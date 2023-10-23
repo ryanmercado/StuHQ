@@ -1,0 +1,44 @@
+{
+   "id":1342107,
+   "name":"[Cuevas] -- ECE 316 Fa22",
+   "account_id":107429,
+   "uuid":"Qorm3N7ngevzCURjdvgBO9jSIkqVIG8cMYIteVea",
+   "start_at":"None",
+   "grading_standard_id":"None",
+   "is_public":false,
+   "created_at":"2022-05-20T13:52:36Z",
+   "course_code":"ECE 316",
+   "default_view":"syllabus",
+   "root_account_id":97771,
+   "enrollment_term_id":4633,
+   "license":"private",
+   "grade_passback_setting":"None",
+   "end_at":"None",
+   "public_syllabus":false,
+   "public_syllabus_to_auth":false,
+   "storage_quota_mb":6144,
+   "is_public_to_auth_users":false,
+   "homeroom_course":false,
+   "course_color":"None",
+   "friendly_name":"None",
+   "apply_assignment_group_weights":true,
+   "calendar":{
+      "ics":"https://utexas.instructure.com/feeds/calendars/course_Qorm3N7ngevzCURjdvgBO9jSIkqVIG8cMYIteVea.ics"
+   },
+   "time_zone":"America/Chicago",
+   "blueprint":false,
+   "template":false,
+   "enrollments":[
+      {
+         "type":"student",
+         "role":"StudentEnrollment",
+         "role_id":6720,
+         "user_id":4352930,
+         "enrollment_state":"active",
+         "limit_privileges_to_course_section":false
+      }
+   ],
+   "hide_final_grades":false,
+   "workflow_state":"available",
+   "restrict_enrollments_to_course_dates":false
+}

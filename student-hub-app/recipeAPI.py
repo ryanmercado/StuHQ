@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonfiy
 from recipeToList import RecipeBook, GroceryList
 
 recipeAPI = Flask(__name__)
@@ -7,7 +7,7 @@ recipeBook = RecipeBook.RecipeBook()
 groceryList = GroceryList.GroceryList()
 
 
-@recipeAPI.route('/api/getRecipe', methods=['POST'])
+@recipeAPI.route('/api/addRecipe', methods=['POST'])
 def create_recipe():
     data = request.get_json()
     name = data['name']

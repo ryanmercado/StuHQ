@@ -14,3 +14,8 @@ class GroceryList:
 
     def get_items(self):
         return self.items
+
+    def add_recipe_ingredients(self, recipe):
+        for ingredient in recipe.get_ingredients():
+            if ingredient not in self.get_items():
+                self.add_item(ingredient)

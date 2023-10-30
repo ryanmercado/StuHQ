@@ -1,8 +1,10 @@
 class Recipe:
     ingredients = []
+    name = ""
 
-    def __init__(self, ingredientList):
+    def __init__(self, name, ingredientList):
         self.ingredients = ingredientList
+        self.name = name
 
     def __eq__(self, recipe):
         for ingredient in self.ingredients:
@@ -16,10 +18,8 @@ class Recipe:
     def get_ingredients(self):
         return self.ingredients
 
-    def add_to_grocery_list(self, groceryList):
-        for ingredient in self.ingredients:
-            if ingredient not in groceryList.get_items():
-                groceryList.add_item(ingredient)
+    def get_name(self):
+        return self.name
 
     def add_ingredient(self, ingredient):
         if ingredient not in self.ingredients:

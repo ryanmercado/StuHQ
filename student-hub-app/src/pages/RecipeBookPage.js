@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import "./assets/styles/App.css"
+import React, { useState, useEffect } from 'react';
+import "./../assets/styles/App.css"
 import { useNavigate } from 'react-router-dom';
 
 
@@ -10,7 +10,7 @@ function RecipeBook() {
 
   useEffect(() => {
     // Fetch recipes from your Flask API endpoint
-    fetch('/api/getRecipes')
+    fetch('http://localhost:5000/api/getRecipes')
       .then((response) => response.json())
       .then((data) => setRecipes(data.recipes))
       .catch((error) => console.error('Error fetching recipes:', error));
@@ -18,7 +18,7 @@ function RecipeBook() {
 
   const handleCreateRecipe = () => {
     // Send a POST request to create a new recipe
-    fetch('/api/addRecipe', {
+    fetch('http://localhost:5000/api/addRecipe', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ function RecipeBook() {
       .then((response) => response.json())
       .then(() => {
         // Refresh the recipes list
-        fetch('/api/getRecipes')
+        fetch('http://localhost:5000/api/getRecipes')
           .then((response) => response.json())
           .then((data) => setRecipes(data.recipes))
           .catch((error) => console.error('Error fetching recipes:', error));

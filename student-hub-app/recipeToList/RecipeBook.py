@@ -2,8 +2,8 @@ class Recipe:
     ingredients = []
     name = ""
 
-    def __init__(self, name, ingredientList):
-        self.ingredients = ingredientList
+    def __init__(self, name, ingredient_list):
+        self.ingredients = ingredient_list
         self.name = name
 
     def __eq__(self, recipe):

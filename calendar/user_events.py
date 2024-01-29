@@ -31,4 +31,4 @@ def delete_event(event_id, conn):
     cursor.execute('DELETE FROM Calendar WHERE event_id = ?', (event_id,))
     conn.commit()
 
-# conn.close()
+

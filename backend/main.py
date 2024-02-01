@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from recipeToList import RecipeBook, GroceryList
+from recipe import RecipeBook, GroceryList
 
 recipeAPI = Flask(__name__)
 

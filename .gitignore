@@ -2,3 +2,4 @@ canvasAPI/__pycache__/getData.cpython-310.pyc
 test.db
 calendar/__pycache__/test_user_events.cpython-310-pytest-8.0.0.pyc
 calendar/__pycache__/user_events.cpython-310.pyc
+backend/calendar/canvasAPI/__pycache__/getData.cpython-310.pyc

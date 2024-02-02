@@ -13,7 +13,7 @@ class TestUserEvents(unittest.TestCase):
             cursor = conn.cursor()
 
             # Execute the DELETE statement without a WHERE clause to delete all rows
-            cursor.execute("DELETE FROM Calendar")
+            cursor.execute("DELETE FROM calendar")
 
             # Commit the changes and close the connection
             conn.commit()
@@ -26,7 +26,7 @@ class TestUserEvents(unittest.TestCase):
         con = sqlite3.connect(self.path)
         self.assertIsNot(con, 0)
         curs = con.cursor()
-        curs.execute("select all usr_id from Calendar")
+        curs.execute("select all usr_id from calendar")
         record = curs.fetchall()
         self.assertGreater(len(record), 0)
         curs.close()
@@ -36,8 +36,8 @@ class TestUserEvents(unittest.TestCase):
         self.erase_all_entries()
         con = sqlite3.connect(self.path)
         curs = con.cursor()
-        create_event(1, 101, datetime.now(), 'Meeting', 'Business', 'Team Meeting', 1643685600, 1643692800, True, 'Additional data', False, True, con)
-        result = read_event(101, con)
+        create_event(1, 101, datetime.now(), 'Meeting', 'Business', 'Team Meeting', 1643685600, 1643692800, True, 'Additional data', False, True)
+        result = read_event(101)
         self.assertIsNotNone(result)
         self.assertEqual(result[5], 'Team Meeting')  # Check if the event title is correct
         curs.close()
@@ -46,9 +46,9 @@ class TestUserEvents(unittest.TestCase):
         self.erase_all_entries()
         con = sqlite3.connect(self.path)
         curs = con.cursor()
-        create_event(1, 101, datetime.now(), 'Meeting', 'Business', 'Team Meeting', 1643685600, 1643692800, True, 'Additional data', False, True, con)
-        update_event(101, 'Updated Title', con)
-        result = read_event(101, con)
+        create_event(1, 101, datetime.now(), 'Meeting', 'Business', 'Team Meeting', 1643685600, 1643692800, True, 'Additional data', False, True)
+        update_event(101, 'Updated Title')
+        result = read_event(101)
         self.assertIsNotNone(result)
         self.assertEqual(result[5], 'Updated Title')  # Check if the event title is updated
         curs.close()
@@ -57,9 +57,9 @@ class TestUserEvents(unittest.TestCase):
         self.erase_all_entries()
         con = sqlite3.connect(self.path)
         curs = con.cursor()
-        create_event(1, 101, datetime.now(), 'Meeting', 'Business', 'Team Meeting', 1643685600, 1643692800, True, 'Additional data', False, True, con)
-        delete_event(101, con)
-        result = read_event(101, con)
+        create_event(1, 101, datetime.now(), 'Meeting', 'Business', 'Team Meeting', 1643685600, 1643692800, True, 'Additional data', False, True)
+        delete_event(101)
+        result = read_event(101)
         self.assertIsNone(result)  # Check if the event is deleted
         curs.close()
 

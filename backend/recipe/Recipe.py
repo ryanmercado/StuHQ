@@ -31,8 +31,13 @@ class Recipe:
             result = cursor.fetchone()
             current_recipes_json = result[0] if result else '[]'
             current_recipes = json.loads(current_recipes_json)
+            recipe_exists = False
+            for rec in current_recipes:
+                if rec['name'] == recipes[0].name:
+                    recipe_exists = True
 
-            current_recipes.extend(recipes)
+            if not recipe_exists:
+                current_recipes.extend(recipes)
 
             updated_recipes_json = json.dumps(current_recipes, cls=RecipeEncoder)
             cursor.execute('UPDATE recipes SET recipe_lists = ? WHERE id = ?', (updated_recipes_json, id))
@@ -106,7 +111,7 @@ class RecipeEncoder(json.JSONEncoder):
 
 #SAMPLE
 # recipe = Recipe(
-#     name='Gerber',
+#     name='Luke',
 #     ingredients=['dough', 'tomato sauce', 'cheese'],
 #     measurements = [(300, 'g'), (200, 'g'), (200, 'g')],
 #     steps='Cook dough, add sauce and cheese'

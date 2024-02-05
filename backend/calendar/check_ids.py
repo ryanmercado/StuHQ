@@ -1,12 +1,17 @@
 import sqlite3
 
-class UserNotFoundException(Exception):
-    pass
-class EventNotFoundException(Exception):
-    pass
-
-
 def usr_id_exists(usr_id):
+
+    '''
+        precondition: 
+            usr_id is an INT
+
+        postcondition:
+            returns a boolean
+                TRUE if usr_id is in DB
+                FALS if usr_id is not in DB
+    '''
+
     con = sqlite3.connect('server/usrDatabase/usrDB.db')
     cursor = con.cursor()
     
@@ -18,6 +23,17 @@ def usr_id_exists(usr_id):
     return count > 0
 
 def event_id_exists(event_id):
+
+    '''
+        precondition: 
+            event_id is an INT
+
+        postcondition:
+            returns a boolean
+                TRUE if event_id is in DB
+                FALS if event_id is not in DB
+    '''
+
     con = sqlite3.connect('server/usrDatabase/usrDB.db')
     cursor = con.cursor()
     

@@ -7,15 +7,13 @@ class ToDoList():
 
     todo = [] # contains all the events to be shown in list
 
-    # NEED TO CHANGE IS_IMPORTANT 
-
     def get_todo_list(self, usr_id):
         self.todo = self.getList(usr_id)
         return self.todo
     
-    def add_to_list(self,usr_id, event_desc, event_type, event_title, start_epoch, end_epoch, is_important):
+    def add_to_list(self,usr_id, event_desc, event_type, event_title, start_epoch, end_epoch, on_to_do_list):
         created_epoch = datetime.now().timestamp()
-        user_events.create_event(usr_id, 1, created_epoch, event_desc, event_type, event_title, start_epoch, end_epoch, is_important)
+        user_events.create_event(usr_id, 1, created_epoch, event_desc, event_type, event_title, start_epoch, end_epoch, on_to_do_list)
         self.get_todo_list(usr_id)
 
     def getList(self, usr_id):
@@ -26,7 +24,7 @@ class ToDoList():
         query = """
             SELECT event_id, event_title, start_epoch
             FROM calendar
-            WHERE usr_id = ? AND start_epoch >= ? AND start_epoch <= ? AND is_important = 1
+            WHERE usr_id = ? AND start_epoch >= ? AND start_epoch <= ? AND on_to_do_list = 1
             ORDER BY start_epoch
         """
         now_epoch = datetime.now().timestamp()

@@ -5,7 +5,7 @@ from user_events import create_event, read_event, update_event, delete_event
 
 class TestUserEvents(unittest.TestCase):
 
-    path = "/home/cdew/StuHQ/server/usrDatabase/usrDB.db"
+    path = "server/usrDatabase/usrDB.db"
 
     def erase_all_entries(self):
         try:

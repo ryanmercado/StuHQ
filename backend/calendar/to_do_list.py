@@ -19,7 +19,7 @@ class ToDoList():
         self.get_todo_list(usr_id)
 
     def getList(self, usr_id):
-        con = sqlite3.connect('/home/cdew/StuHQ/server/usrDatabase/usrDB.db')
+        con = sqlite3.connect('server/usrDatabase/usrDB.db')
         cursor = con.cursor()
         next_week_datetime = datetime.now() + timedelta(days=7)
 
@@ -35,6 +35,8 @@ class ToDoList():
         cursor.execute(query, (usr_id, datetime.now(), next_week_epoch))
 
         result = cursor.fetchall()
+
+        self.todo = result
 
         cursor.close()
         con.close()

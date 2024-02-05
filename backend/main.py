@@ -27,12 +27,7 @@ def delete_recipe():
     data = request.get_json()
     id = data['id']
     name = data['name']
-    ingredients = data['ingredients']
-    measurements = data['measurements']
-    steps = data['steps']
-
-    recipe = Recipe.Recipe(name, ingredients, measurements, steps)
-    name = [recipe]
+    
     Recipe.removeRecipe(id, name)
     return jsonify({'message': 'Recipe deleted successfully'})
 
@@ -45,7 +40,7 @@ def get_recipes():
     
 
 
-@recipeAPI.route('/api/addIngredient', methods=['POST'])
+@recipeAPI.route('/api/addGroceryListIngredient', methods=['POST'])
 def add_ingredient():
     data = request.get_json()
     id = data['id']
@@ -55,7 +50,7 @@ def add_ingredient():
     return jsonify({'message': 'Ingredient added successfully'})
 
 
-@recipeAPI.route('/api/removeIngredient', methods=['POST'])
+@recipeAPI.route('/api/removeGroceryListIngredient', methods=['POST'])
 def remove_ingredient():
     data = request.get_json()
     id = data['id']

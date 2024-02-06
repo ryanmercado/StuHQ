@@ -12,6 +12,8 @@ class Stock:
 
     
     def add_item(id, item):
+        #precondition: id as int and item as string
+        #postcondition: adds item to the stock list associated with id
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')
         cursor = conn.cursor()
         cursor.execute('SELECT COUNT(*) FROM curr_stock WHERE usr_id = ?', (id,))
@@ -42,6 +44,8 @@ class Stock:
 
 
     def delete_item(id, del_item):
+        #precondition: id as int and item as string
+        #postcondition: deletes item from the stock list associated with id if it exists
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')
         cursor = conn.cursor()
         cursor.execute('SELECT COUNT(*) FROM curr_stock WHERE usr_id = ?', (id,))
@@ -69,6 +73,8 @@ class Stock:
         conn.close()
 
     def get_items(id):
+        #precondition: id as int and item as string
+        #postcondition: returns all items in the stock list associated with id
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')
         cursor = conn.cursor()
         cursor.execute('SELECT COUNT(*) FROM curr_stock WHERE usr_id = ?', (id,))

@@ -10,6 +10,8 @@ class GroceryList:
 
 
     def add_item(id, item):
+        #precondition: id as int and item as string
+        #postcondition: adds item to the grocery list associated with id
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')
         cursor = conn.cursor()
         cursor.execute('SELECT COUNT(*) FROM grocery_list WHERE usr_id = ?', (id,))
@@ -39,6 +41,8 @@ class GroceryList:
         conn.close()
 
     def delete_item(id, item):
+        #precondition: id as int and item as string
+        #postcondition: deletes item from the grocery list associated with id
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')
         cursor = conn.cursor()
         cursor.execute('SELECT COUNT(*) FROM grocery_list WHERE usr_id = ?', (id,))
@@ -61,6 +65,8 @@ class GroceryList:
         conn.close()
 
     def get_items(id):
+        #precondition: id as int
+        #postcondition: returns all items in the grocery list associated with id
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')
         cursor = conn.cursor()
         cursor.execute('SELECT COUNT(*) FROM grocery_list WHERE usr_id = ?', (id,))
@@ -76,6 +82,8 @@ class GroceryList:
 
 
     def purchased_item(id, item):
+        #precondition: id as int and item as string
+        #postcondition: removes item from grocery list, adds item to stock
         GroceryList.delete_item(id, item)
         Stock.add_item(id, item)
 

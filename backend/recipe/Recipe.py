@@ -21,13 +21,13 @@ class Recipe:
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
         cursor = conn.cursor()
 
-        cursor.execute('SELECT COUNT(*) FROM recipes WHERE id = ?', (id,))
+        cursor.execute('SELECT COUNT(*) FROM recipes WHERE usr_id = ?', (id,))
         result = cursor.fetchone()
         id_exists = result[0] > 0
 
         if id_exists:
 
-            cursor.execute("SELECT recipe_lists FROM recipes WHERE id = ?", (id,))
+            cursor.execute("SELECT recipe_lists FROM recipes WHERE usr_id = ?", (id,))
             result = cursor.fetchone()
             current_recipes_json = result[0] if result else '[]'
             current_recipes = json.loads(current_recipes_json)
@@ -40,11 +40,11 @@ class Recipe:
                 current_recipes.extend(recipes)
 
             updated_recipes_json = json.dumps(current_recipes, cls=RecipeEncoder)
-            cursor.execute('UPDATE recipes SET recipe_lists = ? WHERE id = ?', (updated_recipes_json, id))
+            cursor.execute('UPDATE recipes SET recipe_lists = ? WHERE usr_id = ?', (updated_recipes_json, id))
         
         else:
             recipes_json = json.dumps(recipes, cls=RecipeEncoder)
-            cursor.execute('INSERT INTO recipes (id, recipe_lists) VALUES (?, ?)', (id, recipes_json))
+            cursor.execute('INSERT INTO recipes (usr_id, recipe_lists) VALUES (?, ?)', (id, recipes_json))
 
         conn.commit()
         conn.close()
@@ -61,7 +61,7 @@ class Recipe:
         id_exists = result[0] > 0
         if id_exists:
 
-            cursor.execute("SELECT recipe_lists FROM recipes WHERE id = ?", (id,))
+            cursor.execute("SELECT recipe_lists from recipes WHERE usr_id = ?", (id,))
             result = cursor.fetchone()
             current_recipes_json = result[0] if result else '[]'
             current_recipes = json.loads(current_recipes_json)
@@ -73,7 +73,7 @@ class Recipe:
                     new_recipes.append(recipe)
 
             updated_recipes_json = json.dumps(new_recipes, cls=RecipeEncoder)
-            cursor.execute('UPDATE recipes SET recipe_lists = ? WHERE id = ?', (updated_recipes_json, id))
+            cursor.execute('UPDATE recipes SET recipe_lists = ? WHERE usr_id = ?', (updated_recipes_json, id))
 
         conn.commit()
         conn.close()
@@ -85,11 +85,11 @@ class Recipe:
 
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')
         cursor = conn.cursor()
-        cursor.execute('SELECT COUNT(*) FROM recipes WHERE id = ?', (id,))
+        cursor.execute('SELECT COUNT(*) FROM recipes WHERE usr_id = ?', (id,))
         result = cursor.fetchone()
         id_exists = result[0] > 0
         if id_exists:
-            cursor.execute("SELECT recipe_lists FROM recipes WHERE id = ?", (id,))
+            cursor.execute("SELECT recipe_lists FROM recipes WHERE usr_id = ?", (id,))
             result = cursor.fetchone()
             current_recipes_json = result[0] if result else '[]'
             return current_recipes_json

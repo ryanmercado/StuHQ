@@ -12,10 +12,10 @@ class GroceryList:
     def add_item(id, item):
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')
         cursor = conn.cursor()
-        cursor.execute('SELECT COUNT(*) FROM grocery_list WHERE id = ?', (id,))
+        cursor.execute('SELECT COUNT(*) FROM grocery_list WHERE usr_id = ?', (id,))
         results = cursor.fetchone()
         if results[0] > 0: #if user exists
-            cursor.execute('SELECT grocery_list FROM grocery_list WHERE id = ?', (id,))
+            cursor.execute('SELECT grocery_list FROM grocery_list WHERE usr_id = ?', (id,))
             results = cursor.fetchone()
             current_grocery_list_json = results[0] if results else '[]'
             current_grocery_list = json.loads(current_grocery_list_json)
@@ -28,12 +28,12 @@ class GroceryList:
             if not item_exists:
                 current_grocery_list.append(item)
                 final_grocery_list = json.dumps(current_grocery_list)
-                cursor.execute('UPDATE grocery_list SET grocery_list = ? WHERE id = ?', (final_grocery_list, id))
+                cursor.execute('UPDATE grocery_list SET grocery_list = ? WHERE usr_id = ?', (final_grocery_list, id))
 
         else:
             grocery_list = [item]
             final_grocery_list = json.dumps(grocery_list)
-            cursor.execute("INSERT INTO grocery_list (id, grocery_list) VALUES (?,?)", (id, final_grocery_list))
+            cursor.execute("INSERT INTO grocery_list (usr_id, grocery_list) VALUES (?,?)", (id, final_grocery_list))
 
         conn.commit()
         conn.close()
@@ -41,10 +41,10 @@ class GroceryList:
     def delete_item(id, item):
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')
         cursor = conn.cursor()
-        cursor.execute('SELECT COUNT(*) FROM grocery_list WHERE id = ?', (id,))
+        cursor.execute('SELECT COUNT(*) FROM grocery_list WHERE usr_id = ?', (id,))
         results = cursor.fetchone()
         if results[0] > 0: #if user exists
-            cursor.execute('SELECT grocery_list FROM grocery_list WHERE id = ?', (id,))
+            cursor.execute('SELECT grocery_list FROM grocery_list WHERE usr_id = ?', (id,))
             results = cursor.fetchone()
             current_grocery_list_json = results[0] if results else '[]'
             current_grocery_list = json.loads(current_grocery_list_json)
@@ -55,7 +55,7 @@ class GroceryList:
                 else:
                     shaved_grocery_list.append(existing_item)
             final_grocery_list = json.dumps(shaved_grocery_list)
-            cursor.execute('UPDATE grocery_list SET grocery_list = ? WHERE id = ?', (final_grocery_list, id))
+            cursor.execute('UPDATE grocery_list SET grocery_list = ? WHERE usr_id = ?', (final_grocery_list, id))
 
         conn.commit()
         conn.close()
@@ -63,11 +63,11 @@ class GroceryList:
     def get_items(id):
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')
         cursor = conn.cursor()
-        cursor.execute('SELECT COUNT(*) FROM grocery_list WHERE id = ?', (id,))
+        cursor.execute('SELECT COUNT(*) FROM grocery_list WHERE usr_id = ?', (id,))
         results = cursor.fetchone()
 
         if results[0] > 0: #if user exists
-            cursor.execute('SELECT grocery_list FROM grocery_list WHERE id = ?', (id,))
+            cursor.execute('SELECT grocery_list FROM grocery_list WHERE usr_id = ?', (id,))
             results = cursor.fetchone()
             current_grocery_list_json = results[0] if results else '[]'
             return current_grocery_list_json

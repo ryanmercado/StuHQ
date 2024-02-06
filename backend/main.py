@@ -3,10 +3,6 @@ from recipe import Recipe, GroceryList, Stock
 
 recipeAPI = Flask(__name__)
 
-recipeBook = RecipeBook.RecipeBook()
-groceryList = GroceryList.GroceryList()
-
-
 @recipeAPI.route('/api/addRecipe', methods=['POST'])
 def create_recipe():
     data = request.get_json()

@@ -1,5 +1,6 @@
 import sqlite3
 import json
+from flask import jsonify
 
 class Stock:
 
@@ -12,14 +13,16 @@ class Stock:
 
     
     def add_item(id, item):
+        #precondition: id as int and item as string
+        #postcondition: adds item to the stock list associated with id
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')
         cursor = conn.cursor()
-        cursor.execute('SELECT COUNT(*) FROM curr_stock WHERE id = ?', (id,))
+        cursor.execute('SELECT COUNT(*) FROM curr_stock WHERE usr_id = ?', (id,))
         result = cursor.fetchone()
         id_exists = result[0] > 0
 
         if id_exists:
-            cursor.execute("SELECT stock_list from curr_stock WHERE id = ?", (id,))
+            cursor.execute("SELECT stock_list from curr_stock WHERE usr_id = ?", (id,))
             result = cursor.fetchone()
             current_stock_json = result[0] if result else '[]'
             item_exists = False
@@ -30,26 +33,29 @@ class Stock:
             if not item_exists:
                 current_stock.append(item)
                 updated_stock_json = json.dumps(current_stock)
-                cursor.execute('UPDATE curr_stock SET stock_list = ? WHERE id = ?', (updated_stock_json, id))
+                cursor.execute('UPDATE curr_stock SET stock_list = ? WHERE usr_id = ?', (updated_stock_json, id))
             
         else:
             stock_list = [item]
             stock_list_json = json.dumps(stock_list)
-            cursor.execute('INSERT INTO curr_stock (id, stock_list) VALUES (?,?)', (id, stock_list_json))
+            cursor.execute('INSERT INTO curr_stock (usr_id, stock_list) VALUES (?,?)', (id, stock_list_json))
             
         conn.commit()
+        cursor.close()
         conn.close()
 
 
     def delete_item(id, del_item):
+        #precondition: id as int and item as string
+        #postcondition: deletes item from the stock list associated with id if it exists
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')
         cursor = conn.cursor()
-        cursor.execute('SELECT COUNT(*) FROM curr_stock WHERE id = ?', (id,))
+        cursor.execute('SELECT COUNT(*) FROM curr_stock WHERE usr_id = ?', (id,))
         result = cursor.fetchone()
         id_exists = result[0] > 0
 
         if id_exists:
-            cursor.execute("SELECT stock_list from curr_stock WHERE id = ?", (id,))
+            cursor.execute("SELECT stock_list from curr_stock WHERE usr_id = ?", (id,))
             result = cursor.fetchone()
             current_stock_json = result[0] if result else '[]'
 
@@ -63,24 +69,31 @@ class Stock:
                     new_stock.append(item)
 
             updated_stock_json = json.dumps(new_stock)
-            cursor.execute('UPDATE curr_stock SET stock_list = ? WHERE id = ?', (updated_stock_json, id))
+            cursor.execute('UPDATE curr_stock SET stock_list = ? WHERE usr_id = ?', (updated_stock_json, id))
             
         conn.commit()
+        cursor.close()
         conn.close()
 
     def get_items(id):
+        #precondition: id as int and item as string
+        #postcondition: returns all items in the stock list associated with id
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')
         cursor = conn.cursor()
-        cursor.execute('SELECT COUNT(*) FROM curr_stock WHERE id = ?', (id,))
+        cursor.execute('SELECT COUNT(*) FROM curr_stock WHERE usr_id = ?', (id,))
         result = cursor.fetchone()
         id_exists = result[0] > 0
 
         if id_exists:
-            cursor.execute("SELECT stock_list from curr_stock WHERE id = ?", (id,))
+            cursor.execute("SELECT stock_list from curr_stock WHERE usr_id = ?", (id,))
             result = cursor.fetchone()
             current_stock_json = result[0] if result else '[]'
+            cursor.close()
+            conn.close()
             return current_stock_json
-        return
+        cursor.close()
+        conn.close()
+        return jsonify({'result': 'usr did not exist'})
 
 
 # Stock.add_item(1, 'strawbs')

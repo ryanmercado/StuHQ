@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 
 const LogIn = () => {
     const [formData, setFormData] = useState({
-        email: '',
+        username: '',
         password: '',
     });
 
@@ -18,7 +18,7 @@ const LogIn = () => {
         console.log('Login Form Data:', formData);
         // Reset form after submission
         setFormData({
-            email: '',
+            username: '',
             password: '',
         });
     };
@@ -28,11 +28,11 @@ const LogIn = () => {
             <h2>Login</h2>
             <form onSubmit={handleSubmit}>
                 <label>
-                    Email:
+                    Username:
                     <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
+                        type="username"
+                        name="username"
+                        value={formData.username}
                         onChange={handleChange}
                     />
                 </label>

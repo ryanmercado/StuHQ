@@ -7,6 +7,7 @@ const SignUp = () => {
         username: '',
         email: '',
         password: '',
+        confirm_password: '',
     });
 
     const handleChange = (e) => {
@@ -22,6 +23,7 @@ const SignUp = () => {
             username: '',
             email: '',
             password: '',
+            confirm_password: '',
         });
     };
 
@@ -55,6 +57,16 @@ const SignUp = () => {
                         type="password"
                         name="password"
                         value={formData.password}
+                        onChange={handleChange}
+                    />
+                </label>
+                <br />
+                <label>
+                    Confirm Password:
+                    <input
+                        type="password"
+                        name="confirm_password"
+                        value={formData.confirm_password}
                         onChange={handleChange}
                     />
                 </label>

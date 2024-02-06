@@ -31,6 +31,12 @@ def hash_password(username, password):
 
 
 def sign_up(username, email, password, confirm_password):
+    #precondition: username, email, password, confirm_password are strings
+    #postcondition: returns 3 different error messages for failed cases
+    #           'username already exists' 
+    #           'passwords do not match'
+    #           'a user has already signed up with this email'
+    # returns 'account created successfully' on successful creation
     conn = sqlite3.connect('server/usrDatabase/usrDB.db')
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM usr_info WHERE username = ?", (username,)) 
@@ -59,6 +65,8 @@ def sign_up(username, email, password, confirm_password):
     conn.commit()
     cursor.close()
     conn.close()
+    return jsonify({'result': 'account created successfully'})
+    
     
     
     

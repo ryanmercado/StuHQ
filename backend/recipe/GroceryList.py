@@ -1,6 +1,7 @@
 import sqlite3
 import json
 import Stock
+from flask import jsonify
 
 class GroceryList:
     items = []
@@ -62,6 +63,7 @@ class GroceryList:
             cursor.execute('UPDATE grocery_list SET grocery_list = ? WHERE usr_id = ?', (final_grocery_list, id))
 
         conn.commit()
+        cursor.close()
         conn.close()
 
     def get_items(id):
@@ -76,9 +78,13 @@ class GroceryList:
             cursor.execute('SELECT grocery_list FROM grocery_list WHERE usr_id = ?', (id,))
             results = cursor.fetchone()
             current_grocery_list_json = results[0] if results else '[]'
+            conn.close()
+            cursor.close()
             return current_grocery_list_json
         
-        return
+        conn.close()
+        cursor.close()
+        return jsonify({'result': 'id did not exist'})
 
 
     def purchased_item(id, item):

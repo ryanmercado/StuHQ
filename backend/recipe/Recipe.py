@@ -1,5 +1,6 @@
 import sqlite3
 import json
+from flask import jsonify
 
 class Recipe:
     ingredients = []
@@ -47,6 +48,7 @@ class Recipe:
             cursor.execute('INSERT INTO recipes (usr_id, recipe_lists) VALUES (?, ?)', (id, recipes_json))
 
         conn.commit()
+        cursor.close()
         conn.close()
     
     def removeRecipe(id, name): 
@@ -76,6 +78,7 @@ class Recipe:
             cursor.execute('UPDATE recipes SET recipe_lists = ? WHERE usr_id = ?', (updated_recipes_json, id))
 
         conn.commit()
+        cursor.close()
         conn.close()
 
     def getRecipes(id):
@@ -92,8 +95,14 @@ class Recipe:
             cursor.execute("SELECT recipe_lists FROM recipes WHERE usr_id = ?", (id,))
             result = cursor.fetchone()
             current_recipes_json = result[0] if result else '[]'
+            conn.close()
+            cursor.close()
             return current_recipes_json
-        return
+        conn.close()
+        cursor.close()
+        return jsonify({'result': 'id did not exist'})
+
+        
 
 
 class RecipeEncoder(json.JSONEncoder):

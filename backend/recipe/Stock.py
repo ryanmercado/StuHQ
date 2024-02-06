@@ -1,5 +1,6 @@
 import sqlite3
 import json
+from flask import jsonify
 
 class Stock:
 
@@ -40,6 +41,7 @@ class Stock:
             cursor.execute('INSERT INTO curr_stock (usr_id, stock_list) VALUES (?,?)', (id, stock_list_json))
             
         conn.commit()
+        cursor.close()
         conn.close()
 
 
@@ -70,6 +72,7 @@ class Stock:
             cursor.execute('UPDATE curr_stock SET stock_list = ? WHERE usr_id = ?', (updated_stock_json, id))
             
         conn.commit()
+        cursor.close()
         conn.close()
 
     def get_items(id):
@@ -85,8 +88,12 @@ class Stock:
             cursor.execute("SELECT stock_list from curr_stock WHERE usr_id = ?", (id,))
             result = cursor.fetchone()
             current_stock_json = result[0] if result else '[]'
+            cursor.close()
+            conn.close()
             return current_stock_json
-        return
+        cursor.close()
+        conn.close()
+        return jsonify({'result': 'usr did not exist'})
 
 
 # Stock.add_item(1, 'strawbs')

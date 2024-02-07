@@ -142,7 +142,7 @@ class Award:
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
         cursor = conn.cursor()
 
-        cursor.execute('SELECT * FROM awards WHERE awd_id = ?', (self.awd_id,))
+        cursor.execute('SELECT * FROM awards WHERE awd_id = ?', (self.award_id,))
         result = cursor.fetchone()
 
         self.title = result[2]
@@ -238,178 +238,389 @@ class Resume:
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
         cursor = conn.cursor() 
 
-        cursor.execute('SELECT COUNT(*) FROM experience WHERE id = ?', (id,))
+        cursor.execute('SELECT COUNT(*) FROM experience WHERE usr_id = ?', (id,))
         result = cursor.fetchone()
         exp_id_exists = result[0] > 0
+        print(exp_id_exists)
 
-        cursor.execute('SELECT COUNT(*) FROM extracurr WHERE id = ?', (id,))
+        cursor.execute('SELECT COUNT(*) FROM extracurr WHERE usr_id = ?', (id,))
         result = cursor.fetchone()
         extracurr_id_exists = result[0] > 0
+        print(extracurr_id_exists)
 
-        cursor.execute('SELECT COUNT(*) FROM general_info WHERE id = ?', (id,))
+        cursor.execute('SELECT COUNT(*) FROM general_info WHERE usr_id = ?', (id,))
         result = cursor.fetchone()
         general_id_exists = result[0] > 0
+        print(general_id_exists)
 
-        cursor.execute('SELECT COUNT(*) FROM projects WHERE id = ?', (id,))
+        cursor.execute('SELECT COUNT(*) FROM projects WHERE usr_id = ?', (id,))
         result = cursor.fetchone()
         project_id_exists = result[0] > 0
+        print(project_id_exists)
 
-        cursor.execute('SELECT COUNT(*) FROM technical_skills WHERE id = ?', (id,))
+        cursor.execute('SELECT COUNT(*) FROM technical_skills WHERE usr_id = ?', (id,))
         result = cursor.fetchone()
         tech_id_exists = result[0] > 0
-
-        if exp_id_exists and extracurr_id_exists and general_id_exists and project_id_exists and tech_id_exists:
-            cursor.execute('SELECT COUNT(*) FROM awards WHERE id = ?', (id,))
-            result = cursor.fetchone()
-            awards_id = result[0] > 0
-            cursor.execute('SELECT COUNT(*) FROM volunteer_work WHERE id = ?', (id,))
-            result = cursor.fetchone()
-            volunteer_work_id = result[0] > 0
-            cursor.execute('SELECT COUNT(*) FROM objective WHERE id = ?', (id,))
-            result = cursor.fetchone()
-            objective_id = result[0] > 0
-            cursor.execute('SELECT COUNT(*) FROM course_work WHERE id = ?', (id,))
-            result = cursor.fetchone()
-            course_work_id = result[0] > 0
-
-            if awards_id and volunteer_work_id and objective_id and course_work_id:
-                resume = Resume()
-            resume = Resume()
-
-
-
-
-
-
-
-
-    def addRecipe(id, recipes):
-
-        #precondtion: id is an int, recipes is a list of Recipe objects
-        #postcondition: adds recipe list to users(id) current list
-
-        conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
-        cursor = conn.cursor()
-
-        cursor.execute('SELECT COUNT(*) FROM experience WHERE id = ?', (id,))
-        result = cursor.fetchone()
-        exp_id_exists = result[0] > 0
-
-        cursor.execute('SELECT COUNT(*) FROM extracurr WHERE id = ?', (id,))
-        result = cursor.fetchone()
-        extracurr_id_exists = result[0] > 0
-
-        cursor.execute('SELECT COUNT(*) FROM general_info WHERE id = ?', (id,))
-        result = cursor.fetchone()
-        general_id_exists = result[0] > 0
-
-        cursor.execute('SELECT COUNT(*) FROM projects WHERE id = ?', (id,))
-        result = cursor.fetchone()
-        project_id_exists = result[0] > 0
-
-        cursor.execute('SELECT COUNT(*) FROM technical_skills WHERE id = ?', (id,))
-        result = cursor.fetchone()
-        tech_id_exists = result[0] > 0
+        print(tech_id_exists)
 
         if exp_id_exists and extracurr_id_exists and general_id_exists and project_id_exists and tech_id_exists:
 
-            cursor.execute("SELECT recipe_lists FROM recipes WHERE id = ?", (id,))
+            # get general info from database
+            general_info = General_Info(id)
+            general_info.setData()
+            self.general_info.append(general_info)
+
+            # get experience from database; there may be multiple experience entries so we
+            # get a list of job ids associated with the same usr_id
+            cursor.execute('SELECT job_id FROM experience WHERE usr_id=?', (id,))
+            result = cursor.fetchall()
+            print(result)
+            job_ids = [results[0] for results in result]
+            for job_id in job_ids:
+                experience = Experience(id, job_id)
+                experience.setData()
+                self.experience.append(experience)
+
+            # get extracurriculars from database; there may be multiple extracurricular entries so we
+            # get a list of activity ids associated with the same usr_id
+            cursor.execute('SELECT act_id FROM extracurr WHERE usr_id=?', (id,))
+            result = cursor.fetchall()
+            act_ids = [results[0] for results in result]
+            for act_id in act_ids:
+                extracurr = Extracurr(id, act_id)
+                extracurr.setData()
+                self.extracurr.append(extracurr)
+
+            # get projects from database; there may be multiple project entries so we
+            # get a list of project ids associated with the same usr_id
+            cursor.execute('SELECT proj_id FROM projects WHERE usr_id=?', (id,))
+            result = cursor.fetchall()
+            project_ids = [results[0] for results in result]
+            for project_id in project_ids:
+                project = Project(id, project_id)
+                project.setData()
+                self.projects.append(project)
+
+            # get technical skills from database; there may be multiple skill entries so we
+            # get a list of skill ids associated with the same usr_id
+            cursor.execute('SELECT skill_id FROM technical_skills WHERE usr_id=?', (id,))
+            result = cursor.fetchall()
+            skill_ids = [results[0] for results in result]
+            for skill_id in skill_ids:
+                technical_skill = Technical_Skill(id, skill_id)
+                technical_skill.setData()
+                self.technical_skills.append(technical_skill)
+
+            cursor.execute('SELECT COUNT(*) FROM awards WHERE usr_id = ?', (id,))
             result = cursor.fetchone()
-            current_recipes_json = result[0] if result else '[]'
-            current_recipes = json.loads(current_recipes_json)
-
-            current_recipes.extend(recipes)
-
-            updated_recipes_json = json.dumps(current_recipes, cls=RecipeEncoder)
-            cursor.execute('UPDATE recipes SET recipe_lists = ? WHERE id = ?', (updated_recipes_json, id))
-        
-        else:
-            recipes_json = json.dumps(recipes, cls=RecipeEncoder)
-            cursor.execute('INSERT INTO recipes (id, recipe_lists) VALUES (?, ?)', (id, recipes_json))
-
-        conn.commit()
-        conn.close()
-
-        return jsonify({'result': 'id does not exist'})
-    
-    def removeRecipe(id, name): 
-        
-        #precondition: id is an int, name is a string 
-        #postcondition: removes the specified recipe if it exists
-
-        conn = sqlite3.connect('server/usrDatabase/usrDB.db')
-        cursor = conn.cursor()
-        cursor.execute('SELECT COUNT(*) FROM recipes WHERE id = ?', (id,))
-        result = cursor.fetchone()
-        id_exists = result[0] > 0
-        if id_exists:
-
-            cursor.execute("SELECT recipe_lists FROM recipes WHERE id = ?", (id,))
+            awards_id_exists = result[0] > 0
+            cursor.execute('SELECT COUNT(*) FROM volunteer_work WHERE usr_id = ?', (id,))
             result = cursor.fetchone()
-            current_recipes_json = result[0] if result else '[]'
-            current_recipes = json.loads(current_recipes_json)
-            new_recipes = []
-            for recipe in current_recipes:
-                if recipe['name'] == name:
-                    continue
-                else:
-                    new_recipes.append(recipe)
-
-            updated_recipes_json = json.dumps(new_recipes, cls=RecipeEncoder)
-            cursor.execute('UPDATE recipes SET recipe_lists = ? WHERE id = ?', (updated_recipes_json, id))
-
-        conn.commit()
-        conn.close()
-
-    def getRecipes(id):
-
-        #precondition: id must be an int (does not have to exist, there are check)
-        #postcondition: returns json formatted list of all recipes associated with the id
-
-        conn = sqlite3.connect('server/usrDatabase/usrDB.db')
-        cursor = conn.cursor()
-        cursor.execute('SELECT COUNT(*) FROM recipes WHERE id = ?', (id,))
-        result = cursor.fetchone()
-        id_exists = result[0] > 0
-        if id_exists:
-            cursor.execute("SELECT recipe_lists FROM recipes WHERE id = ?", (id,))
+            volunteer_work_id_exists = result[0] > 0
+            cursor.execute('SELECT COUNT(*) FROM objective WHERE usr_id = ?', (id,))
             result = cursor.fetchone()
-            current_recipes_json = result[0] if result else '[]'
-            return current_recipes_json
-        return
+            objective_id_exists = result[0] > 0
+            cursor.execute('SELECT COUNT(*) FROM course_work WHERE usr_id = ?', (id,))
+            result = cursor.fetchone()
+            course_work_id_exists = result[0] > 0
+
+            if awards_id_exists and volunteer_work_id_exists and objective_id_exists and course_work_id_exists:
+                # get awards from database; there may be multiple award entries so we
+                # get a list of award ids associated with the same usr_id
+                cursor.execute('SELECT awd_id FROM awards WHERE usr_id=?', (id,))
+                result = cursor.fetchall()
+                awd_ids = [results[0] for results in result]
+                for awd_id in awd_ids:
+                    award = Award(id, awd_id)
+                    award.setData()
+                    self.awards.append(award)
+
+                # get volunteer work from database; there may be multiple volunteer entries so we
+                # get a list of volunteer ids associated with the same usr_id
+                cursor.execute('SELECT vol_id FROM vounteer_work WHERE usr_id=?', (id,))
+                result = cursor.fetchall()
+                vol_ids = [results[0] for results in result]
+                for vol_id in vol_ids:
+                    volunteer_work = Volunteer_Work(id, vol_id)
+                    volunteer_work.setData()
+                    self.volunteer_work.append(volunteer_work)
+
+                # get course work from database; there may be multiple course entries so we
+                # get a list of course ids associated with the same usr_id
+                cursor.execute('SELECT course_id FROM course_work WHERE usr_id=?', (id,))
+                result = cursor.fetchall()
+                course_ids = [results[0] for results in result]
+                for course_id in course_ids:
+                    course_work = Course_Work(id, course_id)
+                    course_work.setData()
+                    self.course_work.append(course_work)
+
+                # get objective statement from database
+                objective = Objective(id)
+                objective.setData()
+                self.objective.append(objective)
+
+            elif awards_id_exists and volunteer_work_id_exists and objective_id_exists:
+                # get awards from database; there may be multiple award entries so we
+                # get a list of award ids associated with the same usr_id
+                cursor.execute('SELECT awd_id FROM awards WHERE usr_id=?', (id,))
+                result = cursor.fetchall()
+                awd_ids = [results[0] for results in result]
+                for awd_id in awd_ids:
+                    award = Award(id, awd_id)
+                    award.setData()
+                    self.awards.append(award)
+
+                # get volunteer work from database; there may be multiple volunteer entries so we
+                # get a list of volunteer ids associated with the same usr_id
+                cursor.execute('SELECT vol_id FROM vounteer_work WHERE usr_id=?', (id,))
+                result = cursor.fetchall()
+                vol_ids = [results[0] for results in result]
+                for vol_id in vol_ids:
+                    volunteer_work = Volunteer_Work(id, vol_id)
+                    volunteer_work.setData()
+                    self.volunteer_work.append(volunteer_work)
+
+                # get objective statement from database
+                objective = Objective(id)
+                objective.setData()
+                self.objective.append(objective)
+
+            elif awards_id_exists and volunteer_work_id_exists and course_work_id_exists:
+                # get awards from database; there may be multiple award entries so we
+                # get a list of award ids associated with the same usr_id
+                cursor.execute('SELECT awd_id FROM awards WHERE usr_id=?', (id,))
+                result = cursor.fetchall()
+                awd_ids = [results[0] for results in result]
+                for awd_id in awd_ids:
+                    award = Award(id, awd_id)
+                    award.setData()
+                    self.awards.append(award)
+
+                # get volunteer work from database; there may be multiple volunteer entries so we
+                # get a list of volunteer ids associated with the same usr_id
+                cursor.execute('SELECT vol_id FROM vounteer_work WHERE usr_id=?', (id,))
+                result = cursor.fetchall()
+                vol_ids = [results[0] for results in result]
+                for vol_id in vol_ids:
+                    volunteer_work = Volunteer_Work(id, vol_id)
+                    volunteer_work.setData()
+                    self.volunteer_work.append(volunteer_work)
+
+                # get course work from database; there may be multiple course entries so we
+                # get a list of course ids associated with the same usr_id
+                cursor.execute('SELECT course_id FROM course_work WHERE usr_id=?', (id,))
+                result = cursor.fetchall()
+                course_ids = [results[0] for results in result]
+                for course_id in course_ids:
+                    course_work = Course_Work(id, course_id)
+                    course_work.setData()
+                    self.course_work.append(course_work)
+
+            elif awards_id_exists and  objective_id_exists and course_work_id_exists:
+                # get awards from database; there may be multiple award entries so we
+                # get a list of award ids associated with the same usr_id
+                cursor.execute('SELECT awd_id FROM awards WHERE usr_id=?', (id,))
+                result = cursor.fetchall()
+                awd_ids = [results[0] for results in result]
+                for awd_id in awd_ids:
+                    award = Award(id, awd_id)
+                    award.setData()
+                    self.awards.append(award)
+
+                # get course work from database; there may be multiple course entries so we
+                # get a list of course ids associated with the same usr_id
+                cursor.execute('SELECT course_id FROM course_work WHERE usr_id=?', (id,))
+                result = cursor.fetchall()
+                course_ids = [results[0] for results in result]
+                for course_id in course_ids:
+                    course_work = Course_Work(id, course_id)
+                    course_work.setData()
+                    self.course_work.append(course_work)
+
+                # get objective statement from database
+                objective = Objective(id)
+                objective.setData()
+                self.objective.append(objective)
 
 
-class RecipeEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, Recipe):
-            return {
-                'name': obj.name,
-                'ingredients': obj.ingredients,
-                'measurements': obj.measurements,
-                'steps': obj.steps
-            }
-        return json.JSONEncoder.default(self, obj)
-    
+            elif awards_id_exists and volunteer_work_id_exists:
+                # get awards from database; there may be multiple award entries so we
+                # get a list of award ids associated with the same usr_id
+                cursor.execute('SELECT awd_id FROM awards WHERE usr_id=?', (id,))
+                result = cursor.fetchall()
+                awd_ids = [results[0] for results in result]
+                for awd_id in awd_ids:
+                    award = Award(id, awd_id)
+                    award.setData()
+                    self.awards.append(award)
+
+                # get volunteer work from database; there may be multiple volunteer entries so we
+                # get a list of volunteer ids associated with the same usr_id
+                cursor.execute('SELECT vol_id FROM vounteer_work WHERE usr_id=?', (id,))
+                result = cursor.fetchall()
+                vol_ids = [results[0] for results in result]
+                for vol_id in vol_ids:
+                    volunteer_work = Volunteer_Work(id, vol_id)
+                    volunteer_work.setData()
+                    self.volunteer_work.append(volunteer_work)
+
+            elif awards_id_exists and course_work_id_exists:
+                # get awards from database; there may be multiple award entries so we
+                # get a list of award ids associated with the same usr_id
+                cursor.execute('SELECT awd_id FROM awards WHERE usr_id=?', (id,))
+                result = cursor.fetchall()
+                awd_ids = [results[0] for results in result]
+                for awd_id in awd_ids:
+                    award = Award(id, awd_id)
+                    award.setData()
+                    self.awards.append(award)
+
+                # get course work from database; there may be multiple course entries so we
+                # get a list of course ids associated with the same usr_id
+                cursor.execute('SELECT course_id FROM course_work WHERE usr_id=?', (id,))
+                result = cursor.fetchall()
+                course_ids = [results[0] for results in result]
+                for course_id in course_ids:
+                    course_work = Course_Work(id, course_id)
+                    course_work.setData()
+                    self.course_work.append(course_work)
+
+            elif awards_id_exists and objective_id_exists:
+                # get awards from database; there may be multiple award entries so we
+                # get a list of award ids associated with the same usr_id
+                cursor.execute('SELECT awd_id FROM awards WHERE usr_id=?', (id,))
+                result = cursor.fetchall()
+                awd_ids = [results[0] for results in result]
+                for awd_id in awd_ids:
+                    award = Award(id, awd_id)
+                    award.setData()
+                    self.awards.append(award)
+
+                # get objective statement from database
+                objective = Objective(id)
+                objective.setData()
+                self.objective.append(objective)
+
+            elif awards_id_exists:
+                # get awards from database; there may be multiple award entries so we
+                # get a list of award ids associated with the same usr_id
+                cursor.execute('SELECT awd_id FROM awards WHERE usr_id=?', (id,))
+                result = cursor.fetchall()
+                awd_ids = [results[0] for results in result]
+                for awd_id in awd_ids:
+                    award = Award(id, awd_id)
+                    award.setData()
+                    self.awards.append(award)
+
+            elif volunteer_work_id_exists and objective_id_exists and course_work_id_exists:
+                # get volunteer work from database; there may be multiple volunteer entries so we
+                # get a list of volunteer ids associated with the same usr_id
+                cursor.execute('SELECT vol_id FROM volunteer_work WHERE usr_id=?', (id,))
+                result = cursor.fetchall()
+                vol_ids = [results[0] for results in result]
+                for vol_id in vol_ids:
+                    volunteer_work = Volunteer_Work(id, vol_id)
+                    volunteer_work.setData()
+                    self.volunteer_work.append(volunteer_work)
+
+                # get course work from database; there may be multiple course entries so we
+                # get a list of course ids associated with the same usr_id
+                cursor.execute('SELECT course_id FROM course_work WHERE usr_id=?', (id,))
+                result = cursor.fetchall()
+                course_ids = [results[0] for results in result]
+                for course_id in course_ids:
+                    course_work = Course_Work(id, course_id)
+                    course_work.setData()
+                    self.course_work.append(course_work)
+
+                # get objective statement from database
+                objective = Objective(id)
+                objective.setData()
+                self.objective.append(objective)
+
+            elif volunteer_work_id_exists and course_work_id_exists:
+                # get volunteer work from database; there may be multiple volunteer entries so we
+                # get a list of volunteer ids associated with the same usr_id
+                cursor.execute('SELECT vol_id FROM vounteer_work WHERE usr_id=?', (id,))
+                result = cursor.fetchall()
+                vol_ids = [results[0] for results in result]
+                for vol_id in vol_ids:
+                    volunteer_work = Volunteer_Work(id, vol_id)
+                    volunteer_work.setData()
+                    self.volunteer_work.append(volunteer_work)
+
+                # get course work from database; there may be multiple course entries so we
+                # get a list of course ids associated with the same usr_id
+                cursor.execute('SELECT course_id FROM course_work WHERE usr_id=?', (id,))
+                result = cursor.fetchall()
+                course_ids = [results[0] for results in result]
+                for course_id in course_ids:
+                    course_work = Course_Work(id, course_id)
+                    course_work.setData()
+                    self.course_work.append(course_work)
+
+            elif volunteer_work_id_exists and objective_id_exists:
+                # get volunteer work from database; there may be multiple volunteer entries so we
+                # get a list of volunteer ids associated with the same usr_id
+                cursor.execute('SELECT vol_id FROM vounteer_work WHERE usr_id=?', (id,))
+                result = cursor.fetchall()
+                vol_ids = [results[0] for results in result]
+                for vol_id in vol_ids:
+                    volunteer_work = Volunteer_Work(id, vol_id)
+                    volunteer_work.setData()
+                    self.volunteer_work.append(volunteer_work)
+
+                # get objective statement from database
+                objective = Objective(id)
+                objective.setData()
+                self.objective.append(objective)
+
+            elif volunteer_work_id_exists:
+                # get volunteer work from database; there may be multiple volunteer entries so we
+                # get a list of volunteer ids associated with the same usr_id
+                cursor.execute('SELECT vol_id FROM vounteer_work WHERE usr_id=?', (id,))
+                result = cursor.fetchall()
+                vol_ids = [results[0] for results in result]
+                for vol_id in vol_ids:
+                    volunteer_work = Volunteer_Work(id, vol_id)
+                    volunteer_work.setData()
+                    self.volunteer_work.append(volunteer_work)
+
+            elif objective_id_exists and course_work_id_exists:
+                # get course work from database; there may be multiple course entries so we
+                # get a list of course ids associated with the same usr_id
+                cursor.execute('SELECT course_id FROM course_work WHERE usr_id=?', (id,))
+                result = cursor.fetchall()
+                course_ids = [results[0] for results in result]
+                for course_id in course_ids:
+                    course_work = Course_Work(id, course_id)
+                    course_work.setData()
+                    self.course_work.append(course_work)
+
+                # get objective statement from database
+                objective = Objective(id)
+                objective.setData()
+                self.objective.append(objective)
+
+            elif objective_id_exists:
+                # get objective statement from database
+                objective = Objective(id)
+                objective.setData()
+                self.objective.append(objective)
+
+            elif course_work_id_exists:
+                # get course work from database; there may be multiple course entries so we
+                # get a list of course ids associated with the same usr_id
+                cursor.execute('SELECT course_id FROM course_work WHERE usr_id=?', (id,))
+                result = cursor.fetchall()
+                course_ids = [results[0] for results in result]
+                for course_id in course_ids:
+                    course_work = Course_Work(id, course_id)
+                    course_work.setData()
+                    self.course_work.append(course_work)
 
 
-# SAMPLE
-# recipe = Recipe(
-#     name='Gerber',
-#     ingredients=['dough', 'tomato sauce', 'cheese'],
-#     measurements = [(300, 'g'), (200, 'g'), (200, 'g')],
-#     steps='Cook dough, add sauce and cheese'
-# )
-# recipes = [recipe]
-
-# Recipe.addRecipe(0, recipes)
-# Recipe.removeRecipe(0, 'Gerber')
-
-experience = Experience(1)
-experience.setData()
-print(experience.getData())
-conn = sqlite3.connect('server/usrDatabase/usrDB.db')
-cursor = conn.cursor()
-cursor.execute('SELECT job_id FROM experience WHERE usr_id=?', (1,))
-result = cursor.fetchall()
-job_ids = [results[0] for results in result]
-print(job_ids)
+resume = Resume()
+resume.getUserInfo(1)
+print(resume.experience[0].getData())

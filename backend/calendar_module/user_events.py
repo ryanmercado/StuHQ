@@ -1,6 +1,6 @@
 import sqlite3
 from flask import jsonify
-from check_ids import usr_id_exists, event_id_exists, UserNotFoundException, EventNotFoundException
+from check_ids import usr_id_exists, event_id_exists
 from datetime import datetime
 
 

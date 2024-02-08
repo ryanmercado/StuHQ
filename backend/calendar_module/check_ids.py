@@ -1,3 +1,4 @@
+
 import sqlite3
 
 def usr_id_exists(usr_id):
@@ -12,7 +13,7 @@ def usr_id_exists(usr_id):
                 FALS if usr_id is not in DB
     '''
 
-    con = sqlite3.connect('server/usrDatabase/usrDB.db')
+    con = sqlite3.connect('StuHQ/server/usrDatabase/usrDB.db')
     cursor = con.cursor()
     
     cursor.execute('SELECT COUNT(*) FROM usr_info WHERE usr_id = ?', (usr_id,))
@@ -34,7 +35,7 @@ def event_id_exists(event_id):
                 FALS if event_id is not in DB
     '''
 
-    con = sqlite3.connect('server/usrDatabase/usrDB.db')
+    con = sqlite3.connect('StuHQ/server/usrDatabase/usrDB.db')
     cursor = con.cursor()
     
     cursor.execute('SELECT COUNT(*) FROM usr_info WHERE event_id = ?', (event_id,))

@@ -2,7 +2,6 @@ from datetime import datetime, timedelta
 
 from flask import jsonify
 import user_events
-from check_ids import usr_id_exists, event_id_exists
 import sqlite3
 
 

@@ -6,7 +6,7 @@ from check_ids import usr_id_exists, event_id_exists, UserNotFoundException, Eve
 import sqlite3
 
 
-def add_to_list(usr_id, event_desc, event_type, event_title, start_epoch, end_epoch, on_to_do_list):
+def add_to_list(usr_id, event_desc, event_type, event_title, start_epoch, end_epoch):
 
     '''
         precondition: 
@@ -27,7 +27,7 @@ def add_to_list(usr_id, event_desc, event_type, event_title, start_epoch, end_ep
 
     '''
 
-    return user_events.create_event(usr_id, event_desc, event_type, event_title, start_epoch, end_epoch, on_to_do_list, None, None, None)
+    return user_events.create_event(usr_id, event_desc, event_type, event_title, start_epoch, end_epoch, 1, None, None, None)
 
 def get_todo_list(usr_id):
 
@@ -55,7 +55,7 @@ def get_todo_list(usr_id):
         now_epoch = datetime.now().timestamp()
         next_week_epoch = next_week_datetime.timestamp()
 
-        cursor.execute(query, (usr_id, datetime.now(), next_week_epoch))
+        cursor.execute(query, (usr_id, now_epoch, next_week_epoch))
 
         result = cursor.fetchall()
 
@@ -67,3 +67,6 @@ def get_todo_list(usr_id):
     else:
         raise jsonify({'result': 'usr_id not found'})
 
+
+
+print(get_todo_list(1))

@@ -66,7 +66,3 @@ def get_todo_list(usr_id):
             return jsonify({'result': 'get to_do_list failed, events may be empty'})
     else:
         raise jsonify({'result': 'usr_id not found'})
-
-
-
-print(get_todo_list(1))

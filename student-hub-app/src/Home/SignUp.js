@@ -14,17 +14,39 @@ const SignUp = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Perform signup logic here, e.g., make an API call
-        console.log('SignUp Form Data:', formData);
-        // Reset form after submission
-        setFormData({
-            username: '',
-            email: '',
-            password: '',
-            confirm_password: '',
-        });
+        try{
+            const response = await fetch('http://localhost:5000/api/createAccount', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
+            
+            const data = await response.json();
+
+            if (response.data.result === 'account created successfully') {
+                
+                history.push('/dashboard')
+
+            } else if (response.data.result === 'account created successfully'){
+                
+            } else if (response.data.result === 'account created successfully'){
+
+            } else if (response.data.result === 'account created successfully'){
+
+            }
+        }catch (error) {
+            console.error('Login error:', error);
+        } finally{
+            setFormData({
+                username: '',
+                password: '',
+            });
+        }
+        
     };
 
     return (

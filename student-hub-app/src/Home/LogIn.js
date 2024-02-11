@@ -14,15 +14,14 @@ const LogIn = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         try{
-            const response = await fetch('http://localhost:5000/api/login', {
-                method: 'POST',
+            const response = await fetch('http://localhost:5000/api/login?username=${formData.username}&password=${formData.password}', {
+                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData),
             });
             
             const data = await response.json();

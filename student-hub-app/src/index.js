@@ -16,7 +16,9 @@ createRoot(document.getElementById('root')).render(
             <Route path="/signup" element={<SignUp />} />
             <Route path="/login" element={<LogIn />} />
             <Route path="/" element={<Landing />} />
-
+            <Route path="/recipeLanding" element ={<recipeLanding/>} />
+            <Route path="/resumeLanding" element ={<resumeDoc/>} />
+            <Route path="/calendarLanding" element ={<calendarLand/>} />
 
         </Routes>
     </Router>

@@ -1,9 +1,10 @@
 from flask import Flask, request, jsonify
 from recipe import Recipe, GroceryList, Stock
+import handleCreateAccount, handleSignIn
 
-recipeAPI = Flask(__name__)
+stuAPI = Flask(__name__)
 
-@recipeAPI.route('/api/addRecipe', methods=['POST'])
+@stuAPI.route('/api/addRecipe', methods=['POST'])
 def create_recipe():
     data = request.get_json()
     usr_id = data['usr_id']
@@ -18,7 +19,7 @@ def create_recipe():
     return jsonify({'message': 'Recipe created successfully'})
 
 
-@recipeAPI.route('/api/removeRecipe', methods=['POST'])
+@stuAPI.route('/api/removeRecipe', methods=['POST'])
 def delete_recipe():
     data = request.get_json()
     usr_id = data['usr_id']
@@ -28,15 +29,14 @@ def delete_recipe():
     return jsonify({'message': 'Recipe deleted successfully'})
 
 
-@recipeAPI.route('/api/getRecipes', methods=['GET'])
+@stuAPI.route('/api/getRecipes', methods=['GET'])
 def get_recipes():
-    data = request.get_json()
-    usr_id = data['usr_id']
+    usr_id = request.args.get('usr_id')
     return Recipe.getRecipes(usr_id)
     
 
 
-@recipeAPI.route('/api/addGroceryListIngredient', methods=['POST'])
+@stuAPI.route('/api/addGroceryListIngredient', methods=['POST'])
 def add_ingredient():
     data = request.get_json()
     usr_id = data['usr_id']
@@ -46,7 +46,7 @@ def add_ingredient():
     return jsonify({'message': 'Ingredient added successfully'})
 
 
-@recipeAPI.route('/api/removeGroceryListIngredient', methods=['POST'])
+@stuAPI.route('/api/removeGroceryListIngredient', methods=['POST'])
 def remove_ingredient():
     data = request.get_json()
     usr_id = data['usr_id']
@@ -56,15 +56,13 @@ def remove_ingredient():
     return jsonify({'message': 'Ingredient deleted successfully'})
 
 
-@recipeAPI.route('/api/getGroceryList', methods=['GET'])
+@stuAPI.route('/api/getGroceryList', methods=['GET'])
 def getGroceryList():
-    data = request.get_json()
-    usr_id = data['usr_id']
-
+    usr_id = request.args.get('usr_id')
     return GroceryList.get_items(usr_id)
 
 
-@recipeAPI.route('/api/addStockItem', methods=['POST'])
+@stuAPI.route('/api/addStockItem', methods=['POST'])
 def addStockItem():
     data = request.get_json()
     usr_id = data['usr_id']
@@ -73,7 +71,7 @@ def addStockItem():
     return jsonify({'message': 'Item added successfully'})
 
 
-@recipeAPI.route('/api/removeStockItem', methods=['POST'])
+@stuAPI.route('/api/removeStockItem', methods=['POST'])
 def removeStockItem():
     data = request.get_json()
     usr_id = data['usr_id']
@@ -82,11 +80,16 @@ def removeStockItem():
     return jsonify({'message': 'Item removed successfully'})
 
 
-@recipeAPI.route('/api/getStock', methods=['GET'])
+@stuAPI.route('/api/getStock', methods=['GET'])
 def getStockItems():
-    data = request.get_json()
-    usr_id = data['usr_id']
+    usr_id = request.args.get('usr_id')
     return Stock.get_items(usr_id)
 
+@stuAPI.route('/api/login', methods=['GET'])
+def login():
+    username = request.args.get('username')
+    password = request.args.get('password')
+    return handleSignIn.login(username, password)
+
 if __name__ == '__main__':
-    recipeAPI.run(debug=True)
+    stuAPI.run(debug=True)

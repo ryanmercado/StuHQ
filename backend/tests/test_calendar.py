@@ -134,7 +134,8 @@ def test_update_event():
 
     dict = user_events.get_event(0)
     assert dict == {'result': (0, 0, 1234567890, "newdesc", "lecture", "newTitle", None, None, 1, None, 0, 0)}
-
+    clearDB()
+    
 def test_delete_event():
     clearDB()
     con = sqlite3.connect('server/usrDatabase/usrDB.db')

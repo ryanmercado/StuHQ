@@ -43,9 +43,9 @@ def create_event(usr_id, event_desc, event_type,
         
         con.commit()
         con.close()
-        return {'result': 'event created'} #jsonify
+        return jsonify({'result': 'event created'})
     else:
-        return {'result': 'id not found'} #jsonify
+        return jsonify({'result': 'id not found'}) 
 
 
 def get_event(event_id):
@@ -67,9 +67,9 @@ def get_event(event_id):
         result = cursor.fetchone()
         event = result
         con.close()
-        return {'result': event} #will be jsonify
+        return jsonify({'result': event}) 
     else:
-        return {'result': 'event not found'} #will be jsonify
+        return jsonify({'result': 'event not found'}) 
 
 def get_usr_events(usr_id):
 
@@ -89,9 +89,9 @@ def get_usr_events(usr_id):
         result = cursor.fetchall()
         events = result
         con.close()
-        return {'result': events} #jsonify
+        return jsonify({'result': events}) #jsonify
     else:
-        return {'result': 'usr_id not found'} #jsonify
+        return jsonify({'result': 'usr_id not found'}) #jsonify
 
 
 def update_event(event_id, event_title, event_desc, event_type, start_epoch, end_epoch, on_to_do_list, extra_data, is_submitted, want_notification):
@@ -124,9 +124,9 @@ def update_event(event_id, event_title, event_desc, event_type, start_epoch, end
                           WHERE event_id = ?''', (event_title, event_desc, event_type, start_epoch, end_epoch, on_to_do_list, is_submitted, want_notification, extra_data, event_id))
         con.commit()
         con.close()
-        return {'result': 'event updated'} #jsonify
+        return jsonify({'result': 'event updated'}) 
     else:
-        return {'result': 'event_id not found'} #jsonify
+        return jsonify({'result': 'event_id not found'}) 
 
 def delete_event(event_id):
 
@@ -146,9 +146,9 @@ def delete_event(event_id):
         cursor.execute('DELETE FROM calendar WHERE event_id = ?', (event_id,))
         con.commit()
         con.close()
-        return {'result': 'event_id deleted'} #jsonify
+        return jsonify({'result': 'event_id deleted'}) 
     else:
-        return {'result': 'event_id not found'} #jsonify
+        return jsonify({'result': 'event_id not found'}) 
     
 def get_event_id():
 

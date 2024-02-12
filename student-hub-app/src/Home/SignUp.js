@@ -10,6 +10,9 @@ const SignUp = () => {
         confirm_password: '',
     });
 
+    const[createdFailed, setCreatedFailed] = useState(false);
+    const[failedMessage, setFailedMessage] = useState('');
+
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
@@ -31,12 +34,16 @@ const SignUp = () => {
                 
                 history.push('/dashboard')
 
-            } else if (response.data.result === 'account created successfully'){
+            } else if (response.data.result === 'username already exists'){
+                setCreatedFailed(true);
+                setFailedMessage = response.data.result;
                 
-            } else if (response.data.result === 'account created successfully'){
-
-            } else if (response.data.result === 'account created successfully'){
-
+            } else if (response.data.result === 'a user has already signed up with this email'){
+                setCreatedFailed(true);
+                setFailedMessage = response.data.result;
+            } else if (response.data.result === 'passwords do not match'){
+                setCreatedFailed(true);
+                setFailedMessage = response.data.result;
             }
         }catch (error) {
             console.error('Login error:', error);
@@ -94,6 +101,7 @@ const SignUp = () => {
                 </label>
                 <br />
                 <button type="submit">Sign Up</button>
+                {createdFailed && <div style={{ color: 'red' }}>{failedMessage}</div>}
             </form>
         </div>
     );

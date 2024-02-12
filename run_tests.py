@@ -9,4 +9,3 @@ pytest.main()
 # to run specific file: 
 # pytest.main(['backend/tests/test_registration_login.py'])
 
-

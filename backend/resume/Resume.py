@@ -12,7 +12,17 @@ class Experience:
         self.location = ''
         self.desc_arr = ''
 
-    def setData(self):
+    def setData(self, user_id, job_id, company, role, start_date, end_date, location, desc_arr):
+        self.user_id = user_id
+        self.job_id = job_id
+        self.company = company
+        self.role = role
+        self.start_date = start_date
+        self.end_date = end_date
+        self.location = location
+        self.desc_arr = desc_arr
+
+    def getDataFromDatabase(self):
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
         cursor = conn.cursor()
 
@@ -38,7 +48,13 @@ class Extracurr:
         self.title = ''
         self.desc = ''
 
-    def setData(self):
+    def setData(self, user_id, act_id, title, desc):
+        self.user_id = user_id
+        self.act_id = act_id
+        self.title = title
+        self.desc = desc
+
+    def getDataFromDatabase(self):
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
         cursor = conn.cursor()
 
@@ -66,7 +82,19 @@ class General_Info:
         self.major = ''
         self.GPA = 0.0
 
-    def setData(self):
+    def setData(self, user_id, lastname, firstname, phone, email, linkedin, edu, grad_date, major, GPA):
+        self.user_id = user_id
+        self.lastname = lastname
+        self.firstname = firstname
+        self.phone = phone
+        self.email = email
+        self.linkedin = linkedin
+        self.edu = edu
+        self.grad_date = grad_date
+        self.major = major
+        self.GPA = GPA
+
+    def getDataFromDatabase(self):
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
         cursor = conn.cursor()
 
@@ -93,7 +121,12 @@ class Technical_Skill:
         self.skill_id = skill_id
         self.name = ''
 
-    def setData(self):
+    def setData(self, user_id, skill_id, name):
+        self.user_id = user_id
+        self.skill_id = skill_id
+        self.name = name
+
+    def getDataFromDatabase(self):
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
         cursor = conn.cursor()
 
@@ -103,8 +136,8 @@ class Technical_Skill:
 
         conn.close()
 
-    def getData():
-        return user_id, skill_id, name
+    def getData(self):
+        return self.user_id, self.skill_id, self.name
 
 class Project:
     def __init__(self, user_id, proj_id):
@@ -115,7 +148,15 @@ class Project:
         self.date = ''
         self.desc_arr = ''
 
-    def setData(self):
+    def setData(self, user_id, proj_id, title, who_for, date, desc_arr):
+        self.user_id = user_id
+        self.proj_id = proj_id
+        self.title = title
+        self.who_for = who_for
+        self.date = date
+        self.desc_arr = desc_arr
+
+    def getDataFromDatabase(self):
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
         cursor = conn.cursor()
 
@@ -138,7 +179,13 @@ class Award:
         self.title = ''
         self.desc = ''
 
-    def setData(self):
+    def setData(self, user_id, award_id, title, desc):
+        self.user_id = user_id
+        self.award_id = award_id
+        self.title = title
+        self.desc = desc
+
+    def getDataFromDatabase(self):
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
         cursor = conn.cursor()
 
@@ -159,7 +206,12 @@ class Course:
         self.course_id = course_id
         self.name = ''
 
-    def setData(self):
+    def setData(self, user_id, course_id, name):
+        self.user_id = user_id
+        self.course_id = course_id
+        self.name = name
+
+    def getDataFromDatabase(self):
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
         cursor = conn.cursor()
 
@@ -178,7 +230,12 @@ class Objective:
         self.obj_str = ''
         self.obj_id = -1
 
-    def setData(self):
+    def setData(self, user_id, obj_str,obj_id):
+        self.user_id = user_id
+        self.obj_str = obj_str
+        self.obj_id = obj_id
+
+    def getDataFromDatabase(self):
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
         cursor = conn.cursor()
 
@@ -202,7 +259,15 @@ class Volunteer_Work:
         self.start_date = ''
         self.end_date = ''
 
-    def setData(self):
+    def setData(self, user_id, vol_id, company, role, start_date, end_date):
+        self.user_id = user_id
+        self.vol_id = vol_id
+        self.company = company
+        self.role = role
+        self.start_date = start_date
+        self.end_date = end_date
+
+    def getDataFromDatabase(self):
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
         cursor = conn.cursor()
 
@@ -241,44 +306,38 @@ class Resume:
         cursor.execute('SELECT COUNT(*) FROM experience WHERE usr_id = ?', (id,))
         result = cursor.fetchone()
         exp_id_exists = result[0] > 0
-        print(exp_id_exists)
 
         cursor.execute('SELECT COUNT(*) FROM extracurr WHERE usr_id = ?', (id,))
         result = cursor.fetchone()
         extracurr_id_exists = result[0] > 0
-        print(extracurr_id_exists)
 
         cursor.execute('SELECT COUNT(*) FROM general_info WHERE usr_id = ?', (id,))
         result = cursor.fetchone()
         general_id_exists = result[0] > 0
-        print(general_id_exists)
 
         cursor.execute('SELECT COUNT(*) FROM projects WHERE usr_id = ?', (id,))
         result = cursor.fetchone()
         project_id_exists = result[0] > 0
-        print(project_id_exists)
 
         cursor.execute('SELECT COUNT(*) FROM technical_skills WHERE usr_id = ?', (id,))
         result = cursor.fetchone()
         tech_id_exists = result[0] > 0
-        print(tech_id_exists)
 
         if exp_id_exists and extracurr_id_exists and general_id_exists and project_id_exists and tech_id_exists:
 
             # get general info from database
             general_info = General_Info(id)
-            general_info.setData()
+            general_info.getDataFromDatabase()
             self.general_info.append(general_info)
 
             # get experience from database; there may be multiple experience entries so we
             # get a list of job ids associated with the same usr_id
             cursor.execute('SELECT job_id FROM experience WHERE usr_id=?', (id,))
             result = cursor.fetchall()
-            print(result)
             job_ids = [results[0] for results in result]
             for job_id in job_ids:
                 experience = Experience(id, job_id)
-                experience.setData()
+                experience.getDataFromDatabase()
                 self.experience.append(experience)
 
             # get extracurriculars from database; there may be multiple extracurricular entries so we
@@ -288,7 +347,7 @@ class Resume:
             act_ids = [results[0] for results in result]
             for act_id in act_ids:
                 extracurr = Extracurr(id, act_id)
-                extracurr.setData()
+                extracurr.getDataFromDatabase()
                 self.extracurr.append(extracurr)
 
             # get projects from database; there may be multiple project entries so we
@@ -298,7 +357,7 @@ class Resume:
             project_ids = [results[0] for results in result]
             for project_id in project_ids:
                 project = Project(id, project_id)
-                project.setData()
+                project.getDataFromDatabase()
                 self.projects.append(project)
 
             # get technical skills from database; there may be multiple skill entries so we
@@ -308,7 +367,7 @@ class Resume:
             skill_ids = [results[0] for results in result]
             for skill_id in skill_ids:
                 technical_skill = Technical_Skill(id, skill_id)
-                technical_skill.setData()
+                technical_skill.getDataFromDatabase()
                 self.technical_skills.append(technical_skill)
 
             cursor.execute('SELECT COUNT(*) FROM awards WHERE usr_id = ?', (id,))
@@ -332,7 +391,7 @@ class Resume:
                 awd_ids = [results[0] for results in result]
                 for awd_id in awd_ids:
                     award = Award(id, awd_id)
-                    award.setData()
+                    award.getDataFromDatabase()
                     self.awards.append(award)
 
                 # get volunteer work from database; there may be multiple volunteer entries so we
@@ -342,7 +401,7 @@ class Resume:
                 vol_ids = [results[0] for results in result]
                 for vol_id in vol_ids:
                     volunteer_work = Volunteer_Work(id, vol_id)
-                    volunteer_work.setData()
+                    volunteer_work.getDataFromDatabase()
                     self.volunteer_work.append(volunteer_work)
 
                 # get course work from database; there may be multiple course entries so we
@@ -352,12 +411,12 @@ class Resume:
                 course_ids = [results[0] for results in result]
                 for course_id in course_ids:
                     course_work = Course_Work(id, course_id)
-                    course_work.setData()
+                    course_work.getDataFromDatabase()
                     self.course_work.append(course_work)
 
                 # get objective statement from database
                 objective = Objective(id)
-                objective.setData()
+                objective.getDataFromDatabase()
                 self.objective.append(objective)
 
             elif awards_id_exists and volunteer_work_id_exists and objective_id_exists:
@@ -368,7 +427,7 @@ class Resume:
                 awd_ids = [results[0] for results in result]
                 for awd_id in awd_ids:
                     award = Award(id, awd_id)
-                    award.setData()
+                    award.getDataFromDatabase()
                     self.awards.append(award)
 
                 # get volunteer work from database; there may be multiple volunteer entries so we
@@ -378,12 +437,12 @@ class Resume:
                 vol_ids = [results[0] for results in result]
                 for vol_id in vol_ids:
                     volunteer_work = Volunteer_Work(id, vol_id)
-                    volunteer_work.setData()
+                    volunteer_work.getDataFromDatabase()
                     self.volunteer_work.append(volunteer_work)
 
                 # get objective statement from database
                 objective = Objective(id)
-                objective.setData()
+                objective.getDataFromDatabase()
                 self.objective.append(objective)
 
             elif awards_id_exists and volunteer_work_id_exists and course_work_id_exists:
@@ -394,7 +453,7 @@ class Resume:
                 awd_ids = [results[0] for results in result]
                 for awd_id in awd_ids:
                     award = Award(id, awd_id)
-                    award.setData()
+                    award.getDataFromDatabase()
                     self.awards.append(award)
 
                 # get volunteer work from database; there may be multiple volunteer entries so we
@@ -404,7 +463,7 @@ class Resume:
                 vol_ids = [results[0] for results in result]
                 for vol_id in vol_ids:
                     volunteer_work = Volunteer_Work(id, vol_id)
-                    volunteer_work.setData()
+                    volunteer_work.getDataFromDatabase()
                     self.volunteer_work.append(volunteer_work)
 
                 # get course work from database; there may be multiple course entries so we
@@ -414,7 +473,7 @@ class Resume:
                 course_ids = [results[0] for results in result]
                 for course_id in course_ids:
                     course_work = Course_Work(id, course_id)
-                    course_work.setData()
+                    course_work.getDataFromDatabase()
                     self.course_work.append(course_work)
 
             elif awards_id_exists and  objective_id_exists and course_work_id_exists:
@@ -425,7 +484,7 @@ class Resume:
                 awd_ids = [results[0] for results in result]
                 for awd_id in awd_ids:
                     award = Award(id, awd_id)
-                    award.setData()
+                    award.getDataFromDatabase()
                     self.awards.append(award)
 
                 # get course work from database; there may be multiple course entries so we
@@ -435,12 +494,12 @@ class Resume:
                 course_ids = [results[0] for results in result]
                 for course_id in course_ids:
                     course_work = Course_Work(id, course_id)
-                    course_work.setData()
+                    course_work.getDataFromDatabase()
                     self.course_work.append(course_work)
 
                 # get objective statement from database
                 objective = Objective(id)
-                objective.setData()
+                objective.getDataFromDatabase()
                 self.objective.append(objective)
 
 
@@ -452,7 +511,7 @@ class Resume:
                 awd_ids = [results[0] for results in result]
                 for awd_id in awd_ids:
                     award = Award(id, awd_id)
-                    award.setData()
+                    award.getDataFromDatabase()
                     self.awards.append(award)
 
                 # get volunteer work from database; there may be multiple volunteer entries so we
@@ -462,7 +521,7 @@ class Resume:
                 vol_ids = [results[0] for results in result]
                 for vol_id in vol_ids:
                     volunteer_work = Volunteer_Work(id, vol_id)
-                    volunteer_work.setData()
+                    volunteer_work.getDataFromDatabase()
                     self.volunteer_work.append(volunteer_work)
 
             elif awards_id_exists and course_work_id_exists:
@@ -473,7 +532,7 @@ class Resume:
                 awd_ids = [results[0] for results in result]
                 for awd_id in awd_ids:
                     award = Award(id, awd_id)
-                    award.setData()
+                    award.getDataFromDatabase()
                     self.awards.append(award)
 
                 # get course work from database; there may be multiple course entries so we
@@ -483,7 +542,7 @@ class Resume:
                 course_ids = [results[0] for results in result]
                 for course_id in course_ids:
                     course_work = Course_Work(id, course_id)
-                    course_work.setData()
+                    course_work.getDataFromDatabase()
                     self.course_work.append(course_work)
 
             elif awards_id_exists and objective_id_exists:
@@ -494,12 +553,12 @@ class Resume:
                 awd_ids = [results[0] for results in result]
                 for awd_id in awd_ids:
                     award = Award(id, awd_id)
-                    award.setData()
+                    award.getDataFromDatabase()
                     self.awards.append(award)
 
                 # get objective statement from database
                 objective = Objective(id)
-                objective.setData()
+                objective.getDataFromDatabase()
                 self.objective.append(objective)
 
             elif awards_id_exists:
@@ -510,7 +569,7 @@ class Resume:
                 awd_ids = [results[0] for results in result]
                 for awd_id in awd_ids:
                     award = Award(id, awd_id)
-                    award.setData()
+                    award.getDataFromDatabase()
                     self.awards.append(award)
 
             elif volunteer_work_id_exists and objective_id_exists and course_work_id_exists:
@@ -521,7 +580,7 @@ class Resume:
                 vol_ids = [results[0] for results in result]
                 for vol_id in vol_ids:
                     volunteer_work = Volunteer_Work(id, vol_id)
-                    volunteer_work.setData()
+                    volunteer_work.getDataFromDatabase()
                     self.volunteer_work.append(volunteer_work)
 
                 # get course work from database; there may be multiple course entries so we
@@ -531,12 +590,12 @@ class Resume:
                 course_ids = [results[0] for results in result]
                 for course_id in course_ids:
                     course_work = Course_Work(id, course_id)
-                    course_work.setData()
+                    course_work.getDataFromDatabase()
                     self.course_work.append(course_work)
 
                 # get objective statement from database
                 objective = Objective(id)
-                objective.setData()
+                objective.getDataFromDatabase()
                 self.objective.append(objective)
 
             elif volunteer_work_id_exists and course_work_id_exists:
@@ -547,7 +606,7 @@ class Resume:
                 vol_ids = [results[0] for results in result]
                 for vol_id in vol_ids:
                     volunteer_work = Volunteer_Work(id, vol_id)
-                    volunteer_work.setData()
+                    volunteer_work.getDataFromDatabase()
                     self.volunteer_work.append(volunteer_work)
 
                 # get course work from database; there may be multiple course entries so we
@@ -557,7 +616,7 @@ class Resume:
                 course_ids = [results[0] for results in result]
                 for course_id in course_ids:
                     course_work = Course_Work(id, course_id)
-                    course_work.setData()
+                    course_work.getDataFromDatabase()
                     self.course_work.append(course_work)
 
             elif volunteer_work_id_exists and objective_id_exists:
@@ -568,12 +627,12 @@ class Resume:
                 vol_ids = [results[0] for results in result]
                 for vol_id in vol_ids:
                     volunteer_work = Volunteer_Work(id, vol_id)
-                    volunteer_work.setData()
+                    volunteer_work.getDataFromDatabase()
                     self.volunteer_work.append(volunteer_work)
 
                 # get objective statement from database
                 objective = Objective(id)
-                objective.setData()
+                objective.getDataFromDatabase()
                 self.objective.append(objective)
 
             elif volunteer_work_id_exists:
@@ -584,7 +643,7 @@ class Resume:
                 vol_ids = [results[0] for results in result]
                 for vol_id in vol_ids:
                     volunteer_work = Volunteer_Work(id, vol_id)
-                    volunteer_work.setData()
+                    volunteer_work.getDataFromDatabase()
                     self.volunteer_work.append(volunteer_work)
 
             elif objective_id_exists and course_work_id_exists:
@@ -595,18 +654,18 @@ class Resume:
                 course_ids = [results[0] for results in result]
                 for course_id in course_ids:
                     course_work = Course_Work(id, course_id)
-                    course_work.setData()
+                    course_work.getDataFromDatabase()
                     self.course_work.append(course_work)
 
                 # get objective statement from database
                 objective = Objective(id)
-                objective.setData()
+                objective.getDataFromDatabase()
                 self.objective.append(objective)
 
             elif objective_id_exists:
                 # get objective statement from database
                 objective = Objective(id)
-                objective.setData()
+                objective.getDataFromDatabase()
                 self.objective.append(objective)
 
             elif course_work_id_exists:
@@ -617,10 +676,96 @@ class Resume:
                 course_ids = [results[0] for results in result]
                 for course_id in course_ids:
                     course_work = Course_Work(id, course_id)
-                    course_work.setData()
+                    course_work.getDataFromDatabase()
                     self.course_work.append(course_work)
+        conn.close()
+
+
+    def addExperience(self, experience):
+        conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
+        cursor = conn.cursor() 
+
+        cursor.execute('INSERT into experience (usr_id, job_id, company, role, start_date, end_date, location, desc_arr) VALUES (?, ?, ?, ?, ?, ?, ?, ?);', 
+                        (experience.user_id, experience.job_id, experience.company, experience.role, experience.start_date, experience.end_date, 
+                        experience.location, experience.desc_arr))
+        conn.commit()
+        conn.close()
+
+    def addExtracurr(self, extracurr):
+        conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
+        cursor = conn.cursor() 
+
+        cursor.execute('INSERT into extracurr (usr_id, act_id, title, desc_arr) VALUES (?, ?, ?, ?);', 
+                        (extracurr.user_id, extracurr.act_id, extracurr.title, extracurr.desc))
+        conn.commit()
+        conn.close()
+
+    def addGeneralInfo(self, general):
+        conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
+        cursor = conn.cursor() 
+
+        cursor.execute('INSERT into general_info (usr_id, lastname, firstname, phone, email, linkedin, edu, grad_date, major, GPA) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);', 
+                        (general.user_id, general.lastname, general.firstname, general.phone, general.email, general.linkedin, general.edu, general.grad_date, general.major, general.GPA))
+        conn.commit()
+        conn.close()
+
+    def addTechnicalSkill(self, technicalSkill):
+        conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
+        cursor = conn.cursor() 
+
+        cursor.execute('INSERT into technical_skills (usr_id, skill_id, name) VALUES (?, ?, ?);', 
+                        (technicalSkill.user_id, technicalSkill.skill_id, technicalSkill.name))
+        conn.commit()
+        conn.close()
+
+    def addProject(self, project):
+        conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
+        cursor = conn.cursor() 
+
+        cursor.execute('INSERT into projects (usr_id, proj_id, title, who_for, date, desc_arr) VALUES (?, ?, ?, ?, ?, ?);', 
+                        (project.user_id, project.proj_id, project.title, project.who_for, project.date, project.desc_arr))
+        conn.commit()
+        conn.close()
+
+    def addAward(self, award):
+        conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
+        cursor = conn.cursor() 
+
+        cursor.execute('INSERT into awards (usr_id, awd_id, title, desc) VALUES (?, ?, ?, ?);', 
+                        (award.user_id, award.award_id, award.title, award.desc))
+        conn.commit()
+        conn.close()
+
+    def addCourse(self, course):
+        conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
+        cursor = conn.cursor() 
+
+        cursor.execute('INSERT into course_work (usr_id, course_id, name) VALUES (?, ?, ?);', 
+                        (course.user_id, course.course_id, course.name))
+        conn.commit()
+        conn.close()
+
+    def addObjective(self, objective):
+        conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
+        cursor = conn.cursor() 
+
+        cursor.execute('INSERT into objective (usr_id, obj_str, obj_id) VALUES (?, ?, ?);', 
+                        (objective.user_id, objective.obj_str, objective.obj_id))
+        conn.commit()
+        conn.close()
+
+    def addVolunteerWork(self, volunteer):
+        conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
+        cursor = conn.cursor() 
+
+        cursor.execute('INSERT into volunteer_work (usr_id, vol_id, company, role, start_date, end_date) VALUES (?, ?, ?, ?, ?, ?);', 
+                        (volunteer.user_id, volunteer.vol_id, volunteer.company, volunteer.role, volunteer.start_date, volunteer.end_date))
+        conn.commit()
+        conn.close()
+    
 
 
 resume = Resume()
-resume.getUserInfo(1)
-print(resume.experience[0].getData())
+volunteer = Volunteer_Work(2, 4)
+volunteer.setData(2, 4, "YMSL", "Secretary", "01/11/2020", "05/22/2022")
+resume.addVolunteerWork(volunteer)

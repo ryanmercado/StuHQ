@@ -44,7 +44,7 @@ def get_todo_list(usr_id):
     con = sqlite3.connect('server/usrDatabase/usrDB.db')
     cursor = con.cursor()
     next_week_datetime = datetime.now() + timedelta(days=7)
-    if(usr_id_exists(usr_id)):
+    if(user_events.usr_id_exists(usr_id)):
         query = """
             SELECT event_id, event_title, start_epoch
             FROM calendar

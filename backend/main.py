@@ -3,7 +3,7 @@ from recipe import Recipe, GroceryList, Stock, user_events, to_do_list
 
 recipeAPI = Flask(__name__)
 
-@recipeAPI.route('/api/addRecipe', methods=['POST'])
+@stuAPI.route('/api/addRecipe', methods=['POST'])
 def create_recipe():
     data = request.get_json()
     usr_id = data['usr_id']
@@ -18,7 +18,7 @@ def create_recipe():
     return jsonify({'message': 'Recipe created successfully'})
 
 
-@recipeAPI.route('/api/removeRecipe', methods=['POST'])
+@stuAPI.route('/api/removeRecipe', methods=['POST'])
 def delete_recipe():
     data = request.get_json()
     usr_id = data['usr_id']
@@ -28,7 +28,7 @@ def delete_recipe():
     return jsonify({'message': 'Recipe deleted successfully'})
 
 
-@recipeAPI.route('/api/getRecipes', methods=['GET'])
+@stuAPI.route('/api/getRecipes', methods=['GET'])
 def get_recipes():
     data = request.get_json()
     usr_id = data['usr_id']
@@ -36,7 +36,7 @@ def get_recipes():
     
 
 
-@recipeAPI.route('/api/addGroceryListIngredient', methods=['POST'])
+@stuAPI.route('/api/addGroceryListIngredient', methods=['POST'])
 def add_ingredient():
     data = request.get_json()
     usr_id = data['usr_id']
@@ -46,7 +46,7 @@ def add_ingredient():
     return jsonify({'message': 'Ingredient added successfully'})
 
 
-@recipeAPI.route('/api/removeGroceryListIngredient', methods=['POST'])
+@stuAPI.route('/api/removeGroceryListIngredient', methods=['POST'])
 def remove_ingredient():
     data = request.get_json()
     usr_id = data['usr_id']
@@ -56,7 +56,7 @@ def remove_ingredient():
     return jsonify({'message': 'Ingredient deleted successfully'})
 
 
-@recipeAPI.route('/api/getGroceryList', methods=['GET'])
+@stuAPI.route('/api/getGroceryList', methods=['GET'])
 def getGroceryList():
     data = request.get_json()
     usr_id = data['usr_id']
@@ -64,7 +64,7 @@ def getGroceryList():
     return GroceryList.get_items(usr_id)
 
 
-@recipeAPI.route('/api/addStockItem', methods=['POST'])
+@stuAPI.route('/api/addStockItem', methods=['POST'])
 def addStockItem():
     data = request.get_json()
     usr_id = data['usr_id']
@@ -73,7 +73,7 @@ def addStockItem():
     return jsonify({'message': 'Item added successfully'})
 
 
-@recipeAPI.route('/api/removeStockItem', methods=['POST'])
+@stuAPI.route('/api/removeStockItem', methods=['POST'])
 def removeStockItem():
     data = request.get_json()
     usr_id = data['usr_id']
@@ -82,14 +82,14 @@ def removeStockItem():
     return jsonify({'message': 'Item removed successfully'})
 
 
-@recipeAPI.route('/api/getStock', methods=['GET'])
+@stuAPI.route('/api/getStock', methods=['GET'])
 def getStockItems():
     data = request.get_json()
     usr_id = data['usr_id']
     return Stock.get_items(usr_id)
 
 
-@calendarAPI.route('/api/addTo_ToDoList', methods=['POST'])
+@stuAPI.route('/api/addTo_ToDoList', methods=['POST'])
 def addTo_ToDoList():
     data = request.get_json()
     usr_id = data['usr_id']
@@ -101,14 +101,14 @@ def addTo_ToDoList():
     return to_do_list.add_to_list(usr_id, event_desc, event_type, event_title, start_epoch, end_epoch)
 
 
-@calendarAPI.route('/api/getToDoList', methods=['GET'])
+@stuAPI.route('/api/getToDoList', methods=['GET'])
 def get_ToDoList():
     data = request.get_json()
     usr_id = data['usr_id']
     return to_do_list.get_todo_list(usr_id)
 
 
-@calendarAPI.route('/api/createEvent', methods=['POST']) 
+@stuAPI.route('/api/createEvent', methods=['POST']) 
 def createEvent():
     data = request.get_json()
     usr_id = data['usr_id']
@@ -124,21 +124,21 @@ def createEvent():
     return user_events.create_event(usr_id, event_desc, event_type, event_title, start_epoch, end_epoch, on_to_do_list, extra_data, is_submitted, want_notification)
 
 
-@calendarAPI.route('/api/getEventInformation', methods=['GET']) 
+@stuAPI.route('/api/getEventInformation', methods=['GET']) 
 def getEventInformation():
     data = request.get_json()
     event_id = data['event_id']
     return user_events.get_event(event_id)
 
 
-@calendarAPI.route('/api/getUserEvents', methods=['GET']) 
+@stuAPI.route('/api/getUserEvents', methods=['GET']) 
 def getUserEvents():
     data = request.get_json()
     usr_id = data['usr_id']
     return user_events.get_usr_events(usr_id)
 
 
-@calendarAPI.route('/api/updateEvent', methods=['POST']) 
+@stuAPI.route('/api/updateEvent', methods=['POST']) 
 def updateEvent():
     data = request.get_json()
     event_id = data['event_id']
@@ -154,11 +154,11 @@ def updateEvent():
     return user_events.update_event(event_id, event_title, event_desc, event_type, start_epoch, end_epoch, on_to_do_list, extra_data, is_submitted, want_notification) 
 
 
-@calendarAPI.route('/api/deleteEvent', methods=['POST']) 
+@stuAPI.route('/api/deleteEvent', methods=['POST']) 
 def deleteEvent():
     data = request.get_json()
     event_id = data['event_id']
-    return user_events.delte_event(event_id)
+    return user_events.delete_event(event_id)
 
 
 

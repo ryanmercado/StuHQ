@@ -8,6 +8,8 @@ import reportWebVitals from './reportWebVitals';
 import LogIn from './Home/LogIn';
 import SignUp from './Home/SignUp';
 import Landing from './Home/Landing';
+import Calendar from './Calendar/CalendarLand';
+import CalendarLand from './Calendar/CalendarLand';
 
 
 createRoot(document.getElementById('root')).render(
@@ -16,7 +18,7 @@ createRoot(document.getElementById('root')).render(
             <Route path="/signup" element={<SignUp />} />
             <Route path="/login" element={<LogIn />} />
             <Route path="/" element={<Landing />} />
-
+            <Route path="/calendar" element={<CalendarLand />} />
 
         </Routes>
     </Router>

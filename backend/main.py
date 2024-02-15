@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify
 from recipe import Recipe, GroceryList, Stock
+from calendar_module import user_events, to_do_list
 import handleCreateAccount, handleSignIn
+
 
 stuAPI = Flask(__name__)
 
@@ -85,11 +87,92 @@ def getStockItems():
     usr_id = request.args.get('usr_id')
     return Stock.get_items(usr_id)
 
+
+
+@stuAPI.route('/api/addTo_ToDoList', methods=['POST'])
+def addTo_ToDoList():
+    data = request.get_json()
+    usr_id = data['usr_id']
+    event_desc = data['event_desc']
+    event_type = data['event_type']
+    event_title = data['event_title']
+    start_epoch = data['start_epoch']
+    end_epoch = data['end_epoch']
+    return to_do_list.add_to_list(usr_id, event_desc, event_type, event_title, start_epoch, end_epoch)
+
+
+@stuAPI.route('/api/getToDoList', methods=['GET'])
+def get_ToDoList():
+    data = request.get_json()
+    usr_id = data['usr_id']
+    return to_do_list.get_todo_list(usr_id)
+
+
+@stuAPI.route('/api/createEvent', methods=['POST']) 
+def createEvent():
+    data = request.get_json()
+    usr_id = data['usr_id']
+    event_desc = data['event_desc']
+    event_type = data['event_type']
+    event_title = data['event_title']
+    start_epoch = data['start_epoch']
+    end_epoch = data['end_epoch']
+    on_to_do_list = data['on_to_do_list']
+    extra_data = data['extra_data']
+    is_submitted = data['is_submitted']
+    want_notification = data['want_notification']
+    return user_events.create_event(usr_id, event_desc, event_type, event_title, start_epoch, end_epoch, on_to_do_list, extra_data, is_submitted, want_notification)
+
+
+@stuAPI.route('/api/getEventInformation', methods=['GET']) 
+def getEventInformation():
+    data = request.get_json()
+    event_id = data['event_id']
+    return user_events.get_event(event_id)
+
+
+@stuAPI.route('/api/getUserEvents', methods=['GET']) 
+def getUserEvents():
+    data = request.get_json()
+    usr_id = data['usr_id']
+    return user_events.get_usr_events(usr_id)
+
+
+@stuAPI.route('/api/updateEvent', methods=['POST']) 
+def updateEvent():
+    data = request.get_json()
+    event_id = data['event_id']
+    event_desc = data['event_desc']
+    event_type = data['event_type']
+    event_title = data['event_title']
+    start_epoch = data['start_epoch']
+    end_epoch = data['end_epoch']
+    on_to_do_list = data['on_to_do_list']
+    extra_data = data['extra_data']
+    is_submitted = data['is_submitted']
+    want_notification = data['want_notification']
+    return user_events.update_event(event_id, event_title, event_desc, event_type, start_epoch, end_epoch, on_to_do_list, extra_data, is_submitted, want_notification) 
+
+
+@stuAPI.route('/api/deleteEvent', methods=['POST']) 
+def deleteEvent():
+    data = request.get_json()
+    event_id = data['event_id']
+    return user_events.delete_event(event_id)
+ 
 @stuAPI.route('/api/login', methods=['GET'])
 def login():
     username = request.args.get('username')
     password = request.args.get('password')
     return handleSignIn.login(username, password)
+
+@stuAPI.route('/api/signup', methods=['POST'])
+def signup():
+    username = request.args.get('username')
+    password = request.args.get('password')
+    email = request.args.get('email')
+    confirm_password = request.args.get('confirm_password')
+    return handleCreateAccount.signup(username, email, password, confirm_password)
 
 if __name__ == '__main__':
     stuAPI.run(debug=True)

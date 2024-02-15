@@ -166,5 +166,13 @@ def login():
     password = request.args.get('password')
     return handleSignIn.login(username, password)
 
+@stuAPI.route('/api/signup', methods=['POST'])
+def signup():
+    username = request.args.get('username')
+    password = request.args.get('password')
+    email = request.args.get('email')
+    confirm_password = request.args.get('confirm_password')
+    return handleCreateAccount.signup(username, email, password, confirm_password)
+
 if __name__ == '__main__':
     stuAPI.run(debug=True)

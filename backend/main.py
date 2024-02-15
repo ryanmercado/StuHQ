@@ -1,7 +1,10 @@
 from flask import Flask, request, jsonify
-from recipe import Recipe, GroceryList, Stock, user_events, to_do_list
+from recipe import Recipe, GroceryList, Stock
+from calendar_module import user_events, to_do_list
+import handleCreateAccount, handleSignIn
 
-recipeAPI = Flask(__name__)
+
+stuAPI = Flask(__name__)
 
 @stuAPI.route('/api/addRecipe', methods=['POST'])
 def create_recipe():
@@ -30,8 +33,7 @@ def delete_recipe():
 
 @stuAPI.route('/api/getRecipes', methods=['GET'])
 def get_recipes():
-    data = request.get_json()
-    usr_id = data['usr_id']
+    usr_id = request.args.get('usr_id')
     return Recipe.getRecipes(usr_id)
     
 
@@ -58,9 +60,7 @@ def remove_ingredient():
 
 @stuAPI.route('/api/getGroceryList', methods=['GET'])
 def getGroceryList():
-    data = request.get_json()
-    usr_id = data['usr_id']
-
+    usr_id = request.args.get('usr_id')
     return GroceryList.get_items(usr_id)
 
 
@@ -84,9 +84,9 @@ def removeStockItem():
 
 @stuAPI.route('/api/getStock', methods=['GET'])
 def getStockItems():
-    data = request.get_json()
-    usr_id = data['usr_id']
+    usr_id = request.args.get('usr_id')
     return Stock.get_items(usr_id)
+
 
 
 @stuAPI.route('/api/addTo_ToDoList', methods=['POST'])
@@ -159,9 +159,12 @@ def deleteEvent():
     data = request.get_json()
     event_id = data['event_id']
     return user_events.delete_event(event_id)
-
-
+ 
+@stuAPI.route('/api/login', methods=['GET'])
+def login():
+    username = request.args.get('username')
+    password = request.args.get('password')
+    return handleSignIn.login(username, password)
 
 if __name__ == '__main__':
-    recipeAPI.run(debug=True)
-
+    stuAPI.run(debug=True)

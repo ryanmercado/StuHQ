@@ -113,7 +113,7 @@ class TechnicalSkill:
 
 # Function to retrieve data from a table and return a list of objects
 def fetch_data(table_name, obj_class):
-    conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
+    conn = connect_to_database()
     cursor = conn.cursor()
     cursor.execute(f"SELECT * FROM {table_name}")
     data = cursor.fetchall()
@@ -219,7 +219,13 @@ def fill_example_data():
 # Call the function to fill example data
 
 
-
+def fetch_and_return():
+    experiences = fetch_data('experience', Experience)
+    extracurriculars = fetch_data('extracurr', Extracurricular)
+    general_infos = fetch_data('general_info', GeneralInfo)
+    projects = fetch_data('projects', Project)
+    technical_skills = fetch_data('technical_skills', TechnicalSkill)
+    return experiences, extracurriculars, general_infos, projects, technical_skills
 
 if __name__ == "__main__":
     fill_example_data()

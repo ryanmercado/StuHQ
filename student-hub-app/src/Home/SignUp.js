@@ -1,7 +1,9 @@
 // SignUp.js
 import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom'; 
 
 function SignUp() {
+    const navigate = useNavigate();
     const [username, setUsernameValue] = useState('');
     const [password, setPasswordValue] = useState('');
     const [email, setEmailValue] = useState('');
@@ -23,8 +25,13 @@ function SignUp() {
         xhr.setRequestHeader("Content-Type", "application/json"); 
         xhr.onload = () => {
           if (xhr.status === 200) {
-            console.log(xhr.responseText);
+            const response = JSON.parse(xhr.response)
+            console.log(response);
+            if (response.result === 'account created successfully') {
+                navigate('/dashboard');
+            }
           }
+
         };
         xhr.send(jsonData);
         setPasswordValue('')

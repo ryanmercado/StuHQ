@@ -1,10 +1,12 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from recipe import Recipe, GroceryList, Stock
 from calendar_module import user_events, to_do_list
 import handleCreateAccount, handleSignIn
 
 
 stuAPI = Flask(__name__)
+CORS(stuAPI)
 
 @stuAPI.route('/api/addRecipe', methods=['POST'])
 def create_recipe():
@@ -162,13 +164,14 @@ def login():
     password = request.args.get('password')
     return handleSignIn.login(username, password)
 
-@stuAPI.route('/api/signup', methods=['POST'])
+@stuAPI.route('/api/createAccount', methods=['POST'])
 def signup():
-    username = request.args.get('username')
-    password = request.args.get('password')
-    email = request.args.get('email')
-    confirm_password = request.args.get('confirm_password')
-    return handleCreateAccount.signup(username, email, password, confirm_password)
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+    email = data.get('email')
+    confirm_password = data.get('confirm_password')
+    return handleCreateAccount.sign_up(username, email, password, confirm_password)
 
 @stuAPI.route('/api/login', methods=['GET'])
 def login():

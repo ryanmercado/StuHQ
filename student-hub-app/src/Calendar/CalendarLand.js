@@ -1,5 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Calendar, dayjsLocalizer } from 'react-big-calendar';
+import React, { useState, useEffect, useEffect } from 'react';
+import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
+import format from 'date-fns/format';
+import parse from 'date-fns/format';
+import startOfWeek from 'date-fns/startOfWeek';
+import getDay from 'date-fns/getDay';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Popover from '@mui/material/Popover';
@@ -128,7 +132,9 @@ function CalendarLand() {
         }
         fetchUserEvents();
     }, [usr_id, navigate]);
-
+    useEffect(() => {
+        fetchUserEvents();
+    }, []);
 
     return (
         <div>

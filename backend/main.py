@@ -164,14 +164,14 @@ def login():
     password = request.args.get('password')
     return handleSignIn.login(username, password)
 
-@stuAPI.route('/api/createAccount', ['POST'])
+@stuAPI.route('/api/createAccount', methods=['POST'])
 def createAccount():
     data = request.get_json()
     username = data['username']
     password = data['password']
     confirm_password = data['confirm_password']
     email = data['email']
-    return handleCreateAccount(username, email, password, confirm_password)
+    return handleCreateAccount.sign_up(username, email, password, confirm_password)
 
 if __name__ == '__main__':
     stuAPI.run(debug=True)

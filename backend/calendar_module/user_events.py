@@ -43,7 +43,7 @@ def create_event(usr_id, event_desc, event_type,
         
         con.commit()
         con.close()
-        return {'result': 'event created'} #jsonify
+        return jsonify({'result': 'event created'})
     else:
         return jsonify({'result': 'id not found'}) 
 

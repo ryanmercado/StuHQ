@@ -14,10 +14,25 @@ import secureLocalStorage from 'react-secure-storage';
 const events = [];
 
 function CalendarLand() {
-    const usr_id = secureLocalStorage.getItem('usr_id');
     const navigate = useNavigate();
     const [newEvent, setNewEvent] = useState({ title: "", start: "", end: "" });
     const [allEvents, setAllEvents] = useState(events);
+    const usr_id = secureLocalStorage.getItem("usr_id")
+
+    const fetchUserEvents = () => {
+        const jsonData = JSON.stringify({'usr_id' : usr_id})
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", `http://localhost:5000/api/getUserEvents?usr_id=${usr_id}`, true);
+        xhr.setRequestHeader("Content-Type", "application/json"); 
+        xhr.onload = () => {
+          if (xhr.status === 200) { // Handle cases: username taken, pwds don't match, email taken
+            const response = JSON.parse(xhr.response)
+            console.log(response)
+            console.log(usr_id)
+          }
+        };
+        xhr.send(jsonData);
+    }
 
     const handleAddEvent = () => {
         if (newEvent.title.trim() !== '') {
@@ -45,11 +60,12 @@ function CalendarLand() {
     });
 
     useEffect(() => {
-
         if (usr_id === null) {
             navigate("/");
         }
+        fetchUserEvents();
     }, [usr_id, navigate]);
+
 
     return (
         <div>

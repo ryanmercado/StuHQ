@@ -134,8 +134,8 @@ def getEventInformation():
 
 @stuAPI.route('/api/getUserEvents', methods=['GET']) 
 def getUserEvents():
-    data = request.get_json()
-    usr_id = data['usr_id']
+    usr_id = request.args.get('usr_id')
+    print(usr_id)
     return user_events.get_usr_events(usr_id)
 
 @stuAPI.route('/api/updateEvent', methods=['POST']) 

@@ -89,9 +89,9 @@ def get_usr_events(usr_id):
         result = cursor.fetchall()
         events = result
         con.close()
-        return jsonify({'result': events}) #jsonify
+        return jsonify({'result': events}) 
     else:
-        return jsonify({'result': 'usr_id not found'}) #jsonify
+        return jsonify({'result': 'usr_id not found'})
 
 
 def update_event(event_id, event_title, event_desc, event_type, start_epoch, end_epoch, on_to_do_list, extra_data, is_submitted, want_notification):

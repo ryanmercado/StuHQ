@@ -1,6 +1,7 @@
 // SignUp.js
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; 
+import { Link, useNavigate } from 'react-router-dom';
+import secureLocalStorage from 'react-secure-storage'
 
 function SignUp() {
     const navigate = useNavigate();
@@ -8,8 +9,8 @@ function SignUp() {
     const [password, setPasswordValue] = useState('');
     const [email, setEmailValue] = useState('');
     const [confirm_password, setConfirmPasswordValue] = useState('');
-    const[createdFailed, setCreatedFailed] = useState(false);
-    const[failedMessage, setFailedMessage] = useState('');
+    const [createdFailed, setCreatedFailed] = useState(false);
+    const [failedMessage, setFailedMessage] = useState('');
 
     const handleSubmit = async (e) => {
         const formData = {
@@ -26,12 +27,12 @@ function SignUp() {
         xhr.onload = () => {
           if (xhr.status === 200) {
             const response = JSON.parse(xhr.response)
-            console.log(response);
+            console.log(response)
             if (response.result === 'account created successfully') {
                 navigate('/dashboard');
+                secureLocalStorage.setItem('usr_id', response.usr_id)
             }
           }
-
         };
         xhr.send(jsonData);
         setPasswordValue('')

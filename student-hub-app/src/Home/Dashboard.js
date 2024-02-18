@@ -13,7 +13,7 @@ function Landing() {
             <Link to="/resumeLanding">
                 <button>Resume Builder</button>
             </Link>
-            <Link to="/calendarLanding">
+            <Link to="/calendar">
                 <button>Life Planner</button>
             </Link>
         </div>

@@ -1,6 +1,6 @@
 // SignUp.js
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import secureLocalStorage from 'react-secure-storage'
 
 function SignUp() {

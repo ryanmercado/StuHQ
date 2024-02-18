@@ -158,10 +158,11 @@ def deleteEvent():
     event_id = data['event_id']
     return user_events.delete_event(event_id)
  
-@stuAPI.route('/api/login', methods=['GET'])
+@stuAPI.route('/api/login', methods=['POST'])
 def login():
-    username = request.args.get('username')
-    password = request.args.get('password')
+    data = request.get_json()
+    username = data['username']
+    password = data['password']
     return handleSignIn.login(username, password)
 
 @stuAPI.route('/api/createAccount', methods=['POST'])

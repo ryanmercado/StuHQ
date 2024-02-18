@@ -69,7 +69,10 @@ def sign_up(username, email, password, confirm_password):
         conn.commit()
         cursor.close()
         conn.close()
-        return jsonify({'result': 'account created successfully'})
+        return jsonify({
+            'result': 'account created successfully',
+            'usr_id': next_id
+        })
     else:
         next_id = get_id()
         pswd_hash = hash_password(username, password)
@@ -79,7 +82,10 @@ def sign_up(username, email, password, confirm_password):
         conn.commit()
         cursor.close()
         conn.close()
-        return jsonify({'result': 'account created successfully'})
+        return jsonify({
+            'result': 'account created successfully',
+            'usr_id': next_id
+        })
     
 # if __name__ == '__main__':
 #     sign_up('grayghost34', 'grayson.drinkard@gmail.com', 'gerber', 'gerber')

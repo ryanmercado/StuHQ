@@ -87,8 +87,6 @@ def getStockItems():
     usr_id = request.args.get('usr_id')
     return Stock.get_items(usr_id)
 
-
-
 @stuAPI.route('/api/addTo_ToDoList', methods=['POST'])
 def addTo_ToDoList():
     data = request.get_json()
@@ -130,13 +128,11 @@ def getEventInformation():
     event_id = data['event_id']
     return user_events.get_event(event_id)
 
-
 @stuAPI.route('/api/getUserEvents', methods=['GET']) 
 def getUserEvents():
     data = request.get_json()
     usr_id = data['usr_id']
     return user_events.get_usr_events(usr_id)
-
 
 @stuAPI.route('/api/updateEvent', methods=['POST']) 
 def updateEvent():
@@ -174,5 +170,21 @@ def signup():
     confirm_password = request.args.get('confirm_password')
     return handleCreateAccount.signup(username, email, password, confirm_password)
 
+@stuAPI.route('/api/login', methods=['GET'])
+def login():
+    username = request.args.get('username')
+    password = request.args.get('password')
+    return handleSignIn.login(username, password)
+
+@stuAPI.route('/api/createAccount', ['POST'])
+def createAccount():
+    data = request.get_json()
+    username = data['username']
+    password = data['password']
+    confirm_password = data['confirm_password']
+    email = data['email']
+    return handleCreateAccount(username, email, password, confirm_password)
+
 if __name__ == '__main__':
     stuAPI.run(debug=True)
+

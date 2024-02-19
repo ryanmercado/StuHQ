@@ -43,7 +43,7 @@ def create_event(usr_id, event_desc, event_type,
         
         con.commit()
         con.close()
-        return jsonify({'result': 'event created'})
+        return {'result': 'event created'} #jsonify
     else:
         return jsonify({'result': 'id not found'}) 
 
@@ -89,6 +89,7 @@ def get_usr_events(usr_id):
         result = cursor.fetchall()
         events = result
         con.close()
+
         return jsonify({'result': events}) #jsonify
     else:
         return jsonify({'result': 'usr_id not found'}) #jsonify

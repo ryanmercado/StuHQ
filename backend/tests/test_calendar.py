@@ -58,6 +58,7 @@ def test_usr_id_exists(clear_db_fixture, app_client):
 
 
 def test_event_id_exists(clear_db_fixture, app_client):
+  
     con = sqlite3.connect('server/usrDatabase/usrDB.db')
 
     # Add test data to the database
@@ -139,7 +140,9 @@ def test_update_event(clear_db_fixture, app_client):
     res = user_events.get_event(0)
     assert res.json['result'] == [0, 0, 1234567890, "newdesc", "lecture", "newTitle", None, None, 1, None, 0, 0]
 
+
 def test_delete_event(clear_db_fixture, app_client):
+
     con = sqlite3.connect('server/usrDatabase/usrDB.db')
 
     # Add test data to the database

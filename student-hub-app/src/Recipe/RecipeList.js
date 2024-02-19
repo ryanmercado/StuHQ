@@ -12,24 +12,40 @@ const RecipeList = () => {
     });
 
     const fetchRecipes = async () => {
-        try {
-            const response = await fetch(`http://localhost:5000/api/getRecipes?usr_id=${newRecipe.usr_id}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
 
-            if (!response.ok) {
-                throw new Error('Failed to fetch recipes');
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", `http://localhost:5000/api/getRecipes?usr_id=${newRecipe.usr_id}`);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.onload = () => {
+            if (xhr.status === 200) {
+                const response = JSON.parse(xhr.response);
+                setRecipeItems(response);
+                console.log(response);
+
             }
+        };
+        xhr.send();
 
-            const data = await response.json();
-            setRecipeItems(JSON.parse(data.result));
-        } catch (error) {
-            console.error('Error fetching recipes:', error.message);
-        }
     };
+    //     try {
+    //         const response = await fetch(`http://localhost:5000/api/getRecipes?usr_id=${newRecipe.usr_id}`, {
+    //             method: 'GET',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //         });
+
+    //         if (!response.ok) {
+    //             throw new Error('Failed to fetch recipes');
+    //         }
+
+    //         const data = await response.json();
+    //         setRecipeItems(JSON.parse(data.result));
+    //     } catch (error) {
+    //         console.error('Error fetching recipes:', error.message);
+    //     }
+    // };
+
 
     const addRecipe = async () => {
         try {

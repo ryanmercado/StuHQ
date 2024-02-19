@@ -17,7 +17,7 @@ def create_recipe():
     measurements = data['measurements']
     steps = data['steps']
 
-    recipe = Recipe.Recipe(name, ingredients,measurements, steps)
+    recipe = Recipe.Recipe(name, ingredients, measurements, steps)
     recipes = [recipe]
     Recipe.addRecipe(usr_id, recipes)
     return jsonify({'message': 'Recipe created successfully'})
@@ -37,6 +37,9 @@ def delete_recipe():
 def get_recipes():
     usr_id = request.args.get('usr_id')
     return Recipe.getRecipes(usr_id)
+    # data = request.get_json()
+    # usr_id = data['usr_id']
+    # return Recipe.getRecipes(usr_id)
     
 
 

@@ -42,6 +42,7 @@ def add_user_db():
     cursor.execute("INSERT INTO usr_info (usr_id, username, pswd_hash, usr_email, created_epoch) VALUES (?,?, ?, ?, ?)", (0, 'User',
         'pswd', 'user@email.com', 0 ))
     conn.commit()
+    cursor.close()
     conn.close()
 
 def clear_usr_db():
@@ -49,6 +50,7 @@ def clear_usr_db():
     cursor = conn.cursor()
     cursor.execute('DELETE FROM usr_info')
     conn.commit()
+    cursor.close()
     conn.close()
 
 

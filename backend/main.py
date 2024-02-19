@@ -45,7 +45,7 @@ def add_ingredient():
     data = request.get_json()
     usr_id = data['usr_id']
     item = data['item']
-
+    
     GroceryList.add_item(usr_id, item)
     return jsonify({'message': 'Ingredient added successfully'})
 

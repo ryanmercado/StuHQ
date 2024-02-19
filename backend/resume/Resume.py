@@ -1,5 +1,6 @@
 import sqlite3
 import json
+from flask import jsonify
 
 class Experience:
     def __init__(self, user_id, job_id):
@@ -215,7 +216,7 @@ class Course:
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
         cursor = conn.cursor()
 
-        cursor.execute('SELECT * FROM awards WHERE course_id = ?', (self.course_id,))
+        cursor.execute('SELECT * FROM course_work WHERE course_id = ?', (self.course_id,))
         result = cursor.fetchone()
         self.name = result[2]
 
@@ -239,7 +240,7 @@ class Objective:
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
         cursor = conn.cursor()
 
-        cursor.execute('SELECT * FROM awards WHERE usr_id = ?', (self.usr_id,))
+        cursor.execute('SELECT * FROM objective WHERE usr_id = ?', (self.user_id,))
         result = cursor.fetchone()
 
         self.obj_str = result[1]
@@ -271,7 +272,7 @@ class Volunteer_Work:
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
         cursor = conn.cursor()
 
-        cursor.execute('SELECT * FROM awards WHERE usr_id = ?', (self.usr_id,))
+        cursor.execute('SELECT * FROM volunteer_work WHERE usr_id = ?', (self.user_id,))
         result = cursor.fetchone()
 
         self.company = result[2]
@@ -284,7 +285,29 @@ class Volunteer_Work:
     def getData(self):
         return self.user_id, self.vol_id, self.company, self.role, self.start_date, self.end_date
 
-class Resume:
+"""
+The resume class is the main class. This includes the following functions:
+    - getUserInfo()
+    - addExperience()
+    - addExtraCurr()
+    - addGeneralInfo()
+    - addProject()
+    - addTechnicalSkill()
+    - addAward()
+    - addCourse()
+    - addObjective()
+    - addVolunteerWork()
+    - generateUniqueID()
+Since the user can have multiple experiences, extracurriculars, etc., the resume 
+class will store user info as arrays of objects. To access these arrays, create a resume
+object like the following:
+    resume = Resume()
+and access specific arrays like this:
+    arrayOfAwards = resume.awards
+arrayOfAwards will now hold the array of award objects that holds the award data of a 
+given user. See the specific classes above to see what kind of data they contain.
+"""
+class Resume: 
     def __init__(self):
         self.awards = []
         self.course_work = []
@@ -296,6 +319,19 @@ class Resume:
         self.technical_skills = []
         self.objective = []
 
+    """
+    This function retreives the user info from the database and stores is in 
+    the resume class instance variables.
+
+    Preconditions:
+        - id is an int
+    Postconditions:
+        - If the user has information stored in the 5 required tables (experience
+          extracurr, general_info, projects, technical_skills), the resume class
+          instance data will be updated
+        - If the user does not have information stored in the 5 required tables,
+          an error message is returned
+    """
     def getUserInfo(self, id):
         # precondtion: id is an int
         # postcondition: gets user information for resume formatting
@@ -396,7 +432,7 @@ class Resume:
 
                 # get volunteer work from database; there may be multiple volunteer entries so we
                 # get a list of volunteer ids associated with the same usr_id
-                cursor.execute('SELECT vol_id FROM vounteer_work WHERE usr_id=?', (id,))
+                cursor.execute('SELECT vol_id FROM volunteer_work WHERE usr_id=?', (id,))
                 result = cursor.fetchall()
                 vol_ids = [results[0] for results in result]
                 for vol_id in vol_ids:
@@ -410,7 +446,7 @@ class Resume:
                 result = cursor.fetchall()
                 course_ids = [results[0] for results in result]
                 for course_id in course_ids:
-                    course_work = Course_Work(id, course_id)
+                    course_work = Course(id, course_id)
                     course_work.getDataFromDatabase()
                     self.course_work.append(course_work)
 
@@ -678,87 +714,249 @@ class Resume:
                     course_work = Course_Work(id, course_id)
                     course_work.getDataFromDatabase()
                     self.course_work.append(course_work)
+        else:
+            return jsonify({'result': 'User does not have required fields'})
         conn.close()
 
+    """
+    This function adds a user experience to the database
 
-    def addExperience(self, experience):
+    Preconditions:
+        - user_id is an int
+        - company is a string
+        - role is a string
+        - start_date is a string
+        - end_date is a string
+        - location is a string
+        - desc_arr is a string
+    Postconditions:
+        - DB is updated with a new row in the experience table associated with
+          user_id and a unique job_id
+    """
+    def addExperience(self, user_id, company, role, start_date, end_date, location, desc_arr):
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
-        cursor = conn.cursor() 
+        cursor = conn.cursor()
+
+        unique_id = self.generateUniqueID('job_id', 'experience')
 
         cursor.execute('INSERT into experience (usr_id, job_id, company, role, start_date, end_date, location, desc_arr) VALUES (?, ?, ?, ?, ?, ?, ?, ?);', 
-                        (experience.user_id, experience.job_id, experience.company, experience.role, experience.start_date, experience.end_date, 
-                        experience.location, experience.desc_arr))
+                        (user_id, unique_id, company, role, start_date, end_date, 
+                        location, desc_arr))
         conn.commit()
         conn.close()
 
-    def addExtracurr(self, extracurr):
+    """
+    This function adds user extracurricular data to the database
+
+    Preconditions:
+        - user_id is an int
+        - title is a string
+        - desc is a string
+    Postconditions:
+        - DB is updated with a new row in the extracurr table associated with
+          user_id and a unique act_id
+    """
+    def addExtracurr(self, user_id, title, desc):
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
-        cursor = conn.cursor() 
+        cursor = conn.cursor()
+
+        unique_id = self.generateUniqueID('act_id', 'extracurr')
 
         cursor.execute('INSERT into extracurr (usr_id, act_id, title, desc_arr) VALUES (?, ?, ?, ?);', 
-                        (extracurr.user_id, extracurr.act_id, extracurr.title, extracurr.desc))
+                        (user_id, unique_id, title, desc))
         conn.commit()
         conn.close()
 
-    def addGeneralInfo(self, general):
+    """
+    This function adds user general info to the database
+
+    Preconditions:
+        - user_id is an int
+        - lastname is a string
+        - firstname is a string
+        - phone is an int
+        - email is a string
+        - linkedin is a string
+        - edu is a string
+        - grad_date is a string
+        - major is a string
+        - GPA is a decimal formatted as (#.##)
+    Postconditions:
+        - DB is updated with a new row in the general_info table 
+          associated with user_id
+    """
+    def addGeneralInfo(self, user_id, lastname, firstname, phone, email, linkedin, edu, grad_date, major, GPA):
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
         cursor = conn.cursor() 
 
         cursor.execute('INSERT into general_info (usr_id, lastname, firstname, phone, email, linkedin, edu, grad_date, major, GPA) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);', 
-                        (general.user_id, general.lastname, general.firstname, general.phone, general.email, general.linkedin, general.edu, general.grad_date, general.major, general.GPA))
+                        (user_id, lastname, firstname, phone, email, linkedin, edu, grad_date, major, GPA))
         conn.commit()
         conn.close()
 
-    def addTechnicalSkill(self, technicalSkill):
+    """
+    This function adds a user technical skill to the database
+
+    Preconditions:
+        - user_id is an int
+        - name is a string
+    Postconditions:
+        - DB is updated with a new row in the technical_skill table associated with
+          user_id and a unique skill_id
+    """
+    def addTechnicalSkill(self, user_id, name):
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
         cursor = conn.cursor() 
+
+        unique_id = self.generateUniqueID('skill_id', 'technical_skills')
 
         cursor.execute('INSERT into technical_skills (usr_id, skill_id, name) VALUES (?, ?, ?);', 
-                        (technicalSkill.user_id, technicalSkill.skill_id, technicalSkill.name))
+                        (user_id, unique_id, name))
         conn.commit()
         conn.close()
 
-    def addProject(self, project):
+    """
+    This function adds a user project to the database
+
+    Preconditions:
+        - user_id is an int
+        - title is a string
+        - who_for is a string
+        - date is a string
+        - desc_arr is a string
+    Postconditions:
+        - DB is updated with a new row in the projects table associated with
+          user_id and a unique proj_id
+    """
+    def addProject(self, user_id, title, who_for, date, desc_arr):
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
         cursor = conn.cursor() 
+
+        unique_id = self.generateUniqueID('proj_id', 'projects')
 
         cursor.execute('INSERT into projects (usr_id, proj_id, title, who_for, date, desc_arr) VALUES (?, ?, ?, ?, ?, ?);', 
-                        (project.user_id, project.proj_id, project.title, project.who_for, project.date, project.desc_arr))
+                        (user_id, unique_id, title, who_for, date, desc_arr))
         conn.commit()
         conn.close()
 
-    def addAward(self, award):
+    """
+    This function adds a user award to the database
+
+    Preconditions:
+        - user_id is an int
+        - title is a string
+        - desc is a string
+    Postconditions:
+        - DB is updated with a new row in the awards table associated with
+          user_id and a unique award_id
+    """
+    def addAward(self, user_id, title, desc):
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
         cursor = conn.cursor() 
+
+        unique_id = self.generateUniqueID('awd_id', 'awards')
 
         cursor.execute('INSERT into awards (usr_id, awd_id, title, desc) VALUES (?, ?, ?, ?);', 
-                        (award.user_id, award.award_id, award.title, award.desc))
+                        (user_id, unique_id, title, desc))
         conn.commit()
         conn.close()
 
-    def addCourse(self, course):
+    """
+    This function adds a user course to the database
+
+    Preconditions:
+        - user_id is an int
+        - name is a string
+    Postconditions:
+        - DB is updated with a new row in the course_work table associated with
+          user_id and a unique course_id
+    """
+    def addCourse(self, user_id, name):
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
         cursor = conn.cursor() 
+
+        unique_id = self.generateUniqueID('course_id', 'course_work')
 
         cursor.execute('INSERT into course_work (usr_id, course_id, name) VALUES (?, ?, ?);', 
-                        (course.user_id, course.course_id, course.name))
+                        (user_id, unique_id, name))
         conn.commit()
         conn.close()
 
-    def addObjective(self, objective):
+    """
+    This function adds a user objective statement to the database
+
+    Preconditions:
+        - user_id is an int
+        - obj_str is a string
+    Postconditions:
+        - DB is updated with a new row in the objective table associated with
+          user_id and a unique obj_id
+    """
+    def addObjective(self, user_id, obj_str):
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
         cursor = conn.cursor() 
+
+        # set obj_id = user_id since there is only one objective entry per user, if any
+        obj_id = user_id
 
         cursor.execute('INSERT into objective (usr_id, obj_str, obj_id) VALUES (?, ?, ?);', 
-                        (objective.user_id, objective.obj_str, objective.obj_id))
+                        (user_id, obj_str, obj_id))
         conn.commit()
         conn.close()
 
-    def addVolunteerWork(self, volunteer):
+    """
+    This function adds user volunteer work to the database
+
+    Preconditions:
+        - user_id is an int
+        - company is a string
+        - role is a string
+        - start_date is a string
+        - end_date is a string
+    Postconditions:
+        - DB is updated with a new row in the volunteer_work table associated with
+          user_id and a unique vol_id
+    """
+    def addVolunteerWork(self, user_id, company, role, start_date, end_date):
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
         cursor = conn.cursor() 
 
+        unique_id = self.generateUniqueID('vol_id', 'volunteer_work')
+
         cursor.execute('INSERT into volunteer_work (usr_id, vol_id, company, role, start_date, end_date) VALUES (?, ?, ?, ?, ?, ?);', 
-                        (volunteer.user_id, volunteer.vol_id, volunteer.company, volunteer.role, volunteer.start_date, volunteer.end_date))
+                        (user_id, unique_id, company, role, start_date, end_date))
         conn.commit()
         conn.close()
+
+    """
+    This function generates a unique ID for a given table in the databse
+
+    Preconditions:
+        - id_name is a string
+        - table is a string
+    Postconditions:
+        - A unique ID that has not been used in the specified table is returned
+    """
+    def generateUniqueID(self, id_name, table):
+        conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
+        cursor = conn.cursor() 
+        cursor.execute('SELECT ' + id_name + ' FROM ' + table)
+        result = cursor.fetchall()
+        ids = [results[0] for results in result]
+        if not ids:
+            return 1
+        unique_id = max(ids) + 1
+        conn.close()
+        return unique_id
+
+# conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
+# cursor = conn.cursor() 
+# cursor.execute('SELECT act_id FROM extracurr')
+# result = cursor.fetchall()
+# job_ids = [results[0] for results in result]
+# print(job_ids)
+# conn.close()
+
+resume = Resume()
+print(resume.getUserInfo(1))
+

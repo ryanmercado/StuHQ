@@ -1,6 +1,6 @@
 import sqlite3
 import json
-import Stock
+from recipe import Stock
 from flask import jsonify
 
 class GroceryList:

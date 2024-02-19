@@ -13,7 +13,10 @@ def login(username, password):
     cursor.close()
     conn.close()
     if results != None: #user exists
-        return jsonify({'result': 'login successful'})
+        return jsonify({
+            'result': 'login successful',
+            'usr_id': results[0]
+            })
     else:
         return jsonify({'result': 'login failed'})
 

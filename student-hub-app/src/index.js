@@ -1,29 +1,17 @@
+
 import React from 'react';
-import { createRoot } from 'react-dom/client';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ReactDOM from 'react-dom/client';
-import './assets/styles/index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import LogIn from './Home/LogIn';
-import SignUp from './Home/SignUp';
-import Landing from './Home/Landing';
-import Calendar from './Calendar/CalendarLand';
-import CalendarLand from './Calendar/CalendarLand';
 
-
-createRoot(document.getElementById('root')).render(
-    <Router>
-        <Routes>
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/login" element={<LogIn />} />
-            <Route path="/" element={<Landing />} />
-            <Route path="/calendar" element={<CalendarLand />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/recipeLanding" element ={<recipeLanding/>} />
-            <Route path="/resumeLanding" element ={<resumeDoc/>} />
-
-
-        </Routes>
-    </Router>
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App/>
+  </React.StrictMode>
 );
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();

@@ -1,59 +1,41 @@
 // SignUp.js
-
 import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import secureLocalStorage from 'react-secure-storage'
 
-const SignUp = () => {
-    const [formData, setFormData] = useState({
-        username: '',
-        email: '',
-        password: '',
-        confirm_password: '',
-    });
-
-    const[createdFailed, setCreatedFailed] = useState(false);
-    const[failedMessage, setFailedMessage] = useState('');
-
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
+function SignUp() {
+    const navigate = useNavigate();
+    const [username, setUsernameValue] = useState('');
+    const [password, setPasswordValue] = useState('');
+    const [email, setEmailValue] = useState('');
+    const [confirm_password, setConfirmPasswordValue] = useState('');
+    const [createdFailed, setCreatedFailed] = useState(false);
+    const [failedMessage, setFailedMessage] = useState('');
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        try{
-            const response = await fetch('http://localhost:5000/api/createAccount', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData)
-            });
-            
-            const data = await response.json();
-
-            if (response.data.result === 'account created successfully') {
-                
-                history.push('/dashboard')
-
-            } else if (response.data.result === 'username already exists'){
-                setCreatedFailed(true);
-                setFailedMessage = response.data.result;
-                
-            } else if (response.data.result === 'a user has already signed up with this email'){
-                setCreatedFailed(true);
-                setFailedMessage = response.data.result;
-            } else if (response.data.result === 'passwords do not match'){
-                setCreatedFailed(true);
-                setFailedMessage = response.data.result;
-            }
-        }catch (error) {
-            console.error('Login error:', error);
-        } finally{
-            setFormData({
-                username: '',
-                password: '',
-            });
+        const formData = {
+            username: username,
+            password: password,
+            email: email,
+            confirm_password: confirm_password,
         }
-        
+        const jsonData = JSON.stringify(formData)
+        e.preventDefault();
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://localhost:5000/api/createAccount");
+        xhr.setRequestHeader("Content-Type", "application/json"); 
+        xhr.onload = () => {
+          if (xhr.status === 200) { // Handle cases: username taken, pwds don't match, email taken
+            const response = JSON.parse(xhr.response)
+            if (response.result === 'account created successfully') {
+                navigate('/dashboard');
+                secureLocalStorage.setItem('usr_id', response.usr_id)
+            }
+          }
+        };
+        xhr.send(jsonData);
+        setPasswordValue('')
+        setConfirmPasswordValue('')
     };
 
     return (
@@ -65,8 +47,8 @@ const SignUp = () => {
                     <input
                         type="text"
                         name="username"
-                        value={formData.username}
-                        onChange={handleChange}
+                        value={username}
+                        onChange={(e) => setUsernameValue(e.target.value)}
                     />
                 </label>
                 <br />
@@ -75,8 +57,8 @@ const SignUp = () => {
                     <input
                         type="email"
                         name="email"
-                        value={formData.email}
-                        onChange={handleChange}
+                        value={email}
+                        onChange={(e) => setEmailValue(e.target.value)}
                     />
                 </label>
                 <br />
@@ -85,8 +67,8 @@ const SignUp = () => {
                     <input
                         type="password"
                         name="password"
-                        value={formData.password}
-                        onChange={handleChange}
+                        value={password}
+                        onChange={(e) => setPasswordValue(e.target.value)}
                     />
                 </label>
                 <br />
@@ -95,8 +77,8 @@ const SignUp = () => {
                     <input
                         type="password"
                         name="confirm_password"
-                        value={formData.confirm_password}
-                        onChange={handleChange}
+                        value={confirm_password}
+                        onChange={(e) => setConfirmPasswordValue(e.target.value)} 
                     />
                 </label>
                 <br />

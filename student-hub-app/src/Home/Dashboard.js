@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 
-const Landing = () => {
+function Landing() {
     return (
         <div>
             <h2>Welcome to your StuHQ Dashboard!</h2>
@@ -13,7 +13,7 @@ const Landing = () => {
             <Link to="/resumeLanding">
                 <button>Resume Builder</button>
             </Link>
-            <Link to="/calendarLanding">
+            <Link to="/calendar">
                 <button>Life Planner</button>
             </Link>
         </div>

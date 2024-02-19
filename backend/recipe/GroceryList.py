@@ -1,6 +1,6 @@
 import sqlite3
 import json
-import Stock
+from recipe import Stock
 from flask import jsonify
 
 class GroceryList:
@@ -15,30 +15,31 @@ class GroceryList:
         #postcondition: adds item to the grocery list associated with id
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')
         cursor = conn.cursor()
-        cursor.execute('SELECT COUNT(*) FROM grocery_list WHERE usr_id = ?', (id,))
+        cursor.execute('SELECT COUNT(*) FROM usr_info WHERE usr_id = ?', (id,))
         results = cursor.fetchone()
         if results[0] > 0: #if user exists
             cursor.execute('SELECT grocery_list FROM grocery_list WHERE usr_id = ?', (id,))
             results = cursor.fetchone()
-            current_grocery_list_json = results[0] if results else '[]'
-            current_grocery_list = json.loads(current_grocery_list_json)
-            item_exists = False
+            if results != None:
+                current_grocery_list_json = results[0]
+                items_list = current_grocery_list_json.split(', ')
+                item_exists = False
 
-            for existing_item in current_grocery_list:
-                if existing_item == item:
-                    item_exists = True
+                for existing_item in items_list:
+                    if existing_item == item:
+                        item_exists = True
             
-            if not item_exists:
-                current_grocery_list.append(item)
-                final_grocery_list = json.dumps(current_grocery_list)
-                cursor.execute('UPDATE grocery_list SET grocery_list = ? WHERE usr_id = ?', (final_grocery_list, id))
-
-        else:
-            grocery_list = [item]
-            final_grocery_list = json.dumps(grocery_list)
-            cursor.execute("INSERT INTO grocery_list (usr_id, grocery_list) VALUES (?,?)", (id, final_grocery_list))
+                if not item_exists:
+                    items_list.append(item)
+                    items_string = ', '.join(items_list)
+                    # final_grocery_list = json.dumps(current_grocery_list)
+                    cursor.execute('UPDATE grocery_list SET grocery_list = ? WHERE usr_id = ?', (items_string, id))
+            else: 
+                cursor.execute('INSERT INTO grocery_list (usr_id, grocery_list) VALUES (?,?)', (id, item))
+            
 
         conn.commit()
+        cursor.close()
         conn.close()
 
     def delete_item(id, item):
@@ -51,17 +52,16 @@ class GroceryList:
         if results[0] > 0: #if user exists
             cursor.execute('SELECT grocery_list FROM grocery_list WHERE usr_id = ?', (id,))
             results = cursor.fetchone()
-            current_grocery_list_json = results[0] if results else '[]'
-            current_grocery_list = json.loads(current_grocery_list_json)
+            current_grocery_list = results[0] if results else '[]'
             shaved_grocery_list = []
-            for existing_item in current_grocery_list:
+            items_list = current_grocery_list.split(', ')
+            for existing_item in items_list:
                 if existing_item == item:
                     continue
                 else:
                     shaved_grocery_list.append(existing_item)
-            final_grocery_list = json.dumps(shaved_grocery_list)
-            cursor.execute('UPDATE grocery_list SET grocery_list = ? WHERE usr_id = ?', (final_grocery_list, id))
-
+            final_list = items_string = ', '.join(shaved_grocery_list)
+            cursor.execute('UPDATE grocery_list SET grocery_list = ? WHERE usr_id = ?', (final_list, id))
         conn.commit()
         cursor.close()
         conn.close()
@@ -74,16 +74,15 @@ class GroceryList:
         cursor.execute('SELECT COUNT(*) FROM grocery_list WHERE usr_id = ?', (id,))
         results = cursor.fetchone()
 
-        if results[0] > 0: #if user exists
+        if results[0] > 0: # if user exists
             cursor.execute('SELECT grocery_list FROM grocery_list WHERE usr_id = ?', (id,))
             results = cursor.fetchone()
-            current_grocery_list_json = results[0] if results else '[]'
-            conn.close()
+            current_grocery_list = results[0] if results else '[]'
             cursor.close()
-            return current_grocery_list_json
-        
-        conn.close()
+            conn.close()
+            return json.dumps(current_grocery_list)
         cursor.close()
+        conn.close()
         return jsonify({'result': 'id did not exist'})
 
 
@@ -92,8 +91,3 @@ class GroceryList:
         #postcondition: removes item from grocery list, adds item to stock
         GroceryList.delete_item(id, item)
         Stock.add_item(id, item)
-
-
-# GroceryList.delete_item(1, 'grapes')
-# GroceryList.add_item(1, 'strawbs')
-# print(GroceryList.get_items(0))

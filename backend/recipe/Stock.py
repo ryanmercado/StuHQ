@@ -17,28 +17,25 @@ class Stock:
         #postcondition: adds item to the stock list associated with id
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')
         cursor = conn.cursor()
-        cursor.execute('SELECT COUNT(*) FROM curr_stock WHERE usr_id = ?', (id,))
+        cursor.execute('SELECT COUNT(*) FROM usr_info WHERE usr_id = ?', (id,))
         result = cursor.fetchone()
-        id_exists = result[0] > 0
 
-        if id_exists:
+        if result[0] > 0:
             cursor.execute("SELECT stock_list from curr_stock WHERE usr_id = ?", (id,))
             result = cursor.fetchone()
-            current_stock_json = result[0] if result else '[]'
-            item_exists = False
-            current_stock = json.loads(current_stock_json)
-            for existing_item in current_stock:
-                if existing_item == item:
-                    item_exists = True
-            if not item_exists:
-                current_stock.append(item)
-                updated_stock_json = json.dumps(current_stock)
-                cursor.execute('UPDATE curr_stock SET stock_list = ? WHERE usr_id = ?', (updated_stock_json, id))
-            
-        else:
-            stock_list = [item]
-            stock_list_json = json.dumps(stock_list)
-            cursor.execute('INSERT INTO curr_stock (usr_id, stock_list) VALUES (?,?)', (id, stock_list_json))
+            if result != None:
+                current_stock = result[0] if result else '[]'
+                current_stock = current_stock.split(', ')
+                item_exists = False
+                for existing_item in current_stock:
+                    if existing_item == item:
+                        item_exists = True
+                if not item_exists:
+                    current_stock.append(item)
+                    items_string = ', '.join(current_stock)
+                    cursor.execute('UPDATE curr_stock SET stock_list = ? WHERE usr_id = ?', (items_string, id))
+            else:
+                cursor.execute('INSERT INTO curr_stock (usr_id, stock_list) VALUES (?, ?)', (id, item))
             
         conn.commit()
         cursor.close()
@@ -50,26 +47,22 @@ class Stock:
         #postcondition: deletes item from the stock list associated with id if it exists
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')
         cursor = conn.cursor()
-        cursor.execute('SELECT COUNT(*) FROM curr_stock WHERE usr_id = ?', (id,))
+        cursor.execute('SELECT COUNT(*) FROM usr_info WHERE usr_id = ?', (id,))
         result = cursor.fetchone()
-        id_exists = result[0] > 0
 
-        if id_exists:
+        if result[0] > 0:
             cursor.execute("SELECT stock_list from curr_stock WHERE usr_id = ?", (id,))
             result = cursor.fetchone()
-            current_stock_json = result[0] if result else '[]'
-
-            current_stock = json.loads(current_stock_json)
+            current_stock = result[0] if result else '[]'
+            current_stock = current_stock.split(', ')
             new_stock = []
-
             for item in current_stock:
                 if item == del_item:
                     continue
                 else: 
                     new_stock.append(item)
-
-            updated_stock_json = json.dumps(new_stock)
-            cursor.execute('UPDATE curr_stock SET stock_list = ? WHERE usr_id = ?', (updated_stock_json, id))
+            items_string = ', '.join(new_stock)
+            cursor.execute('UPDATE curr_stock SET stock_list = ? WHERE usr_id = ?', (items_string, id))
             
         conn.commit()
         cursor.close()
@@ -82,20 +75,14 @@ class Stock:
         cursor = conn.cursor()
         cursor.execute('SELECT COUNT(*) FROM curr_stock WHERE usr_id = ?', (id,))
         result = cursor.fetchone()
-        id_exists = result[0] > 0
 
-        if id_exists:
-            cursor.execute("SELECT stock_list from curr_stock WHERE usr_id = ?", (id,))
+        if result[0] > 0: # user exists
+            cursor.execute("SELECT stock_list FROM curr_stock WHERE usr_id = ?", (id,))
             result = cursor.fetchone()
-            current_stock_json = result[0] if result else '[]'
+            current_stock = result[0] if result else '[]'
             cursor.close()
             conn.close()
-            return current_stock_json
+            return json.dumps(current_stock)
         cursor.close()
         conn.close()
         return jsonify({'result': 'usr did not exist'})
-
-
-# Stock.add_item(1, 'strawbs')
-# Stock.delete_item(0, 'strawbs')
-# print(Stock.get_items(1))

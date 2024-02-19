@@ -22,11 +22,9 @@ class Recipe:
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
         cursor = conn.cursor()
 
-        cursor.execute('SELECT COUNT(*) FROM recipes WHERE usr_id = ?', (id,))
+        cursor.execute('SELECT COUNT(*) FROM usr_info WHERE usr_id = ?', (id,))
         result = cursor.fetchone()
-        id_exists = result[0] > 0
-
-        if id_exists:
+        if result[0] > 0:
 
             cursor.execute("SELECT recipe_lists FROM recipes WHERE usr_id = ?", (id,))
             result = cursor.fetchone()
@@ -41,11 +39,8 @@ class Recipe:
                 current_recipes.extend(recipes)
 
             updated_recipes_json = json.dumps(current_recipes, cls=RecipeEncoder)
-            cursor.execute('UPDATE recipes SET recipe_lists = ? WHERE usr_id = ?', (updated_recipes_json, id))
-        
-        else:
-            recipes_json = json.dumps(recipes, cls=RecipeEncoder)
-            cursor.execute('INSERT INTO recipes (usr_id, recipe_lists) VALUES (?, ?)', (id, recipes_json))
+            cursor.execute('DELETE from recipes where usr_id = ?', (id,))
+            cursor.execute('INSERT INTO recipes (usr_id, recipe_lists) VALUES (?, ?)', (id, updated_recipes_json))
 
         conn.commit()
         cursor.close()
@@ -58,7 +53,7 @@ class Recipe:
 
         conn = sqlite3.connect('server/usrDatabase/usrDB.db')
         cursor = conn.cursor()
-        cursor.execute('SELECT COUNT(*) FROM recipes WHERE id = ?', (id,))
+        cursor.execute('SELECT COUNT(*) FROM recipes WHERE usr_id = ?', (id,))
         result = cursor.fetchone()
         id_exists = result[0] > 0
         if id_exists:
@@ -95,11 +90,11 @@ class Recipe:
             cursor.execute("SELECT recipe_lists FROM recipes WHERE usr_id = ?", (id,))
             result = cursor.fetchone()
             current_recipes_json = result[0] if result else '[]'
-            conn.close()
             cursor.close()
+            conn.close()
             return current_recipes_json
-        conn.close()
         cursor.close()
+        conn.close()
         return jsonify({'result': 'id did not exist'})
 
         

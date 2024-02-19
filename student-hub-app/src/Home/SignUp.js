@@ -25,7 +25,7 @@ function SignUp() {
         xhr.open("POST", "http://localhost:5000/api/createAccount");
         xhr.setRequestHeader("Content-Type", "application/json"); 
         xhr.onload = () => {
-          if (xhr.status === 200) {
+          if (xhr.status === 200) { // Handle cases: username taken, pwds don't match, email taken
             const response = JSON.parse(xhr.response)
             if (response.result === 'account created successfully') {
                 navigate('/dashboard');

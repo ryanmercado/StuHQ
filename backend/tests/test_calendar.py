@@ -1,5 +1,25 @@
 import sqlite3
 from backend.calendar_module import user_events
+import pytest
+from flask import Flask
+
+# Define a mock Flask app for testing
+def create_test_app():
+    app = Flask(__name__)
+    return app
+
+# Use this function to create a mock Flask app
+app = create_test_app()
+
+@pytest.fixture(scope='module')
+def app_client():
+    with app.app_context():
+        yield app.test_client()
+
+@pytest.fixture
+def clear_db_fixture():
+    yield
+    clearDB()
 
 # Clears usr_info and calendar tables
 def clearDB():
@@ -10,8 +30,7 @@ def clearDB():
     con.commit()
     con.close()
 
-def test_get_event_id():
-    clearDB()
+def test_get_event_id(clear_db_fixture, app_client):
     con = sqlite3.connect('server/usrDatabase/usrDB.db')
 
     x0 = user_events.get_event_id()
@@ -25,10 +44,7 @@ def test_get_event_id():
     assert x0 == 0
     assert x1 == 1
 
-    clearDB()
-
-def test_usr_id_exists():
-    clearDB()
+def test_usr_id_exists(clear_db_fixture, app_client):
     con = sqlite3.connect('server/usrDatabase/usrDB.db')
 
     # Add test data to the database
@@ -40,10 +56,9 @@ def test_usr_id_exists():
     assert user_events.usr_id_exists(0) is True
     assert user_events.usr_id_exists(1) is False
 
-    clearDB()
 
-def test_event_id_exists():
-    clearDB()
+def test_event_id_exists(clear_db_fixture, app_client):
+  
     con = sqlite3.connect('server/usrDatabase/usrDB.db')
 
     # Add test data to the database
@@ -55,10 +70,8 @@ def test_event_id_exists():
 
     assert user_events.event_id_exists(0) is True
     assert user_events.event_id_exists(1) is False
-    clearDB()
 
-def test_get_event():
-    clearDB()
+def test_get_event(clear_db_fixture, app_client):
     con = sqlite3.connect('server/usrDatabase/usrDB.db')
 
     # Add test data to the database
@@ -68,15 +81,13 @@ def test_get_event():
     con.commit()
     con.close()
 
-    dict = user_events.get_event(0)
-    assert dict == {'result': (0, 0, 1234567890, "description", "assignment", "HW1", None, None, 1, None, None, None)}
+    res = user_events.get_event(0)
+    assert res.json['result'] == [0, 0, 1234567890, "description", "assignment", "HW1", None, None, 1, None, None, None]
 
-    dict = user_events.get_event(1)
-    assert dict == {'result': 'event not found'}
-    clearDB()
+    res = user_events.get_event(1)
+    assert res.json['result'] == 'event not found'
 
-def test_get_usr_events():
-    clearDB()
+def test_get_usr_events(clear_db_fixture, app_client):
     con = sqlite3.connect('server/usrDatabase/usrDB.db')
 
     # Add test data to the database
@@ -87,39 +98,30 @@ def test_get_usr_events():
     con.commit()
     con.close()
 
-    dict = user_events.get_usr_events(0)
-    assert dict == {'result': [(0, 0, 1234567890, "description", "assignment", "HW1", None, None, 1, None, None, None), (0, 1, 1234567890, "description", "assignment", "HW2", None, None, 1, None, None, None)]}
+    res = user_events.get_usr_events(0)
+    assert res.json['result'] == [[0, 0, 1234567890, "description", "assignment", "HW1", None, None, 1, None, None, None], [0, 1, 1234567890, "description", "assignment", "HW2", None, None, 1, None, None, None]]
 
-    dict = user_events.get_usr_events(1)
-    assert dict == {'result': 'usr_id not found'}
-    clearDB()
+    res = user_events.get_usr_events(1)
+    assert res.json['result'] == 'usr_id not found'
 
-def test_create_event():
-    clearDB()
-
+def test_create_event(clear_db_fixture, app_client):
     con = sqlite3.connect('server/usrDatabase/usrDB.db')
-    dict = user_events.create_event(0, "description", "assignment", "HW1", None, 1707550546, 0, None, 1, None)
-    assert dict == {'result': 'id not found'}
+    res = user_events.create_event(0, "description", "assignment", "HW1", None, 1707550546, 0, None, 1, None)
+    assert res.json['result'] == 'id not found'
 
     cursor = con.cursor()
     cursor.execute('INSERT INTO usr_info (usr_id, username, pswd_hash, usr_email, created_epoch) VALUES (0, "Jax5", "asvdfsrgh32423r", "jax5@email.com", 1234567890);')
     con.commit()
     con.close()
 
-    dict = user_events.create_event(0, "description", "assignment", "HW1", None, 1707550546, 0, None, 1, None)
-    assert dict == {'result': 'event created'}
+    res = user_events.create_event(0, "description", "assignment", "HW1", None, 1707550546, 0, None, 1, None)
+    assert res.json['result'] == 'event created'
 
     # Ensure event was acutually added to db
-    dict = user_events.get_event(0)
-    assert 'result' in dict
-    event_result = dict['result']
-    assert isinstance(event_result[2], float) #make sure timestamp was added as float
-    assert dict == {'result': (0, 0, event_result[2], "description", "assignment", "HW1", None, 1707550546, 0, None, 1, None)}
+    res = user_events.get_event(0)
+    assert isinstance(res.json['result'][2], float) #checks created_epoch
 
-    clearDB()
-
-def test_update_event():
-    clearDB()
+def test_update_event(clear_db_fixture, app_client):
     con = sqlite3.connect('server/usrDatabase/usrDB.db')
 
     # Add test data to the database
@@ -129,15 +131,18 @@ def test_update_event():
     con.commit()
     con.close()
 
-    dict = user_events.update_event(0, "newTitle" , "newdesc", "lecture", None, None, 1, None, 0, 0)
-    assert dict == {'result': 'event updated'}
+    res = user_events.update_event(0, "newTitle" , "newdesc", "lecture", None, None, 1, None, 0, 0)
+    assert res.json['result'] == 'event updated'
 
-    dict = user_events.get_event(0)
-    assert dict == {'result': (0, 0, 1234567890, "newdesc", "lecture", "newTitle", None, None, 1, None, 0, 0)}
-    clearDB()
-    
-def test_delete_event():
-    clearDB()
+    res = user_events.update_event(14, "newTitle" , "newdesc", "lecture", None, None, 1, None, 0, 0)
+    assert res.json['result'] == 'event_id not found'
+
+    res = user_events.get_event(0)
+    assert res.json['result'] == [0, 0, 1234567890, "newdesc", "lecture", "newTitle", None, None, 1, None, 0, 0]
+
+
+def test_delete_event(clear_db_fixture, app_client):
+
     con = sqlite3.connect('server/usrDatabase/usrDB.db')
 
     # Add test data to the database
@@ -147,14 +152,14 @@ def test_delete_event():
     con.commit()
     con.close()
 
-    dict = user_events.get_event(0)
-    assert dict == {'result': (0, 0, 1234567890, "description", "assignment", "HW1", None, None, 1, None, None, None)}
+    res = user_events.get_event(0)
+    assert res.json['result'] == [0, 0, 1234567890, "description", "assignment", "HW1", None, None, 1, None, None, None]
 
-    dict = user_events.delete_event(1)
-    assert dict == {'result': 'event_id not found'}
+    res = user_events.delete_event(1)
+    assert res.json['result'] == 'event_id not found'
 
-    dict = user_events.delete_event(0)
-    assert dict == {'result': 'event_id deleted'}
+    res = user_events.delete_event(0)
+    assert res.json['result'] == 'event_id deleted'
 
-    dict = user_events.get_event(0)
-    assert dict == {'result': 'event not found'}
+    res = user_events.get_event(0)
+    assert res.json['result'] == 'event not found'

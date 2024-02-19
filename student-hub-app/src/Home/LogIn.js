@@ -1,26 +1,45 @@
 // Login.js
 
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 const LogIn = () => {
     const [formData, setFormData] = useState({
         username: '',
         password: '',
     });
+    const [loginFailed, setLoginFailed] = useState(false);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Perform login logic here, e.g., make an API call
-        console.log('Login Form Data:', formData);
-        // Reset form after submission
-        setFormData({
-            username: '',
-            password: '',
-        });
+        try{
+            const response = await fetch('http://localhost:5000/api/login?username=${formData.username}&password=${formData.password}', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            
+            const data = await response.json();
+
+            if (response.data.result === 'login successful') {
+                history.push('/dashboard')
+            }else{
+                setLoginFailed(true)
+            }
+        }catch (error) {
+            console.error('Login error:', error);
+        } finally{
+            setFormData({
+                username: '',
+                password: '',
+            });
+        }
+        
     };
 
     return (
@@ -49,6 +68,7 @@ const LogIn = () => {
                 <br />
                 <button type="submit">Login</button>
             </form>
+            {loginFailed && <div style={{ color: 'red' }}>Login failed</div>}
         </div>
     );
 };

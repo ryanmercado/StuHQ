@@ -10,9 +10,9 @@ def login(username, password):
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM usr_info WHERE username = ? AND pswd_hash = ?', (username, hash_pswd))
     results = cursor.fetchone()
-    conn.close()
     cursor.close()
-    if results[0] > 0: #user exists
+    conn.close()
+    if results != None: #user exists
         return jsonify({'result': 'login successful'})
     else:
         return jsonify({'result': 'login failed'})

@@ -41,48 +41,32 @@ def sign_up(username, email, password, confirm_password):
     # returns 'account created successfully' on successful creation
 
     if password != confirm_password: #if passwords do not match
-            print('found')
-            return jsonify({'result': 'passwords do not match'})
+        return jsonify({'result': 'passwords do not match'})
     
     conn = sqlite3.connect('server/usrDatabase/usrDB.db')
     cursor = conn.cursor()
+
     cursor.execute("SELECT * FROM usr_info WHERE username = ?", (username,)) 
     results = cursor.fetchone()
     if results != None:
-        if results[0] > 0: #if username exists
-            cursor.close()
-            conn.close()
-            return jsonify({'result': 'username already exists'})
-    
-        cursor.execute('SELECT * FROM usr_info WHERE usr_email = ?', (email,)) #if email is associated with a user
-        results = cursor.fetchone()
-        if results != None:
-            cursor.close()
-            conn.close()
-            return jsonify({'result': 'a user has already signed up with this email'})
-    
-        next_id = get_id()
-        pswd_hash = hash_password(username, password)
-        created_epoch = datetime.now().timestamp()
-        cursor.execute("INSERT INTO usr_info (usr_id, username, pswd_hash, usr_email, created_epoch) VALUES (?,?, ?, ?, ?)", (next_id, username,
-        pswd_hash, email, created_epoch ))
-        conn.commit()
         cursor.close()
         conn.close()
-        return jsonify({'result': 'account created successfully'})
-    else:
-        next_id = get_id()
-        pswd_hash = hash_password(username, password)
-        created_epoch = datetime.now().timestamp()
-        cursor.execute("INSERT INTO usr_info (usr_id, username, pswd_hash, usr_email, created_epoch) VALUES (?,?, ?, ?, ?)", (next_id, username,
-        pswd_hash, email, created_epoch ))
-        conn.commit()
+        return jsonify({'result': 'username already exists'})
+    
+    cursor.execute('SELECT * FROM usr_info WHERE usr_email = ?', (email,)) #if email is associated with a user
+    results = cursor.fetchone()
+    if results != None:
         cursor.close()
         conn.close()
-        return jsonify({'result': 'account created successfully'})
+        return jsonify({'result': 'a user has already signed up with this email'})
     
-# if __name__ == '__main__':
-#     sign_up('grayghost34', 'grayson.drinkard@gmail.com', 'gerber', 'gerber')
-    
-    
+    next_id = get_id()
+    pswd_hash = hash_password(username, password)
+    created_epoch = datetime.now().timestamp()
+    cursor.execute("INSERT INTO usr_info (usr_id, username, pswd_hash, usr_email, created_epoch) VALUES (?,?, ?, ?, ?)", (next_id, username,
+    pswd_hash, email, created_epoch ))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({'result': 'account created successfully'})
     

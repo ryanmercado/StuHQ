@@ -762,10 +762,3 @@ class Resume:
                         (volunteer.user_id, volunteer.vol_id, volunteer.company, volunteer.role, volunteer.start_date, volunteer.end_date))
         conn.commit()
         conn.close()
-    
-
-
-resume = Resume()
-volunteer = Volunteer_Work(2, 4)
-volunteer.setData(2, 4, "YMSL", "Secretary", "01/11/2020", "05/22/2022")
-resume.addVolunteerWork(volunteer)

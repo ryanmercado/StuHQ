@@ -1,9 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-const Projects = () => {
+const Projects = ({ handleValidation }) => {
+  const [projectDetails, setProjectDetails] = useState('');
+
+  const validateFields = () => {
+    if (projectDetails.trim() !== '') {
+      handleValidation(true);
+    } else {
+      handleValidation(false);
+    }
+  };
+
+  const handleProjectDetailsChange = (e) => {
+    setProjectDetails(e.target.value);
+    validateFields();
+  };
+
   return (
     <div>
-      {/* Your code here */}
+      <h1>Projects</h1>
+      <label htmlFor="projectDetails">Project Details:</label>
+      <input
+        type="text"
+        id="projectDetails"
+        value={projectDetails}
+        onChange={handleProjectDetailsChange}
+      />
     </div>
   );
 };

@@ -1,9 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-const Jobs = () => {
+const Jobs = ({ handleValidation }) => {
+  const [jobHistory, setJobHistory] = useState('');
+
+  const validateFields = () => {
+    if (jobHistory.trim() !== '') {
+      handleValidation(true);
+    } else {
+      handleValidation(false);
+    }
+  };
+
+  const handleJobHistoryChange = (e) => {
+    setJobHistory(e.target.value);
+    validateFields();
+  };
+
   return (
     <div>
-      {/* Your code here */}
+      <h1>Job History</h1>
+      <label htmlFor="jobHistory">Job History:</label>
+      <input
+        type="text"
+        id="jobHistory"
+        value={jobHistory}
+        onChange={handleJobHistoryChange}
+      />
     </div>
   );
 };

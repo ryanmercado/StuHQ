@@ -19,7 +19,7 @@ def create_recipe():
 
     recipe = Recipe.Recipe(name, ingredients, measurements, steps)
     recipes = [recipe]
-    Recipe.addRecipe(usr_id, recipes)
+    Recipe.Recipe.addRecipe(usr_id, recipes)
     return jsonify({'message': 'Recipe created successfully'})
 
 
@@ -29,18 +29,15 @@ def delete_recipe():
     usr_id = data['usr_id']
     name = data['name']
     
-    Recipe.removeRecipe(usr_id, name)
+    Recipe.Recipe.removeRecipe(usr_id, name)
     return jsonify({'message': 'Recipe deleted successfully'})
 
 
 @stuAPI.route('/api/getRecipes', methods=['GET'])
 def get_recipes():
     usr_id = request.args.get('usr_id')
-    return Recipe.getRecipes(usr_id)
-    # data = request.get_json()
-    # usr_id = data['usr_id']
-    # return Recipe.getRecipes(usr_id)
-    
+    return Recipe.Recipe.getRecipes(usr_id)
+
 
 
 @stuAPI.route('/api/addGroceryListIngredient', methods=['POST'])
@@ -49,7 +46,7 @@ def add_ingredient():
     usr_id = data['usr_id']
     item = data['item']
     
-    GroceryList.add_item(usr_id, item)
+    GroceryList.GroceryList.add_item(usr_id, item)
     return jsonify({'message': 'Ingredient added successfully'})
 
 
@@ -59,14 +56,14 @@ def remove_ingredient():
     usr_id = data['usr_id']
     item = data['item']
 
-    GroceryList.delete_item(usr_id,item)
+    GroceryList.GroceryList.delete_item(usr_id, item)
     return jsonify({'message': 'Ingredient deleted successfully'})
 
 
 @stuAPI.route('/api/getGroceryList', methods=['GET'])
 def getGroceryList():
     usr_id = request.args.get('usr_id')
-    return GroceryList.get_items(usr_id)
+    return GroceryList.GroceryList.get_items(usr_id)
 
 
 @stuAPI.route('/api/addStockItem', methods=['POST'])
@@ -74,7 +71,7 @@ def addStockItem():
     data = request.get_json()
     usr_id = data['usr_id']
     item = data['item']
-    Stock.add_item(usr_id, item)
+    Stock.Stock.add_item(usr_id, item)
     return jsonify({'message': 'Item added successfully'})
 
 
@@ -83,14 +80,14 @@ def removeStockItem():
     data = request.get_json()
     usr_id = data['usr_id']
     item = data['item']  
-    Stock.delete_item(usr_id, item)
+    Stock.Stock.delete_item(usr_id, item)
     return jsonify({'message': 'Item removed successfully'})
 
 
 @stuAPI.route('/api/getStock', methods=['GET'])
 def getStockItems():
     usr_id = request.args.get('usr_id')
-    return Stock.get_items(usr_id)
+    return Stock.Stock.get_items(usr_id)
 
 @stuAPI.route('/api/addTo_ToDoList', methods=['POST'])
 def addTo_ToDoList():

@@ -1,10 +1,13 @@
 // RecipeList.js
 import React, { useEffect, useState } from 'react';
+import secureLocalStorage from 'react-secure-storage';
+import { useNavigate } from 'react-router-dom';
 
 const RecipeList = () => {
+    const navigate = useNavigate();
+    const usr_id = secureLocalStorage.getItem('usr_id');
     const [recipeItems, setRecipeItems] = useState([]);
     const [newRecipe, setNewRecipe] = useState({
-        usr_id: 1, // Replace with the actual user ID or fetch it dynamically
         name: '',
         ingredients: [],
         measurements: [],
@@ -12,39 +15,27 @@ const RecipeList = () => {
     });
 
     const fetchRecipes = async () => {
+        const apiUrl = new URL('http://localhost:5000/api/getRecipes');
+        const params = new URLSearchParams;
+        params.append('usr_id', usr_id);
+        apiUrl.search = params.toString();
 
-        const xhr = new XMLHttpRequest();
-        xhr.open("GET", `http://localhost:5000/api/getRecipes?usr_id=${newRecipe.usr_id}`);
-        xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.onload = () => {
-            if (xhr.status === 200) {
-                const response = JSON.parse(xhr.response);
-                setRecipeItems(response);
-                console.log(response);
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'GET'
+            });
 
+            if (!response.ok) {
+                throw new Error('Failed to fetch recipes');
             }
-        };
-        xhr.send();
 
+            const data = await response.json();
+            setRecipeItems(data);
+
+        } catch (error) {
+            console.error('Error fetching recipes:', error.message);
+        }
     };
-    //     try {
-    //         const response = await fetch(`http://localhost:5000/api/getRecipes?usr_id=${newRecipe.usr_id}`, {
-    //             method: 'GET',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //         });
-
-    //         if (!response.ok) {
-    //             throw new Error('Failed to fetch recipes');
-    //         }
-
-    //         const data = await response.json();
-    //         setRecipeItems(JSON.parse(data.result));
-    //     } catch (error) {
-    //         console.error('Error fetching recipes:', error.message);
-    //     }
-    // };
 
 
     const addRecipe = async () => {
@@ -54,7 +45,13 @@ const RecipeList = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(newRecipe),
+                body: JSON.stringify({
+                    usr_id: usr_id,
+                    name: newRecipe.name,
+                    ingredients: newRecipe.ingredients,
+                    measurements: newRecipe.measurements,
+                    steps: newRecipe.steps
+                }),
             });
 
             if (!response.ok) {
@@ -70,7 +67,6 @@ const RecipeList = () => {
             console.error('Error adding recipe:', error.message);
         }
         setNewRecipe({
-            usr_id: 1, // Replace with the actual user ID or fetch it dynamically
             name: '',
             ingredients: [],
             measurements: [],
@@ -85,7 +81,7 @@ const RecipeList = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ usr_id: newRecipe.usr_id, name }),
+                body: JSON.stringify({ usr_id: usr_id, name: name }),
             });
 
             if (!response.ok) {
@@ -103,8 +99,13 @@ const RecipeList = () => {
     };
 
     useEffect(() => {
-        fetchRecipes();
-    }, [newRecipe.usr_id]);
+
+        if (usr_id === null) {
+            navigate("/");
+        } else {
+            fetchRecipes();
+        }
+    }, [usr_id, navigate]);
 
     return (
         <div>
@@ -125,6 +126,7 @@ const RecipeList = () => {
                         Name:
                         <input
                             type="text"
+                            placeholder='pizza'
                             value={newRecipe.name}
                             onChange={(e) => setNewRecipe({ ...newRecipe, name: e.target.value })}
                         />
@@ -133,6 +135,7 @@ const RecipeList = () => {
                         Ingredients:
                         <input
                             type="text"
+                            placeholder="dough, tomato sauce, cheese"
                             value={newRecipe.ingredients.join(', ')}
                             onChange={(e) => setNewRecipe({ ...newRecipe, ingredients: e.target.value.split(', ') })}
                         />
@@ -143,23 +146,14 @@ const RecipeList = () => {
                             type="text"
                             placeholder="EX: (300 g, 200 ml, 2 tsp)"
                             value={newRecipe.measurements}
-                            onChange={(e) => {
-                                const measurementsString = e.target.value;
-                                const measurementsArray = measurementsString
-                                    .split(', ')
-                                    .map((item) => {
-                                        const [amount, unit] = item.split(' ');
-                                        return [parseInt(amount, 10), unit];
-                                    })
-                                    .filter((item) => !isNaN(item[0])); // Filter out invalid entries
-                                setNewRecipe({ ...newRecipe, measurements: measurementsArray });
-                            }}
+                            onChange={(e) => setNewRecipe({ ...newRecipe, measurements: e.target.value })}
                         />
                     </label>
                     <label>
                         Steps:
                         <input
                             type="text"
+                            placeholder='Cook dough, add sauce and cheese'
                             value={newRecipe.steps}
                             onChange={(e) => setNewRecipe({ ...newRecipe, steps: e.target.value })}
                         />

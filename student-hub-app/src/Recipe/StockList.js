@@ -1,20 +1,25 @@
 // StockList.js
 import React, { useState, useEffect } from 'react';
+import secureLocalStorage from 'react-secure-storage';
+import { useNavigate } from 'react-router-dom';
 
 const StockList = () => {
+    const navigate = useNavigate();
+    const usr_id = secureLocalStorage.getItem('usr_id');
     const [stockItems, setStockItems] = useState([]);
     const [newItem, setNewItem] = useState({
-        usr_id: 1, //replace with the actual user ID or fetch it dynamically
         name: ''
     });
 
     const fetchStockList = async () => {
+        const apiUrl = new URL('http://localhost:5000/api/getStock');
+        const params = new URLSearchParams;
+        params.append('usr_id', usr_id);
+        apiUrl.search = params.toString();
+
         try {
-            const response = await fetch(`http://localhost:5000/api/getStock?usr_id=${newItem.usr_id}`, {
+            const response = await fetch(apiUrl, {
                 method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
             });
 
             if (!response.ok) {
@@ -22,7 +27,14 @@ const StockList = () => {
             }
 
             const data = await response.json();
-            setStockItems(JSON.parse(data.result));
+
+            console.log(data);
+
+            if (data.result === 'usr did not exist') {
+                setStockItems([])
+            } else {
+                setStockItems(data.split(', '));
+            }
         } catch (error) {
             console.error('Error fetching stock list:', error.message);
         }
@@ -35,7 +47,7 @@ const StockList = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(newItem)
+                body: JSON.stringify({ usr_id: usr_id, item: newItem.name })
             });
 
             if (!response.ok) {
@@ -50,19 +62,18 @@ const StockList = () => {
             console.error('Error adding stock item:', error.message);
         }
         setNewItem({
-            usr_id: 1, //replace with the actual user ID or fetch it dynamically
             name: ''
         });
     };
 
     const removeItem = async (name) => {
         try {
-            const response = await fetch('https://localhost:5000/api/removeStockItem', {
+            const response = await fetch('http://localhost:5000/api/removeStockItem', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ usr_id: newItem.usr_id, name })
+                body: JSON.stringify({ usr_id: usr_id, item: name })
             });
 
             if (!response.ok) {
@@ -79,23 +90,28 @@ const StockList = () => {
     };
 
     useEffect(() => {
-        fetchStockList();
-    }, [newItem.usr_id]);
+        if (usr_id === null) {
+            navigate("/");
+        } else {
+            fetchStockList();
+        }
+    }, [usr_id, navigate]);
 
 
     return (
         <div>
+            <h2>Your Stock List</h2>
             <ul>
-                {stockItems.map((item) => {
-                    <li key={item.name}>
-                        {item.name}{' '}
-                        <button onClick={() => removeItem(item.name)}>Remove</button>
+                {stockItems.map((item, index) => (
+                    <li key={index}>
+                        {item}{' '}
+                        <button onClick={() => removeItem(item)}>Remove</button>
                     </li>
-                })}
+                ))}
             </ul>
             <label>
                 Add Item:
-                <input type="text" name="new-item" value={newItem.name} placeholder='Stock Item' onChange={(e) => setNewItem({ ...newItem, name: e.target.value })} />
+                <input type="text" name="new-item" value={newItem.name} placeholder='Stock Item' onChange={(e) => setNewItem({ name: e.target.value })} />
             </label>
             <button onClick={addItem}>Add Item</button>
         </div>

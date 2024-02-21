@@ -59,19 +59,6 @@ def sign_up(username, email, password, confirm_password):
         cursor.close()
         conn.close()
         return jsonify({'result': 'a user has already signed up with this email'})
-    
-        next_id = get_id()
-        pswd_hash = hash_password(username, password)
-        created_epoch = datetime.now().timestamp()
-        cursor.execute("INSERT INTO usr_info (usr_id, username, pswd_hash, usr_email, created_epoch) VALUES (?,?, ?, ?, ?)", (next_id, username,
-        pswd_hash, email, created_epoch ))
-        conn.commit()
-        cursor.close()
-        conn.close()
-        return jsonify({
-            'result': 'account created successfully',
-            'usr_id': next_id
-        })
     else:
         next_id = get_id()
         pswd_hash = hash_password(username, password)

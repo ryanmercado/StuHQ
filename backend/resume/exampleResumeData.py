@@ -1,5 +1,5 @@
 import sqlite3
-
+ # Does not use owen's methods, purely for example data
 
 def connect_to_database():
     try:
@@ -145,7 +145,7 @@ def fill_example_data():
         
         # GEN INFO
 
-        howie_info = (1, 'DeWitt', 'Howie', 1234567890, 'howie@example.com', 'linkedin.com/howie', 'BSc Computer Science', '2023-05-15', 'Computer Science', 3.80)
+        howie_info = (1, 'DeWitt', 'Howie', 1234567890, 'howiedewitt@example.com', 'linkedin.com/howie', 'The University of Texas at Austin', 'May 2024', 'Bachelor of Science: Computer Science', 3.80)
 
         # Insert general info
         clear_table(cursor, 'general_info')
@@ -194,14 +194,15 @@ def fill_example_data():
 
 
         technical_skills_data = [
-            (1, 1, 'Python'),
-            (1, 2, 'Java'),
-            (1, 3, 'SQL'),
-            (1, 4, 'JavaScript'),
-            (1, 5, 'HTML'),
-            (1, 6, 'CSS'),
-            (1, 7, 'Git'),
-            (1, 8, 'Data Analysis')
+            (1, 1, 'Microsoft Office 365'),
+            (1, 2, 'Leadership'),
+            (1, 3, 'Time Management'),
+            (1, 4, 'Customer Service'),
+            (1, 5, 'Problem Solving'),
+            (1, 6, 'Interpersonal Skills'),
+            (1, 7, 'Critical Thinking'),
+            (1, 8, 'Flexibility'),
+            (1, 9, 'Marketing')
         ]
 
         # Insert technical skills

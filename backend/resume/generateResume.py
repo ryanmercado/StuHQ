@@ -8,7 +8,7 @@ from reportlab.pdfbase.ttfonts import TTFont
 from exampleResumeData import fetch_and_return
 from reportlab.lib import colors
 
-from Resume import Resume
+#from Resume import Resume
 from exampleResumeData import fetch_and_return
 
 pdfmetrics.registerFont(TTFont('Cambria', './fonts/Cambria.ttf'))
@@ -20,14 +20,14 @@ regFontSize = 10.5
 titleFontSize = 14
 tinyFontSize = 9.5
 
-def generateResume(usr_id):
+def generateResume():
     # Create a PDF document
     document = SimpleDocTemplate("resume.pdf", pagesize=letter, leftMargin=0.5*inch, rightMargin=0.5*inch, topMargin=0.5*inch, bottomMargin=0.5*inch)
     doc = []
 
 
     # Fetch user data
-    resume = Resume()
+    #resume = Resume()
     experiences, extracurriculars, general_infos, projects, technical_skills = fetch_and_return()
     
     # Gen INFO

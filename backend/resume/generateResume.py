@@ -30,6 +30,8 @@ def generateResume(usr_id):
     # Fetch user data
     resume = Resume()
     resume.getUserInfo(usr_id)
+
+
     experiences = resume.experience
     extracurriculars = resume.extracurr
     general_infos = resume.general_info
@@ -42,7 +44,7 @@ def generateResume(usr_id):
     title = Paragraph(f"{general_infos[0].firstname} {general_infos[0].lastname}", style)
     doc.append(title)
 
-    # Phone Number might not exist
+    # Phone Number might not exist(optional field)
     phoneNum = general_infos[0].phone
     style = tinyStyle()
     if phoneNumber is None:

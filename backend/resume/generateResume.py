@@ -7,6 +7,7 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from exampleResumeData import fetch_and_return
 from reportlab.lib import colors
+from Resume import Resume
 
 #from Resume import Resume
 from exampleResumeData import fetch_and_return
@@ -20,15 +21,20 @@ regFontSize = 10.5
 titleFontSize = 14
 tinyFontSize = 9.5
 
-def generateResume():
+def generateResume(usr_id):
     # Create a PDF document
     document = SimpleDocTemplate("resume.pdf", pagesize=letter, leftMargin=0.5*inch, rightMargin=0.5*inch, topMargin=0.5*inch, bottomMargin=0.5*inch)
     doc = []
 
 
     # Fetch user data
-    #resume = Resume()
-    experiences, extracurriculars, general_infos, projects, technical_skills = fetch_and_return()
+    resume = Resume()
+    resume.getUserInfo(usr_id)
+    experiences = resume.experience
+    extracurriculars = resume.extracurr
+    general_infos = resume.general_info
+    projects = resume.projects
+    technical_skills = resume.technical_skills
     
     # Gen INFO
 
@@ -153,6 +159,6 @@ def regularRightStyle():
     return style
 
 if __name__ == "__main__":
-    generateResume()
+    generateResume(1)
 
 

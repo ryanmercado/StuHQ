@@ -14,6 +14,7 @@ from exampleResumeData import fetch_and_return
 
 pdfmetrics.registerFont(TTFont('Cambria', './fonts/Cambria.ttf'))
 pdfmetrics.registerFont(TTFont('Cambria-Bold', './fonts/Cambria-Bold.ttf'))
+pdfmetrics.registerFont(TTFont('Cambria-Italic', './fonts/Cambria-Italic.ttf'))
 styles = getSampleStyleSheet()
 
 # IF FONT SIZE IS CHANGED, ALL HORIZONTAL LINES WILL BE RUINED
@@ -42,6 +43,7 @@ def generateResume(usr_id):
 
     style = nameTitleStyle()
     title = Paragraph(f"{general_infos[0].firstname} {general_infos[0].lastname}", style)
+    title = Paragraph("Nigga Balls", style)
     doc.append(title)
 
     # Phone Number might not exist(optional field)

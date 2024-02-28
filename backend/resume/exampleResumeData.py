@@ -168,8 +168,8 @@ def fill_example_data():
 
 
         experiences_data = [
-            (1, 1, 'Company X', 'Software Engineer', '2020-01-01', '2021-06-30', 'New York', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),
-            (1, 2, 'Company Y', 'Data Analyst', '2021-09-01', '2022-12-31', 'San Francisco', 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.')
+            (1, 1, 'Company X', 'Software Engineer', 'Spring 2022', 'Present', 'New York', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),
+            (1, 2, 'Company Y', 'Data Analyst', 'January 2017', 'Yesterday Nigga', 'San Francisco', 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.')
         ]
 
         # Insert job experiences

@@ -1,4 +1,5 @@
 import sqlite3
+import json
  # Does not use owen's methods, purely for example data
 
 def connect_to_database():
@@ -166,10 +167,16 @@ def fill_example_data():
 
         # EXPERIENCE DATA
 
+        desc_array1 = ['Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.']
+        desc_array2 = ['Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', 
+                       'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.', 
+                       'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.']
+        json1 = json.dumps(desc_array1)
+        json2 = json.dumps(desc_array2)
 
         experiences_data = [
-            (1, 1, 'Company X', 'Software Engineer', 'Spring 2022', 'Present', 'New York', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),
-            (1, 2, 'Company Y', 'Data Analyst', 'January 2017', 'Yesterday Nigga', 'San Francisco', 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.')
+            (1, 1, 'Company X', 'Software Engineer', 'Spring 2022', 'Present', 'New York', json1),
+            (1, 2, 'Company Y', 'Data Analyst', 'January 2017', 'Yesterday Nigga', 'San Francisco', json2)
         ]
 
         # Insert job experiences

@@ -42,9 +42,11 @@ def generateResume(usr_id):
     # Gen INFO
 
     style = nameTitleStyle()
+
     title = Paragraph(f"{general_infos[0].firstname} {general_infos[0].lastname}", style)
-    title = Paragraph("Nigga Balls", style)
+    
     doc.append(title)
+
 
     # Phone Number might not exist(optional field)
     phoneNum = general_infos[0].phone
@@ -93,11 +95,28 @@ def generateResume(usr_id):
 
     # EXPERIENCE
     expTitle = Paragraph(f"<br></br><u>EXPERIENCE{whiteSpace(201)}</u>", underlineBoldStyle())
+    
+    doc.append(expTitle)
+    for i in range(len(experiences)):
+        col_widths = [5*inch, 2.5*inch]
+        #t1 = Paragraph(experiences[0].company, regularBoldStyle())
+        t1 = Paragraph(text=f"<font face = 'Cambria-Bold' size={regFontSize}>{experiences[i].company}</font> - <font face=Cambria size={regFontSize}> {experiences[i].role}; {experiences[i].location}</font>")
+        #t2 = Paragraph(f"{experiences[0].role}; {experiences[0].location}", regularStyle())
+        t2 = Paragraph(f"{experiences[i].start_date} - {experiences[i].end_date}", regularRightStyle())
+        data = [
+            [t1,t2]
+        ]
+        table = Table(data, colWidths=col_widths)
+        table.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 0.25, colors.white), ('BOX', (0, 0), (-1, -1), 0.25, colors.white)]))
+        doc.append(table)
+
+        spacer = Spacer(1, 0.125*inch)
+        doc.append(spacer)
+        if i > 3:
+            break
     #exp
     #code
     #here
-    doc.append(expTitle)
-
 
     # PROJECTS
     projTitle = Paragraph(f"<br></br><u>PROJECTS{whiteSpace(207)}</u>", underlineBoldStyle())
@@ -108,7 +127,7 @@ def generateResume(usr_id):
 
     # EXTRACURRICULARS
     extraTitle = Paragraph(f"<br></br><u>EXTRACURRICULARS{whiteSpace(184)}</u>", underlineBoldStyle())
-    #code here
+    #code here 
 
     doc.append(extraTitle)
 
@@ -144,7 +163,7 @@ def nameTitleStyle():
     style = ParagraphStyle(name='Title', parent=styles['Normal'], fontName='Cambria-Bold', fontSize=titleFontSize, alignment=TA_CENTER, leading=titleFontSize)
     return style
 def tinyStyle():
-    style = ParagraphStyle(name='Tiny', parent=styles['Normal'], fontName='Cambria', fontSize=tinyFontSize, alignment=TA_CENTER, leading=tinyFontSize)
+    style = ParagraphStyle(name='Tiny', parent=styles['Normal'], fontName='Cambria', fontSize=tinyFontSize, alignment=TA_CENTER, leading=titleFontSize)
     return style
 def justifyRegularStyle():
     style = ParagraphStyle(name='JustifyRegular', parent=styles['Normal'], fontName='Cambria', fontSize=regFontSize, alignment=TA_JUSTIFY, leading=regFontSize)
@@ -161,6 +180,8 @@ def underlineBoldStyle():
 def regularRightStyle():
     style = ParagraphStyle(name='RegularRight', parent=styles['Normal'], fontName='Cambria', fontSize=regFontSize, alignment=TA_RIGHT, leading=regFontSize)
     return style
+
+#def ItalicRegular():
 
 if __name__ == "__main__":
     generateResume(1)

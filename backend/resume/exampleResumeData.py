@@ -4,7 +4,7 @@ import json
 
 def connect_to_database():
     try:
-        conn = sqlite3.connect('/root/StuHQ/server/usrDatabase/usrDB.db')
+        conn = sqlite3.connect('/Users/drewrentz/Documents/School/StuHQ/server/usrDatabase/usrDB.db')
         return conn
     except sqlite3.Error as e:
         print("Error connecting to database:", e)

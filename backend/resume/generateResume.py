@@ -12,8 +12,9 @@ from Resume import Resume
 #from Resume import Resume
 from exampleResumeData import fetch_and_return
 
-pdfmetrics.registerFont(TTFont('Cambria', '/Users/drewrentz/Documents/School/StuHQ/backend/resume/fonts/Cambria.ttf'))
-pdfmetrics.registerFont(TTFont('Cambria-Bold', '/Users/drewrentz/Documents/School/StuHQ/backend/resume/fonts/Cambria-Bold.ttf'))
+pdfmetrics.registerFont(TTFont('Cambria', './fonts/Cambria.ttf'))
+pdfmetrics.registerFont(TTFont('Cambria-Bold', './fonts/Cambria-Bold.ttf'))
+pdfmetrics.registerFont(TTFont('Cambria-Italic', './fonts/Cambria-Italic.ttf'))
 styles = getSampleStyleSheet()
 
 # IF FONT SIZE IS CHANGED, ALL HORIZONTAL LINES WILL BE RUINED
@@ -41,7 +42,9 @@ def generateResume(usr_id):
     # Gen INFO
 
     style = nameTitleStyle()
-    title = Paragraph(f"{general_infos[0].firstname} faggy {general_infos[0].lastname}", style)
+
+    title = Paragraph(f"{general_infos[0].firstname} {general_infos[0].lastname}", style)
+    
     doc.append(title)
 
 
@@ -109,7 +112,6 @@ def generateResume(usr_id):
 
         spacer = Spacer(1, 0.125*inch)
         doc.append(spacer)
-        
         if i > 3:
             break
     #exp

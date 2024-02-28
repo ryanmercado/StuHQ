@@ -2,3 +2,6 @@
 server/usrDatabase/usrDB.db
 *.pyc
 
+*.DS_Store
+
+backend/recipe/__pycache__/Stock.cpython-311.pyc

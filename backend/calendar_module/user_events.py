@@ -198,9 +198,6 @@ def usr_id_exists(usr_id):
     
     cursor.execute('SELECT COUNT(*) FROM usr_info WHERE usr_id = ?', (usr_id,))
     count = cursor.fetchone()[0]
-
-    print(usr_id)
-    print(count)
     
     con.close()
 

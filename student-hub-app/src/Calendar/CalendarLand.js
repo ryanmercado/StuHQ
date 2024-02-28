@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useEffect } from 'react';
-import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
+import { Calendar, datejsLocalizer } from 'react-big-calendar';
 import format from 'date-fns/format';
 import parse from 'date-fns/format';
 import startOfWeek from 'date-fns/startOfWeek';
@@ -132,9 +132,6 @@ function CalendarLand() {
         }
         fetchUserEvents();
     }, [usr_id, navigate]);
-    useEffect(() => {
-        fetchUserEvents();
-    }, []);
 
     return (
         <div>

@@ -290,5 +290,5 @@ def getResume():
 
 
 if __name__ == '__main__':
-    stuAPI.run(debug=True)
+    stuAPI.run()
 

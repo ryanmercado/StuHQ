@@ -175,5 +175,5 @@ def createAccount():
     return handleCreateAccount.sign_up(username, email, password, confirm_password)
 
 if __name__ == '__main__':
-    stuAPI.run(debug=True)
+    stuAPI.run()
 

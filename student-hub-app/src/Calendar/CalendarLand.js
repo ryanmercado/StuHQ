@@ -11,10 +11,10 @@ import secureLocalStorage from 'react-secure-storage';
 import dayjs from 'dayjs'
 
 
-
 const events = [];
 
 function CalendarLand() {
+    const eventIds = new Set();
     const [addEvent, setAddEvent] = useState({ title: "", start: null, end: null, description: "", eventType: "" });
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
@@ -23,8 +23,8 @@ function CalendarLand() {
     const [anchorEl, setAnchorEl] = useState(null);
     const [isPopoverOpen, setPopoverOpen] = useState(false);
     const [allEvents, setAllEvents] = useState(events);
-    const [selectedEvent, setSelectedEvent] = useState(null);
     const usr_id = secureLocalStorage.getItem("usr_id");
+    var loadFlag = true;
     const [popoverFields, setPopoverFields] = useState({
         title: '',
         start: '',
@@ -41,10 +41,38 @@ function CalendarLand() {
         xhr.onload = () => {
             if (xhr.status === 200) {
                 const response = JSON.parse(xhr.response);
+                if(response.result.length !== 0 && loadFlag){
+                    const response_events = response.result;                
+                    const builtEvents = response_events.map(buildEvent)
+                    for(let i = 0; i < builtEvents.length; i++){
+                        if(!eventIds.has(builtEvents[i].event_id)){
+                            setAllEvents((allEvents) => [...allEvents, builtEvents[i]]);
+                            eventIds.add(builtEvents[i].event_id)
+                        }
+                    }
+                    loadFlag = false
+                }
             }
         };
         xhr.send(jsonData);
     };
+
+    const buildEvent = (event) => {
+
+        const startDate = new Date(event[6])
+        const endDate = new Date(event[7])
+
+        const newEvent = {
+            event_id: event[1],
+            title: event[5],  
+            start: startDate,
+            end: endDate,
+            description: event[3],
+            type: event[4]
+          };
+
+        return newEvent;
+    }
 
     const handleAddEvent = () => {
         const startDateTime = new Date(startDate);
@@ -62,9 +90,7 @@ function CalendarLand() {
         };
       
         if (newEvent.title.trim() !== '') {
-          setAllEvents([...allEvents, newEvent]);
           setAddEvent({ title: "", start: null, end: null, description: "", eventType: null }); // Clear fields after adding the event
-          console.log(newEvent);
         }
         const formData = {
             usr_id : secureLocalStorage.getItem('usr_id'),
@@ -88,12 +114,33 @@ function CalendarLand() {
           }
         };
         xhr.send(jsonData);
+        loadFlag = true;
+        fetchUserEvents();
 
       };
 
-    const deleteEvent = (eventId) => {
-        const updatedEvents = allEvents.filter((event) => eventId.title !== event.title);
+    const deleteEvent = (event1) => {
+        const formData = {
+            event_id: event1.event_id
+        }
+        const jsonData = JSON.stringify(formData)
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://localhost:5000/api/deleteEvent");
+        xhr.setRequestHeader("Content-Type", "application/json"); 
+        xhr.onload = () => {
+          if (xhr.status === 200) { // Handle cases: username taken, pwds don't match, email taken
+            const response = JSON.parse(xhr.response)
+          }
+        };
+        xhr.send(jsonData);
+        eventIds.delete(event1.event_id)
+        const updatedEvents = allEvents.filter((event) => event1.title !== event.title);
         setAllEvents(updatedEvents);
+        loadFlag = true;
+        setTimeout(() => {
+            fetchUserEvents();
+        }, 1000);
+
     };
 
     const locales = {
@@ -101,13 +148,13 @@ function CalendarLand() {
     };
 
     const handleSelectEvent = (event) => {
-        console.log(event.eventType)
+        console.log(event.type)
         setPopoverFields({
             title: event.title,
             start: event.start,
             end: event.end,
             desc : event.description,
-            type : event.eventType
+            type : event.type
         })
         setAnchorEl(event.target);
         setPopoverOpen(true)
@@ -118,10 +165,11 @@ function CalendarLand() {
         setPopoverOpen(false)
     };
 
-    const open = Boolean(anchorEl);
     const localizer = dayjsLocalizer(dayjs);
 
     useEffect(() => {
+        console.log('effect')
+        loadFlag = !loadFlag
         fetchUserEvents();
     }, []);
 
@@ -179,8 +227,7 @@ function CalendarLand() {
                 <h2>Event List</h2>
                 <ul>
                     {allEvents.map((event) => {
-                        return (<li>{event.title}: {event.start.toString()} - {event.end.toString()} - {event.description} <button onClick={() => deleteEvent(event)}>Delete Event</button></li>
-                        );
+                        return (<li>{event.title}: {event.start.toString()} - {event.end.toString()} - {event.description} <button onClick={() => deleteEvent(event)}>Delete Event</button></li>);
                     })}
                 </ul>
             </div>

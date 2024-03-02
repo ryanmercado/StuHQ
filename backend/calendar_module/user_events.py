@@ -161,15 +161,12 @@ def get_event_id():
     cursor.execute('SELECT MAX(event_id) FROM calendar')
     max_id = cursor.fetchone()[0]
 
-    print(max_id)
-
     if max_id is not None:
         # Iterate over the range of usr_ids from 1 to the maximum
         for event_id in range(0, max_id + 1):
             # Check if the usr_id exists in the usr_info table
             cursor.execute('SELECT COUNT(*) FROM calendar WHERE event_id = ?', (event_id,))
             count = cursor.fetchone()[0]
-            print(count)
             if count == 0:
                 # Found the first missing usr_id
                 return event_id

@@ -2,6 +2,15 @@ import sqlite3
 import json
 from flask import jsonify
 
+
+def connect_to_database():
+    try:
+        conn = sqlite3.connect('server/usrDatabase/usrDB.db')
+        return conn
+    except sqlite3.Error as e:
+        print("Error connecting to database:", e)
+        return None
+
 class Experience:
     def __init__(self, user_id, job_id):
         self.user_id = user_id
@@ -24,7 +33,7 @@ class Experience:
         self.desc_arr = desc_arr
 
     def getDataFromDatabase(self):
-        conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
+        conn = connect_to_database() 
         cursor = conn.cursor()
 
         cursor.execute('SELECT * FROM experience WHERE job_id = ?', (self.job_id,))
@@ -56,7 +65,7 @@ class Extracurr:
         self.desc = desc
 
     def getDataFromDatabase(self):
-        conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
+        conn = connect_to_database()
         cursor = conn.cursor()
 
         cursor.execute('SELECT * FROM extracurr WHERE act_id = ?', (self.act_id,))
@@ -96,7 +105,7 @@ class General_Info:
         self.GPA = GPA
 
     def getDataFromDatabase(self):
-        conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
+        conn = connect_to_database() 
         cursor = conn.cursor()
 
         cursor.execute('SELECT * FROM general_info WHERE usr_id = ?', (self.user_id,))
@@ -128,7 +137,7 @@ class Technical_Skill:
         self.name = name
 
     def getDataFromDatabase(self):
-        conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
+        conn = connect_to_database()
         cursor = conn.cursor()
 
         cursor.execute('SELECT * FROM technical_skills WHERE skill_id = ?', (self.skill_id,))
@@ -158,7 +167,7 @@ class Project:
         self.desc_arr = desc_arr
 
     def getDataFromDatabase(self):
-        conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
+        conn = connect_to_database() 
         cursor = conn.cursor()
 
         cursor.execute('SELECT * FROM projects WHERE proj_id = ?', (self.proj_id,))
@@ -187,7 +196,7 @@ class Award:
         self.desc = desc
 
     def getDataFromDatabase(self):
-        conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
+        conn = connect_to_database()  
         cursor = conn.cursor()
 
         cursor.execute('SELECT * FROM awards WHERE awd_id = ?', (self.award_id,))
@@ -213,7 +222,7 @@ class Course:
         self.name = name
 
     def getDataFromDatabase(self):
-        conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
+        conn = connect_to_database()  
         cursor = conn.cursor()
 
         cursor.execute('SELECT * FROM course_work WHERE course_id = ?', (self.course_id,))
@@ -237,7 +246,7 @@ class Objective:
         self.obj_id = obj_id
 
     def getDataFromDatabase(self):
-        conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
+        conn = connect_to_database()
         cursor = conn.cursor()
 
         cursor.execute('SELECT * FROM objective WHERE usr_id = ?', (self.user_id,))
@@ -269,7 +278,7 @@ class Volunteer_Work:
         self.end_date = end_date
 
     def getDataFromDatabase(self):
-        conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
+        conn = connect_to_database()
         cursor = conn.cursor()
 
         cursor.execute('SELECT * FROM volunteer_work WHERE usr_id = ?', (self.user_id,))
@@ -336,7 +345,7 @@ class Resume:
         # precondtion: id is an int
         # postcondition: gets user information for resume formatting
 
-        conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
+        conn = connect_to_database()
         cursor = conn.cursor() 
 
         cursor.execute('SELECT COUNT(*) FROM experience WHERE usr_id = ?', (id,))
@@ -734,7 +743,7 @@ class Resume:
           user_id and a unique job_id
     """
     def addExperience(self, user_id, company, role, start_date, end_date, location, desc_arr):
-        conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
+        conn = connect_to_database()
         cursor = conn.cursor()
 
         unique_id = self.generateUniqueID('job_id', 'experience')
@@ -757,7 +766,7 @@ class Resume:
           user_id and a unique act_id
     """
     def addExtracurr(self, user_id, title, desc):
-        conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
+        conn = connect_to_database() 
         cursor = conn.cursor()
 
         unique_id = self.generateUniqueID('act_id', 'extracurr')
@@ -786,7 +795,7 @@ class Resume:
           associated with user_id
     """
     def addGeneralInfo(self, user_id, lastname, firstname, phone, email, linkedin, edu, grad_date, major, GPA):
-        conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
+        conn = connect_to_database()  
         cursor = conn.cursor() 
 
         cursor.execute('INSERT into general_info (usr_id, lastname, firstname, phone, email, linkedin, edu, grad_date, major, GPA) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);', 
@@ -805,7 +814,7 @@ class Resume:
           user_id and a unique skill_id
     """
     def addTechnicalSkill(self, user_id, name):
-        conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
+        conn = connect_to_database()
         cursor = conn.cursor() 
 
         unique_id = self.generateUniqueID('skill_id', 'technical_skills')
@@ -829,7 +838,7 @@ class Resume:
           user_id and a unique proj_id
     """
     def addProject(self, user_id, title, who_for, date, desc_arr):
-        conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
+        conn = connect_to_database()
         cursor = conn.cursor() 
 
         unique_id = self.generateUniqueID('proj_id', 'projects')
@@ -851,7 +860,7 @@ class Resume:
           user_id and a unique award_id
     """
     def addAward(self, user_id, title, desc):
-        conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
+        conn = connect_to_database()
         cursor = conn.cursor() 
 
         unique_id = self.generateUniqueID('awd_id', 'awards')
@@ -872,7 +881,7 @@ class Resume:
           user_id and a unique course_id
     """
     def addCourse(self, user_id, name):
-        conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
+        conn = connect_to_database() 
         cursor = conn.cursor() 
 
         unique_id = self.generateUniqueID('course_id', 'course_work')
@@ -893,7 +902,7 @@ class Resume:
           user_id and a unique obj_id
     """
     def addObjective(self, user_id, obj_str):
-        conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
+        conn = connect_to_database()
         cursor = conn.cursor() 
 
         # set obj_id = user_id since there is only one objective entry per user, if any
@@ -918,7 +927,7 @@ class Resume:
           user_id and a unique vol_id
     """
     def addVolunteerWork(self, user_id, company, role, start_date, end_date):
-        conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
+        conn = connect_to_database()
         cursor = conn.cursor() 
 
         unique_id = self.generateUniqueID('vol_id', 'volunteer_work')
@@ -938,7 +947,7 @@ class Resume:
         - A unique ID that has not been used in the specified table is returned
     """
     def generateUniqueID(self, id_name, table):
-        conn = sqlite3.connect('server/usrDatabase/usrDB.db')  
+        conn = connect_to_database()
         cursor = conn.cursor() 
         cursor.execute('SELECT ' + id_name + ' FROM ' + table)
         result = cursor.fetchall()
@@ -957,6 +966,5 @@ class Resume:
 # print(job_ids)
 # conn.close()
 
-resume = Resume()
-print(resume.getUserInfo(1))
+
 

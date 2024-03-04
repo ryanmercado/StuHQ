@@ -29,7 +29,7 @@ tinyFontSize = 9.5
 
 def generateResume(usr_id):
     # Create a PDF document
-    document = SimpleDocTemplate("resume", pagesize=letter, leftMargin=0.5*inch, rightMargin=0.5*inch, topMargin=0.5*inch, bottomMargin=0.5*inch)
+    document = SimpleDocTemplate("resume.pdf", pagesize=letter, leftMargin=0.5*inch, rightMargin=0.5*inch, topMargin=0.5*inch, bottomMargin=0.5*inch)
     doc = []
 
 

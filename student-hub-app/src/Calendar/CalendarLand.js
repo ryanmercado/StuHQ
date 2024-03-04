@@ -124,43 +124,6 @@ function CalendarLand( {onEventChange} ) {
           on_to_do_list: addEvent.on_to_do_list
         };
 
-        
-        if (
-            addEvent.title === '' ||
-            startDate === null ||
-            endDate === null ||
-            startTime === null ||
-            endTime === null ||
-            addEvent.description === '' ||
-            addEvent.eventType === ''
-        ) {
-            // Set an error message
-            setError('Please fill in all fields');
-            return;
-        }
-        setError('')
-
-        const startDateTime = new Date(startDate);
-        startDateTime.setHours(startTime.getHours(), startTime.getMinutes(), 0, 0);
-      
-        const endDateTime = new Date(endDate);
-        endDateTime.setHours(endTime.getHours(), endTime.getMinutes(), 0, 0);
-
-        if(endDateTime < startTime){
-            setError('End time must come after start time')
-            return;
-        }
-        setError('')
-
-        const newEvent = {
-          title: addEvent.title,  
-          start: startDateTime,
-          end: endDateTime,
-          description: addEvent.description,
-          type: addEvent.eventType,
-          on_to_do_list: addEvent.on_to_do_list
-        };
-
         if (newEvent.title.trim() !== '') {
           setAddEvent({ title: "", start: null, end: null, description: "", eventType: addEvent.eventType}); // Clear fields after adding the event
         }

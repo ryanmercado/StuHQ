@@ -28,6 +28,11 @@ const DefaultPopup = ({ handleClose }) => {
 
   const handleSubmit = () => {
     // Handle submit logic
+    if (requiredFlags) {
+      handleClose();  
+    } else {
+      setErrorMessage('*Please fill out all required fields before submitting.');
+    }
   };
 
   const handleValidation = (isValid) => {

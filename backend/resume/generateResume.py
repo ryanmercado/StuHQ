@@ -24,9 +24,12 @@ regFontSize = 10.5
 titleFontSize = 14
 tinyFontSize = 9.5
 
+#WHERE RESUME IS STORED
+
+
 def generateResume(usr_id):
     # Create a PDF document
-    document = SimpleDocTemplate("resume.pdf", pagesize=letter, leftMargin=0.5*inch, rightMargin=0.5*inch, topMargin=0.5*inch, bottomMargin=0.5*inch)
+    document = SimpleDocTemplate("resume", pagesize=letter, leftMargin=0.5*inch, rightMargin=0.5*inch, topMargin=0.5*inch, bottomMargin=0.5*inch)
     doc = []
 
 
@@ -69,7 +72,7 @@ def generateResume(usr_id):
     t1 = Paragraph(general_infos[0].edu, regularBoldStyle())
     t2 = Paragraph(general_infos[0].major, regularStyle())
     t3 = Paragraph(general_infos[0].grad_date, regularRightStyle())
-    t4 = Paragraph(f"Overall GPA: {general_infos[0].GPA}", regularBoldStyle())
+    t4 = Paragraph(f"Overall GPA: {fixGPA(general_infos[0].GPA)}", regularBoldStyle())
     tEmpty = Paragraph("", regularStyle())
     data = [
         [t1,t2,t3],
@@ -192,6 +195,8 @@ def generateResume(usr_id):
     # Save the PDF
     document.build(doc)
 
+    # SEND THROUGH 
+
 
     
 def whiteSpace(num):
@@ -213,6 +218,10 @@ def phoneNumber(number):
     formatted_number = f"({number_str[0:3]}) {number_str[3:6]}-{number_str[6:]}"
 
     return formatted_number
+
+def fixGPA(gpa):
+    gpa_str = "{:.2f}".format(gpa)
+    return gpa_str
 
 
 
@@ -241,6 +250,7 @@ def regularRightStyle():
 #def ItalicRegular():
 
 if __name__ == "__main__":
+    
     generateResume(1)
 
 

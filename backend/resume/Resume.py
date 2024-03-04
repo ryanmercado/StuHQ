@@ -508,7 +508,7 @@ class Resume:
                 result = cursor.fetchall()
                 course_ids = [results[0] for results in result]
                 for course_id in course_ids:
-                    course_work = Course_Work(id, course_id)
+                    course_work = Course(id, course_id)
                     course_work.getDataFromDatabase()
                     self.course_work.append(course_work)
 
@@ -529,7 +529,7 @@ class Resume:
                 result = cursor.fetchall()
                 course_ids = [results[0] for results in result]
                 for course_id in course_ids:
-                    course_work = Course_Work(id, course_id)
+                    course_work = Course(id, course_id)
                     course_work.getDataFromDatabase()
                     self.course_work.append(course_work)
 
@@ -577,7 +577,7 @@ class Resume:
                 result = cursor.fetchall()
                 course_ids = [results[0] for results in result]
                 for course_id in course_ids:
-                    course_work = Course_Work(id, course_id)
+                    course_work = Course(id, course_id)
                     course_work.getDataFromDatabase()
                     self.course_work.append(course_work)
 
@@ -625,7 +625,7 @@ class Resume:
                 result = cursor.fetchall()
                 course_ids = [results[0] for results in result]
                 for course_id in course_ids:
-                    course_work = Course_Work(id, course_id)
+                    course_work = Course(id, course_id)
                     course_work.getDataFromDatabase()
                     self.course_work.append(course_work)
 
@@ -651,7 +651,7 @@ class Resume:
                 result = cursor.fetchall()
                 course_ids = [results[0] for results in result]
                 for course_id in course_ids:
-                    course_work = Course_Work(id, course_id)
+                    course_work = Course(id, course_id)
                     course_work.getDataFromDatabase()
                     self.course_work.append(course_work)
 
@@ -689,7 +689,7 @@ class Resume:
                 result = cursor.fetchall()
                 course_ids = [results[0] for results in result]
                 for course_id in course_ids:
-                    course_work = Course_Work(id, course_id)
+                    course_work = Course(id, course_id)
                     course_work.getDataFromDatabase()
                     self.course_work.append(course_work)
 
@@ -711,7 +711,7 @@ class Resume:
                 result = cursor.fetchall()
                 course_ids = [results[0] for results in result]
                 for course_id in course_ids:
-                    course_work = Course_Work(id, course_id)
+                    course_work = Course(id, course_id)
                     course_work.getDataFromDatabase()
                     self.course_work.append(course_work)
         else:

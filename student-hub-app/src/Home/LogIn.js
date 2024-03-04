@@ -26,8 +26,8 @@ const LogIn = () => {
             const response = JSON.parse(xhr.response)
             console.log(response)
             if (response.result === 'login successful') {
-                navigate('/dashboard');
                 secureLocalStorage.setItem('usr_id', response.usr_id)
+                navigate('/dashboard');
             }
             else if (response.result === 'login failed') {
                 setLoginFailed(true);

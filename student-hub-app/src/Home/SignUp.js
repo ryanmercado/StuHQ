@@ -28,8 +28,9 @@ function SignUp() {
             if (xhr.status === 200) { // Handle cases: username taken, pwds don't match, email taken
               const response = JSON.parse(xhr.response)
               if (response.result === 'account created successfully') {
-                  navigate('/dashboard');
                   secureLocalStorage.setItem('usr_id', response.usr_id)
+                  navigate('/dashboard');
+
               }
               else if (response.result === 'username already exists'){
                   setCreatedFailed(true);

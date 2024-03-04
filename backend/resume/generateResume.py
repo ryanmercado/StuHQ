@@ -5,12 +5,11 @@ from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import inch
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-from exampleResumeData import fetch_and_return
 from reportlab.lib import colors
 from Resume import Resume
 
 #from Resume import Resume
-from exampleResumeData import fetch_and_return
+
 
 pdfmetrics.registerFont(TTFont('Cambria', './fonts/Cambria.ttf'))
 pdfmetrics.registerFont(TTFont('Cambria-Bold', './fonts/Cambria-Bold.ttf'))

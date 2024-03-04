@@ -9,6 +9,7 @@ import SignUp from './Home/SignUp';
 import Landing from './Home/Landing';
 import CalendarLand from './Calendar/CalendarLand';
 import Dashboard from './Home/Dashboard.js'
+import ResumeDoc from './Resume/resumeDoc';
 
 function App(){
   return(
@@ -20,7 +21,7 @@ function App(){
               <Route path="/calendar" element={<CalendarLand />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/recipeLanding" element ={<recipeLanding/>} />
-              <Route path="/resumeLanding" element ={<resumeDoc/>} />
+              <Route path="/resumeLanding" element ={<ResumeDoc/>} />
           </Routes>
       </Router>
   )

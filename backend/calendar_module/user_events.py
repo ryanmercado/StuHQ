@@ -4,8 +4,8 @@ from datetime import datetime
 
 
 def create_event(usr_id, event_desc, event_type, 
-                 event_title, start_epoch, end_epoch, on_to_do_list, extra_data, 
-                 is_submitted, want_notification):
+                 event_title, start_epoch = None, end_epoch = None,  on_to_do_list = 0, extra_data = None, 
+                 is_submitted = None, want_notification = None):
     
     '''
         precondition: 
@@ -221,3 +221,18 @@ def event_id_exists(event_id):
     con.close()
 
     return count > 0
+
+def toggleToDo(event_id, on_to_do_list):
+    if event_id_exists(event_id):
+        con = sqlite3.connect('server/usrDatabase/usrDB.db')
+        cursor = con.cursor()
+        cursor.execute('''
+                       UPDATE calendar 
+                       SET on_to_do_list = ?
+                       WHERE event_id = ?
+                       ''', (on_to_do_list,event_id,))
+        con.commit()
+        con.close()
+        return jsonify({'result': 'toggle successful'}) 
+    else:
+        return jsonify({'result': 'event_id not found'}) 

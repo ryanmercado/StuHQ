@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useEffect } from 'react';
-import { Calendar, datejsLocalizer } from 'react-big-calendar';
+import { Calendar, Navigate, datejsLocalizer } from 'react-big-calendar';
 import format from 'date-fns/format';
 import parse from 'date-fns/format';
 import startOfWeek from 'date-fns/startOfWeek';
@@ -17,19 +17,19 @@ import dayjs from 'dayjs';
 
 
 
-const events = [];
 
-function CalendarLand() {
-    const eventIds = new Set();
+function CalendarLand( {onEventChange} ) {
+    const [eventIds, setEventIds] = useState(new Set());
     const navigate = useNavigate();
-    const [addEvent, setAddEvent] = useState({ title: "", start: null, end: null, description: "", eventType: "" });
+    const [addEvent, setAddEvent] = useState({ title: "", start: null, end: null, description: "", eventType: "", on_to_do_list: false,});
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
     const [startTime, setStartTime] = useState(null);
     const [endTime, setEndTime] = useState(null);
     const [anchorEl, setAnchorEl] = useState(null);
     const [isPopoverOpen, setPopoverOpen] = useState(false);
-    const [allEvents, setAllEvents] = useState(events);
+    const [allEvents, setAllEvents] = useState(new Array);
+    const [error, setError] = useState('');
     const usr_id = secureLocalStorage.getItem("usr_id");
     var loadFlag = true;
     const [popoverFields, setPopoverFields] = useState({
@@ -48,26 +48,30 @@ function CalendarLand() {
         xhr.onload = () => {
             if (xhr.status === 200) {
                 const response = JSON.parse(xhr.response);
-                if(response.result.length !== 0 && loadFlag){
+                var todo = new Array
+                if(loadFlag){
                     const response_events = response.result;                
                     const builtEvents = response_events.map(buildEvent)
                     for(let i = 0; i < builtEvents.length; i++){
-                        if(!eventIds.has(builtEvents[i].event_id)){
+                        if (builtEvents[i].on_to_do_list == 1){
+                            todo.push(builtEvents[i])
+                        }
+                        if(!eventIds.has(builtEvents[i].event_id) && builtEvents[i].start !== null && !builtEvents[i].end !== null){
                             setAllEvents((allEvents) => [...allEvents, builtEvents[i]]);
                             eventIds.add(builtEvents[i].event_id)
                         }
                     }
                     loadFlag = false
-                }
+                    onEventChange(todo);
+                }        
             }
         };
         xhr.send(jsonData);
     };
 
     const buildEvent = (event) => {
-
-        const startDate = new Date(event[6])
-        const endDate = new Date(event[7])
+        const startDate = event[6] ? new Date(event[6]) : null;
+        const endDate = event[7] ? new Date(event[7]) : null;
 
         const newEvent = {
             event_id: event[1],
@@ -75,29 +79,53 @@ function CalendarLand() {
             start: startDate,
             end: endDate,
             description: event[3],
+            on_to_do_list: event[8],
             type: event[4]
           };
-
+ 
         return newEvent;
     }
 
     const handleAddEvent = () => {
+        
+        if (
+            addEvent.title === '' ||
+            startDate === null ||
+            endDate === null ||
+            startTime === null ||
+            endTime === null ||
+            addEvent.description === '' ||
+            addEvent.eventType === ''
+        ) {
+            // Set an error message
+            setError('Please fill in all fields');
+            return;
+        }
+        setError('')
+
         const startDateTime = new Date(startDate);
         startDateTime.setHours(startTime.getHours(), startTime.getMinutes(), 0, 0);
       
         const endDateTime = new Date(endDate);
         endDateTime.setHours(endTime.getHours(), endTime.getMinutes(), 0, 0);
-      
+
+        if(endDateTime < startTime){
+            setError('End time must come after start time')
+            return;
+        }
+        setError('')
+
         const newEvent = {
           title: addEvent.title,  
           start: startDateTime,
           end: endDateTime,
           description: addEvent.description,
-          type: addEvent.eventType
+          type: addEvent.eventType,
+          on_to_do_list: addEvent.on_to_do_list
         };
-      
+
         if (newEvent.title.trim() !== '') {
-          setAddEvent({ title: "", start: null, end: null, description: "", eventType: null }); // Clear fields after adding the event
+          setAddEvent({ title: "", start: null, end: null, description: "", eventType: addEvent.eventType}); // Clear fields after adding the event
         }
         const formData = {
             usr_id : secureLocalStorage.getItem('usr_id'),
@@ -106,7 +134,7 @@ function CalendarLand() {
             event_title : newEvent.title,
             start_epoch : newEvent.start.getTime(),
             end_epoch : newEvent.end.getTime(),
-            on_to_do_list : false,
+            on_to_do_list : newEvent.on_to_do_list == true ? 1:0 ,
             extra_data : null,
             is_submitted : null,
             want_notification : null
@@ -123,7 +151,6 @@ function CalendarLand() {
         xhr.send(jsonData);
         loadFlag = true;
         fetchUserEvents();
-
       };
 
     const deleteEvent = (event1) => {
@@ -141,12 +168,13 @@ function CalendarLand() {
         };
         xhr.send(jsonData);
         eventIds.delete(event1.event_id)
-        const updatedEvents = allEvents.filter((event) => event1.title !== event.title);
+        const updatedEvents = allEvents.filter((event) => event1.event_id !== event.event_id);
         setAllEvents(updatedEvents);
         loadFlag = true;
         setTimeout(() => {
             fetchUserEvents();
         }, 1000);
+        //     fetchUserEvents();
 
     };
 
@@ -171,6 +199,9 @@ function CalendarLand() {
         setAnchorEl(null);
         setPopoverOpen(false)
     };
+    const handleCheckboxChange = () => {
+        setAddEvent({ ...addEvent, on_to_do_list: !addEvent.on_to_do_list });
+    };
 
     const localizer = dayjsLocalizer(dayjs);
 
@@ -187,10 +218,10 @@ function CalendarLand() {
             <h1>Calendar</h1>
             <div>
         <h2>Add New Event</h2>
-        <div>
+        <div style={{ zIndex: 2 }}>
             <input type='text' placeholder='Add Title' value={addEvent.title} onChange={(e) => setAddEvent({ ...addEvent, title: e.target.value })} />
             <input type='text' placeholder='Add Description' value={addEvent.description} onChange={(e) => setAddEvent({ ...addEvent, description: e.target.value })} />
-            <select value={addEvent.eventType} onChange={(e) => setAddEvent({ ...addEvent, eventType: e.target.value })}>
+            <select id='type_dropdown' value={addEvent.eventType} onChange={(e) => setAddEvent({ ...addEvent, eventType: e.target.value })}>
                 <option value="" disabled hidden>Select Event Type</option>
                 <option value="Meeting">Meeting</option>   
                 <option value="Appointment">Appointment</option>
@@ -227,10 +258,18 @@ function CalendarLand() {
             dateFormat="h:mm aa"
             placeholderText='End Time'
             />
+            <input
+            type='checkbox'
+            id='showOnTodoList'
+            checked={addEvent.on_to_do_list}
+            onChange={handleCheckboxChange}
+            />
+            <label htmlFor='showOnTodoList'>Show on Todo List</label>
           <button style={{ marginTop: "10px" }} onClick={handleAddEvent}>
             Add Event
           </button>
-        </div>
+          {error && <div style={{ color: 'red' }}>{error}</div>}
+          </div>
       </div>
             <div>
                 <h2>Event List</h2>
@@ -240,6 +279,7 @@ function CalendarLand() {
                     })}
                 </ul>
             </div>
+            <div style={{zIndex: 1 }}>
             <Calendar
                 localizer={localizer}
                 events={allEvents}
@@ -249,6 +289,7 @@ function CalendarLand() {
                 showMultiDayTimes
                 onSelectEvent={(event, target) => handleSelectEvent(event, target)}
             />
+            </div>
             <Popover
                 open={isPopoverOpen}
                 anchorEl={anchorEl}

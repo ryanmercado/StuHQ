@@ -341,6 +341,35 @@ class Resume:
         - If the user does not have information stored in the 5 required tables,
           an error message is returned
     """
+    def deleteUserInfo(self, id):
+        # precondition: id is an int
+        # post condition: deletes all info related to a user in resume dbs
+        conn = sqlite3.connect('server/usrDatabase/usrDB.db')
+        cursor = conn.cursor()
+
+        cursor.execute('SELECT COUNT(*) FROM usr_info WHERE usr_id = ?', (id, ))
+        res = cursor.fetchone()
+
+        if res[0] > 0: #user exists
+            cursor.execute('DELETE FROM experience WHERE usr_id = ?', (id, ))
+            cursor.execute('DELETE FROM extracurr WHERE usr_id = ?', (id, ))
+            cursor.execute('DELETE FROM general_info WHERE usr_id = ?', (id, ))
+            cursor.execute('DELETE FROM projects WHERE usr_id = ?', (id, ))
+            cursor.execute('DELETE FROM technical_skills WHERE usr_id = ?', (id, ))
+            cursor.execute('DELETE FROM awards WHERE usr_id = ?', (id, ))
+            cursor.execute('DELETE FROM objective WHERE usr_id = ?', (id, ))
+            cursor.execute('DELETE FROM volunteer_work WHERE usr_id = ?', (id, ))
+            cursor.execute('DELETE FROM course_work WHERE usr_id = ?', (id, ))
+            conn.commit()
+            cursor.close()
+            conn.close()
+            return jsonify({'result': 'User resume info deleted'})
+
+        cursor.close()
+        conn.close()
+        return jsonify({'result': 'User did not exist'})
+        
+
     def getUserInfo(self, id):
         # precondtion: id is an int
         # postcondition: gets user information for resume formatting

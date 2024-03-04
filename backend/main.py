@@ -1,8 +1,9 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from recipe import Recipe, GroceryList, Stock
 from calendar_module import user_events, to_do_list
-from Resume import Resume
+from resume import Resume
+from resume import generateResume
 import handleCreateAccount, handleSignIn
 
 
@@ -178,7 +179,7 @@ def createAccount():
 
 @stuAPI.route('/api/addResumeExperience', methods=['POST'])
 def addResumeExperience():
-    resume = Resume():
+    resume = Resume()
     data = request.get_json()
     user_id = data['user_id']
     company = data['company']
@@ -192,7 +193,7 @@ def addResumeExperience():
 
 @stuAPI.route('/api/addResumeExtracurr', methods=['POST'])
 def addResumeExtracurr():
-    resume = Resume():
+    resume = Resume()
     data = request.get_json()
     user_id = data['user_id']
     title = data['title']
@@ -202,7 +203,7 @@ def addResumeExtracurr():
 
 @stuAPI.route('/api/addResumeGeneralInfo', methods=['POST'])
 def addResumeGeneralInfo():
-    resume = Resume():
+    resume = Resume()
     data = request.get_json()
     user_id = data['user_id']
     lastname = data['lastname']
@@ -219,7 +220,7 @@ def addResumeGeneralInfo():
 
 @stuAPI.route('/api/addResumeTechnicalSkill', methods=['POST'])
 def addResumeTechnicalSkill():
-    resume = Resume():
+    resume = Resume()
     data = request.get_json()
     user_id = data['user_id']
     name = data['name']
@@ -228,7 +229,7 @@ def addResumeTechnicalSkill():
 
 @stuAPI.route('/api/addResumeProject', methods=['POST'])
 def addResumeProject():
-    resume = Resume():
+    resume = Resume()
     data = request.get_json()
     user_id = data['user_id']
     title = data['title']
@@ -240,7 +241,7 @@ def addResumeProject():
 
 @stuAPI.route('/api/addResumeAward', methods=['POST'])
 def addResumeAward():
-    resume = Resume():
+    resume = Resume()
     data = request.get_json()
     user_id = data['user_id']
     title = data['title']
@@ -250,7 +251,7 @@ def addResumeAward():
 
 @stuAPI.route('/api/addResumeCourse', methods=['POST'])
 def addResumeCourse():
-    resume = Resume():
+    resume = Resume()
     data = request.get_json()
     user_id = data['user_id']
     name = data['name']
@@ -259,23 +260,33 @@ def addResumeCourse():
 
 @stuAPI.route('/api/addResumeObjective', methods=['POST'])
 def addResumeObjective():
-    resume = Resume():
+    resume = Resume()
     data = request.get_json()
     user_id = data['user_id']
     obj_string = data['obj_string']
-    resume.addObjective(user_id, title, desc)
+    resume.addObjective(user_id, obj_string)
 
 
 @stuAPI.route('/api/addResumeVolunteerWork', methods=['POST'])
 def addResumeVolunteerWork():
-    resume = Resume():
+    resume = Resume()
     data = request.get_json()
     user_id = data['user_id']
     company = data['company']
     role = data['role']
     start_date = data['start_date']
     end_date = data['end_date']
-    resume.addVolunteerWork(user_id, title, desc)
+    resume.addVolunteerWork(user_id, company, role, start_date, end_date)
+
+@stuAPI.route('/api/generate_resume', methods = ['POST'])
+def getResume():
+    data = request.get_json()
+    user_id = data['user_id']
+    generateResume(user_id)
+    pdf_path = "resume/resume.pdf" # might need to change this depending on tests (dk what path is here)
+    return send_file(pdf_path, as_attachment= True)
+
+
 
 
 if __name__ == '__main__':

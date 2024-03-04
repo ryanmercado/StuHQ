@@ -12,9 +12,9 @@ import json
 #from Resume import Resume
 
 
-pdfmetrics.registerFont(TTFont('Cambria', './fonts/Cambria.ttf'))
-pdfmetrics.registerFont(TTFont('Cambria-Bold', './fonts/Cambria-Bold.ttf'))
-pdfmetrics.registerFont(TTFont('Cambria-Italic', './fonts/Cambria-Italic.ttf'))
+pdfmetrics.registerFont(TTFont('Cambria', 'backend/resume/fonts/Cambria.ttf'))
+pdfmetrics.registerFont(TTFont('Cambria-Bold', 'backend/resume/fonts/Cambria-Bold.ttf'))
+pdfmetrics.registerFont(TTFont('Cambria-Italic', 'backend/resume/fonts/Cambria-Italic.ttf'))
 styles = getSampleStyleSheet()
 
 # NOTE: THIS CODE EXPECTS BULLET POINTS TO BE STORED IN THE DATABSE AS JSON ARRAYS
@@ -147,7 +147,7 @@ def generateResume(usr_id):
         for desc in desc_array:
             ptext = f'<bullet>&bull;</bullet>{desc}'
             doc.append(Paragraph(ptext, regularStyle()))
-            
+
         spacer = Spacer(1, 0.125*inch)
         doc.append(spacer)
         

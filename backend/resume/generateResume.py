@@ -99,7 +99,7 @@ def generateResume(usr_id):
     for i in range(len(experiences)):
         col_widths = [5*inch, 2.5*inch]
         #t1 = Paragraph(experiences[0].company, regularBoldStyle())
-        t1 = Paragraph(text=f"<font face = 'Cambria-Bold' size={regFontSize}>{experiences[i].company}</font> - <font face=Cambria size={regFontSize}> {experiences[i].role}; {experiences[i].location}</font>")
+        t1 = Paragraph(text=f"<font face = 'Cambria-Bold' size={regFontSize}>{experiences[i].company}</font> - <font face=Cambria-Italic size={regFontSize}> {experiences[i].role}; {experiences[i].location}</font>")
         #t2 = Paragraph(f"{experiences[0].role}; {experiences[0].location}", regularStyle())
         t2 = Paragraph(f"{experiences[i].start_date} - {experiences[i].end_date}", regularRightStyle())
         data = [
@@ -108,9 +108,13 @@ def generateResume(usr_id):
         table = Table(data, colWidths=col_widths)
         table.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 0.25, colors.white), ('BOX', (0, 0), (-1, -1), 0.25, colors.white)]))
         doc.append(table)
-
+        ptext=f'<bullet>&bull;</bullet>{experiences[i].desc_arr}'
+        doc.append(Paragraph(ptext, regularStyle()))
         spacer = Spacer(1, 0.125*inch)
         doc.append(spacer)
+        
+        
+
         if i > 3:
             break
     #exp
@@ -123,12 +127,59 @@ def generateResume(usr_id):
 
     doc.append(projTitle)
 
+    for i in range(len(projects)):
+        col_widths = [5*inch, 2.5*inch]
+        #t1 = Paragraph(experiences[0].company, regularBoldStyle())
+        t1 = Paragraph(text=f"<font face = 'Cambria-Bold' size={regFontSize}>{projects[i].title}</font> - <font face=Cambria-Italic size={regFontSize}> {projects[i].who_for}</font>")
+        #t2 = Paragraph(f"{projects[0].role}; {projects[0].location}", regularStyle())
+        t2 = Paragraph(f"{projects[i].date}", regularRightStyle())
+        data = [
+            [t1,t2]
+        ]
+        table = Table(data, colWidths=col_widths)
+        table.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 0.25, colors.white), ('BOX', (0, 0), (-1, -1), 0.25, colors.white)]))
+        doc.append(table)
+        ptext=f'<bullet>&bull;</bullet>{projects[i].desc_arr}'
+        doc.append(Paragraph(ptext, regularStyle()))
+        spacer = Spacer(1, 0.125*inch)
+        doc.append(spacer)
+        
+        
+
+        if i > 3:
+            break
+
 
     # EXTRACURRICULARS
     extraTitle = Paragraph(f"<br></br><u>EXTRACURRICULARS{whiteSpace(184)}</u>", underlineBoldStyle())
     #code here 
 
     doc.append(extraTitle)
+
+    #temp dates for activiteies
+    dates = ['May 1931', 'October 1944', 'January 1956']
+
+    for i in range(len(extracurriculars)):
+        col_widths = [5*inch, 2.5*inch]
+        t1 = Paragraph(text=f"<font face = 'Cambria-Bold' size={regFontSize}>{extracurriculars[i].title}</font>")
+        #t1 = Paragraph(text=f"<font face = 'Cambria-Bold' size={regFontSize}>{extracurriculars[i].title}</font> - <font face=Cambria-Italic size={regFontSize}>{extracurriculars[i].desc_arr}</font>")
+        #t2 = Paragraph(f"{extracurriculars[i].date}", regularRightStyle())
+        t2 = Paragraph(f"{dates[i]}", regularRightStyle())
+
+        data = [
+            [t1,t2]
+        ]
+
+        table = Table(data, colWidths=col_widths)
+        table.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 0.25, colors.white), ('BOX', (0, 0), (-1, -1), 0.25, colors.white)]))
+        doc.append(table)
+        spacer = Spacer(1, 0.125*inch)
+        doc.append(spacer)
+        
+        
+
+        if i > 3:
+            break
 
 
     # Save the PDF

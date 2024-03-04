@@ -183,7 +183,7 @@ def addResumeExperience():
     user_id = data['user_id']
     company = data['company']
     role = data['role']
-    start_date = data["start_date"]
+    start_date = data['start_date']
     end_date = data['end_date']
     location = data['location']
     desc_arr = data['desc_arr']

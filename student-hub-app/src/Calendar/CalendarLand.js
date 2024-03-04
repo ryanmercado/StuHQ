@@ -1,9 +1,5 @@
-import React, { useState, useEffect, useEffect } from 'react';
-import { Calendar, Navigate, datejsLocalizer } from 'react-big-calendar';
-import format from 'date-fns/format';
-import parse from 'date-fns/format';
-import startOfWeek from 'date-fns/startOfWeek';
-import getDay from 'date-fns/getDay';
+import React, { useState, useEffect } from 'react';
+import { Calendar, Navigate, dayjsLocalizer } from 'react-big-calendar';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Popover from '@mui/material/Popover';
@@ -14,8 +10,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from 'react-router-dom';
 import secureLocalStorage from 'react-secure-storage';
 import dayjs from 'dayjs';
-
-
 
 
 function CalendarLand( {onEventChange} ) {
@@ -182,15 +176,36 @@ function CalendarLand( {onEventChange} ) {
         "en-US": require("date-fns/locale/en-US")
     };
 
-    const localizer = dateFnsLocalizer({
-        format,
-        parse,
-        startOfWeek,
-        getDay,
-        locales
-    });
+    const handleSelectEvent = (event) => {
+        console.log(event.type)
+        setPopoverFields({
+            title: event.title,
+            start: event.start,
+            end: event.end,
+            desc : event.description,
+            type : event.type
+        })
+        setAnchorEl(event.target);
+        setPopoverOpen(true)
+    };
 
+    const handleClosePopover = () => {
+        setAnchorEl(null);
+        setPopoverOpen(false)
+    };
+    const handleCheckboxChange = () => {
+        setAddEvent({ ...addEvent, on_to_do_list: !addEvent.on_to_do_list });
+    };
 
+    const localizer = dayjsLocalizer(dayjs);
+
+    useEffect(() => {
+        if (usr_id === null) {
+            navigate("/");
+        }
+        loadFlag = !loadFlag
+        fetchUserEvents();
+    }, [usr_id, navigate]);
 
     return (
         <div>

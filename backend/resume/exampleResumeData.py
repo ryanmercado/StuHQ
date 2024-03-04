@@ -4,7 +4,7 @@ import json
 
 def connect_to_database():
     try:
-        conn = sqlite3.connect('/Users/drewrentz/Documents/School/StuHQ/server/usrDatabase/usrDB.db')
+        conn = sqlite3.connect('server/usrDatabase/usrDB.db')
         return conn
     except sqlite3.Error as e:
         print("Error connecting to database:", e)
@@ -154,11 +154,22 @@ def fill_example_data():
 
         
         # PROJ DATA
+        proj_desc1 = ['Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.']
+        proj_desc2 = ['Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.']
+        proj_desc3 = ['Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.', 
+                       'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.']
+        proj_desc4 = ['Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.']
+        json1 = json.dumps(proj_desc1)
+        json2 = json.dumps(proj_desc2)
+        json3 = json.dumps(proj_desc3)
+        json4 = json.dumps(proj_desc4)
 
 
         projects_data = [
-            (1, 1, 'Project A', 'Company A', '2022-08-01', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),
-            (1, 2, 'Project B', 'Company B', '2023-02-15', 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.')
+            (1, 1, 'Project A', 'Company A', 'June 1783', json1),
+            (1, 2, 'Project B', 'Company B', 'August 1939', json2),
+            (1, 3, 'Project C', 'Company C', 'December 2000', json3),
+            (1, 4, 'Project D', 'Company D', 'January 2022', json4)
         ]
 
         # Insert projects
@@ -170,13 +181,16 @@ def fill_example_data():
         desc_array1 = ['Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.']
         desc_array2 = ['Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', 
                        'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.', 
-                       'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.']
+                       'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',]
+        desc_array3 = ['Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.']
         json1 = json.dumps(desc_array1)
         json2 = json.dumps(desc_array2)
+        json3 = json.dumps(desc_array3)
 
         experiences_data = [
             (1, 1, 'Company X', 'Software Engineer', 'Spring 2022', 'Present', 'New York', json1),
-            (1, 2, 'Company Y', 'Data Analyst', 'January 2017', 'Yesterday Nigga', 'San Francisco', json2)
+            (1, 2, 'Company Y', 'Data Analyst', 'January 2017', 'Spring 2022', 'San Francisco', json2),
+            (1, 3, 'Company Z', 'Marketing Intern', 'Summer 2016', 'August 2016', 'Austin', json3)
         ]
 
         # Insert job experiences

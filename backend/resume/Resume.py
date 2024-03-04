@@ -5,7 +5,7 @@ from flask import jsonify
 
 def connect_to_database():
     try:
-        conn = sqlite3.connect('server/usrDatabase/usrDB.db')
+        conn = sqlite3.connect('../../server/usrDatabase/usrDB.db')
         return conn
     except sqlite3.Error as e:
         print("Error connecting to database:", e)
@@ -966,6 +966,5 @@ class Resume:
 # print(job_ids)
 # conn.close()
 
-resume = Resume()
-print(resume.getUserInfo(1))
+
 

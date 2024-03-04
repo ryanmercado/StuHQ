@@ -7,6 +7,7 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib import colors
 from Resume import Resume
+import json
 
 #from Resume import Resume
 
@@ -15,6 +16,8 @@ pdfmetrics.registerFont(TTFont('Cambria', './fonts/Cambria.ttf'))
 pdfmetrics.registerFont(TTFont('Cambria-Bold', './fonts/Cambria-Bold.ttf'))
 pdfmetrics.registerFont(TTFont('Cambria-Italic', './fonts/Cambria-Italic.ttf'))
 styles = getSampleStyleSheet()
+
+# NOTE: THIS CODE EXPECTS BULLET POINTS TO BE STORED IN THE DATABSE AS JSON ARRAYS
 
 # IF FONT SIZE IS CHANGED, ALL HORIZONTAL LINES WILL BE RUINED
 regFontSize = 10.5
@@ -108,8 +111,11 @@ def generateResume(usr_id):
         table = Table(data, colWidths=col_widths)
         table.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 0.25, colors.white), ('BOX', (0, 0), (-1, -1), 0.25, colors.white)]))
         doc.append(table)
-        ptext=f'<bullet>&bull;</bullet>{experiences[i].desc_arr}'
-        doc.append(Paragraph(ptext, regularStyle()))
+        desc_array = json.loads(experiences[i].desc_arr)
+        for desc in desc_array:
+            ptext=f'<bullet>&bull;</bullet>{desc}'
+            doc.append(Paragraph(ptext, regularStyle()))
+        
         spacer = Spacer(1, 0.125*inch)
         doc.append(spacer)
         
@@ -123,8 +129,6 @@ def generateResume(usr_id):
 
     # PROJECTS
     projTitle = Paragraph(f"<br></br><u>PROJECTS{whiteSpace(207)}</u>", underlineBoldStyle())
-    #code here
-
     doc.append(projTitle)
 
     for i in range(len(projects)):
@@ -139,8 +143,11 @@ def generateResume(usr_id):
         table = Table(data, colWidths=col_widths)
         table.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 0.25, colors.white), ('BOX', (0, 0), (-1, -1), 0.25, colors.white)]))
         doc.append(table)
-        ptext=f'<bullet>&bull;</bullet>{projects[i].desc_arr}'
-        doc.append(Paragraph(ptext, regularStyle()))
+        desc_array = json.loads(projects[i].desc_arr)
+        for desc in desc_array:
+            ptext = f'<bullet>&bull;</bullet>{desc}'
+            doc.append(Paragraph(ptext, regularStyle()))
+            
         spacer = Spacer(1, 0.125*inch)
         doc.append(spacer)
         

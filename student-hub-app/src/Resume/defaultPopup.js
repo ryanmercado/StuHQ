@@ -49,19 +49,35 @@ const DefaultPopup = ({ handleClose }) => {
       );
       break;
     case 2:
-      pageContent = <Skills requiredFlags={requiredFlags} setRequiredFlags={setRequiredFlags} />;
+      pageContent = (
+        <Skills
+          handleValidation={handleValidation}
+        />
+      );
       break;
     case 3:
-      pageContent = <Jobs requiredFlags={requiredFlags} setRequiredFlags={setRequiredFlags} />;
+      pageContent = (
+        <Jobs
+          handleValidation={handleValidation}
+        />
+      );
       break;
     case 4:
-      pageContent = <Projects requiredFlags={requiredFlags} setRequiredFlags={setRequiredFlags} />;
+      pageContent = (
+        <Projects
+          handleValidation={handleValidation}
+        />
+      );
       break;
     case 5:
-      pageContent = <Extracurr requiredFlags={requiredFlags} setRequiredFlags={setRequiredFlags} />;
+      pageContent = (
+        <Extracurr
+          handleValidation={handleValidation}
+        />
+      );
       break;
     default:
-      pageContent = <GenInfo requiredFlags={requiredFlags} setRequiredFlags={setRequiredFlags} />;
+      pageContent = <GenInfo/>;
   }
 
   return (
@@ -77,11 +93,11 @@ const DefaultPopup = ({ handleClose }) => {
         )}
         {pageContent}
       </div>
-      {currentPage !== 1 && ( // Conditionally render the previous arrow if not on page 1
+      {/* {currentPage !== 1 && ( // Conditionally render the previous arrow if not on page 1 //THIS IS FOR PREV PAGE LOGIC - NOT READY YET
         <span className="arrow arrow-left" onClick={prevPage}>
           &#10094;
         </span>
-      )}
+      )} */}
       {currentPage !== 5 ? (
         <span className="arrow arrow-right" onClick={nextPage}>
           &#10095;

@@ -1,7 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Jobs = ({ handleValidation }) => {
   const [jobHistory, setJobHistory] = useState('');
+
+
+  useEffect(() => {
+    validateFields();
+  }, [jobHistory]);
 
   const validateFields = () => {
     if (jobHistory.trim() !== '') {
@@ -13,7 +18,6 @@ const Jobs = ({ handleValidation }) => {
 
   const handleJobHistoryChange = (e) => {
     setJobHistory(e.target.value);
-    validateFields();
   };
 
   return (

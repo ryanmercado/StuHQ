@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Projects = ({ handleValidation }) => {
   const [projectDetails, setProjectDetails] = useState('');
 
+  useEffect(() => {
+    validateFields();
+  }, [projectDetails]);
+
   const validateFields = () => {
     if (projectDetails.trim() !== '') {
       handleValidation(true);
+      //API
     } else {
       handleValidation(false);
     }
@@ -13,7 +18,6 @@ const Projects = ({ handleValidation }) => {
 
   const handleProjectDetailsChange = (e) => {
     setProjectDetails(e.target.value);
-    validateFields();
   };
 
   return (

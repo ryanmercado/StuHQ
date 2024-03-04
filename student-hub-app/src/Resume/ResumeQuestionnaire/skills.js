@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Skills = ({ handleValidation }) => {
   const [skills, setSkills] = useState('');
 
+  useEffect(() => {
+    validateFields();
+  }, [skills]);
+
   const validateFields = () => {
     if (skills.trim() !== '') {
       handleValidation(true);
+      // CALL API AND WRITE TO DB
     } else {
       handleValidation(false);
     }
@@ -13,7 +18,6 @@ const Skills = ({ handleValidation }) => {
 
   const handleSkillsChange = (e) => {
     setSkills(e.target.value);
-    validateFields();
   };
 
   return (

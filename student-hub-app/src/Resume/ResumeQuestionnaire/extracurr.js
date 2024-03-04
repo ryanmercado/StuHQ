@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Extracurr = ({ handleValidation }) => {
   const [extracurriculars, setExtracurriculars] = useState('');
+
+  useEffect(() => {
+    validateFields();
+  }, [extracurriculars]);
 
   const validateFields = () => {
     if (extracurriculars.trim() !== '') {
@@ -13,7 +17,6 @@ const Extracurr = ({ handleValidation }) => {
 
   const handleExtracurricularsChange = (e) => {
     setExtracurriculars(e.target.value);
-    validateFields();
   };
 
   return (

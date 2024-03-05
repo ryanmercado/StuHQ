@@ -19,35 +19,42 @@ const GenInfo = ({ handleValidation }) => {
     validateFields();
   }, [firstName, lastName, phone, email, linkedin, edu, major, GPA]);
 
+// handling Required fields
+
   const validateFields = () => {
     if (
       firstName.trim() !== '' &&
       lastName.trim() !== '' &&
-      /^\(\d{3}\) \d{3}-\d{4}$/.test(phone) &&
-      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) &&
-      /^\d{2}\/\d{2}$/.test(gradDate) &&
-      /^\d\.\d{2}$/.test(GPA) &&
+      /^\(\d{3}\) \d{3}-\d{4}$/.test(phone) && // Phone number format: (123) 456-7890
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && // Email format: user@domain
+      /^\d\.\d{2}$/.test(GPA) && // GPA format: X.XX
       edu.trim() !== '' &&
-      major.trim() !== ''
+      major.trim() !== '' &&
+      gradMonth !== '' &&
+      gradYear !== ''
     ) {
       handleValidation(true);
+      handleSubmit();
     } else {
+      // Could figure out which fields are invalid and display a message for each
+
       handleValidation(false);
     }
   };
 
   const handleSubmit = () => {
+    // Probably needs to handle con
     const formData = {
-      usr_id,
+      usr_id: usr_id,
       lastname: lastName,
       firstname: firstName,
-      phone,
-      email,
-      linkedin,
+      phone: phone,
+      email: email,
+      linkedin: linkedin,
       edu,
-      grad_date: gradDate,
-      major,
-      GPA
+      grad_date: gradMonth + ' ' + gradYear,
+      major: major,
+      GPA: GPA,
     };
 
     // Call your API here to write to the database using formData
@@ -65,6 +72,8 @@ const GenInfo = ({ handleValidation }) => {
     // .catch(error => console.error('Error:', error));
   };
 
+  //Make tiny error message for each field?
+
   const handleFirstNameChange = (e) => {
     setFirstName(e.target.value);
   };
@@ -73,10 +82,11 @@ const GenInfo = ({ handleValidation }) => {
     setLastName(e.target.value);
   };
 
+  // Phone number format: (123) 456-7890
   const handlePhoneChange = (e) => {
     const inputValue = e.target.value.replace(/\D/g, ''); // Remove non-digit characters
     let formattedPhone = '';
-    
+    //Adding delete handling logic to delete () and - would make this more seemless
     
     switch (inputValue.length) {
       case 3:
@@ -136,6 +146,7 @@ const GenInfo = ({ handleValidation }) => {
     setMajor(e.target.value);
   };
 
+  // GPA format: X.XX and <= 5 or nil
   const handleGPAChange = (e) => {
     const enteredGPA = parseFloat(e.target.value);
   
@@ -164,7 +175,7 @@ const GenInfo = ({ handleValidation }) => {
         onChange={handleLastNameChange}
         />
       <br />
-      <label htmlFor="phone">Phone:</label>
+      <label htmlFor="phone">Phone #:</label>
       <input
         type="tel"
         id="phone"
@@ -179,6 +190,7 @@ const GenInfo = ({ handleValidation }) => {
         value={email}
         onChange={handleEmailChange}
       />
+      {/* Could add button next to email to fill with what is already on file for user*/}
       <br />
       <label htmlFor="linkedin">Linkedin:</label>
       <input
@@ -188,7 +200,7 @@ const GenInfo = ({ handleValidation }) => {
         onChange={handleLinkedinChange}
       />
       <br />
-      <label htmlFor="edu">Education:</label>
+      <label htmlFor="edu">Most Notable Education:</label>
       <input
         type="text"
         id="edu"
@@ -237,7 +249,6 @@ const GenInfo = ({ handleValidation }) => {
         onChange={handleGPAChange}
       />
       <br />
-      <button onClick={handleSubmit}>Submit</button>
     </div>
   );
 };

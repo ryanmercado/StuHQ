@@ -1,0 +1,14 @@
+Hey Team :D
+
+Check out these websites if u wanna explore modern Web Dev tools:
+
+Big page Design:
+http://Shots.so
+
+Single Element Library:
+http://Uiverse.io
+
+Find Color Scheme(We need to decide on one and stick to it):
+http://Huemint.com
+Similar tool to find color palats:
+http://Coolors.co

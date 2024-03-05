@@ -11,7 +11,7 @@ const ResumeDoc = () => {
   const [showPopup, setShowPopup] = useState(true);
 
   const handleCreateResume = async () => {
-    
+    //For trying to pull file from backend, does not work yet
     try {
       const response = await fetch('/api/generate_resume', {
         method: 'POST',

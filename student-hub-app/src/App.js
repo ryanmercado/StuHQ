@@ -16,8 +16,12 @@ import RecipeList from './Recipe/RecipeList.js';
 import StockList from './Recipe/StockList.js';
 import GroceryList from './Recipe/GroceryList.js';
 import Navbar from './Navbar/Navbar.js';
+import secureLocalStorage from 'react-secure-storage';
 
 function App() {
+
+    secureLocalStorage.clear()
+
     return (
         <>
             <Navbar />

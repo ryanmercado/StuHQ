@@ -1,8 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import secureLocalStorage from 'react-secure-storage';
+import { useNavigate } from 'react-router-dom';
 
 
 function Landing() {
+    const usr_id = secureLocalStorage.getItem('usr_id')
+    const navigate = useNavigate();
+
+    
+    useEffect(() => {
+        if (usr_id === null) {
+            navigate("/");
+        }
+    }, []);
+
     return (
         <div>
             <h2>Welcome to your StuHQ Dashboard!</h2>

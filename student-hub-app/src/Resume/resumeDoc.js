@@ -6,8 +6,28 @@ const ResumeDoc = () => {
   const [isResumeReady, setIsResumeReady] = useState(false);
   const [showPopup, setShowPopup] = useState(true);
 
-  const handleCreateResume = () => {
-    setIsResumeReady(true);
+  const handleCreateResume = async () => {
+    
+    try {
+      const response = await fetch('/api/generate_resume', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ user_id: 1 })
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to generate resume');
+      }
+  
+      // Assuming the response contains the PDF file, you can handle it here
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      window.open(url); // Open the PDF in a new tab
+    } catch (error) {
+      console.error('Error generating resume:', error);
+    }
   };
 
   const handlePopupClose = () => {

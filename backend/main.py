@@ -173,6 +173,123 @@ def createAccount():
     email = data['email']
     return handleCreateAccount.sign_up(username, email, password, confirm_password)
 
+
+@stuAPI.route('/api/addResumeExperience', methods=['POST'])
+def addResumeExperience():
+    resume = Resume()
+    data = request.get_json()
+    user_id = data['user_id']
+    company = data['company']
+    role = data['role']
+    start_date = data['start_date']
+    end_date = data['end_date']
+    location = data['location']
+    desc_arr = data['desc_arr']
+    resume.addExperience(user_id, company, role, start_date, end_date, location, desc_arr)
+
+
+@stuAPI.route('/api/addResumeExtracurr', methods=['POST'])
+def addResumeExtracurr():
+    resume = Resume()
+    data = request.get_json()
+    user_id = data['user_id']
+    title = data['title']
+    desc = data['desc']
+    resume.addExtracurr(user_id, title, desc)
+
+
+@stuAPI.route('/api/addResumeGeneralInfo', methods=['POST'])
+def addResumeGeneralInfo():
+    resume = Resume()
+    data = request.get_json()
+    user_id = data['user_id']
+    lastname = data['lastname']
+    firstname = data['firstname']
+    phone = data['phone']
+    email = data['email']
+    linkedin = data['linkedin']
+    edu = data['edu']
+    grad_date = data['grad_date']
+    major = data['major']
+    GPA = data['GPA']
+    resume.addGeneralInfo(user_id, lastname, firstname, phone, email, linkedin, edu, grad_date, major, GPA)
+
+
+@stuAPI.route('/api/addResumeTechnicalSkill', methods=['POST'])
+def addResumeTechnicalSkill():
+    resume = Resume()
+    data = request.get_json()
+    user_id = data['user_id']
+    name = data['name']
+    resume.addTechnicalSkill(user_id, name)
+
+
+@stuAPI.route('/api/addResumeProject', methods=['POST'])
+def addResumeProject():
+    resume = Resume()
+    data = request.get_json()
+    user_id = data['user_id']
+    title = data['title']
+    who_for = data['who_for']
+    date = data['date']
+    desc_arr = data['desc_arr']
+    resume.addProject(user_id, title, who_for, date, desc_arr)
+
+
+@stuAPI.route('/api/addResumeAward', methods=['POST'])
+def addResumeAward():
+    resume = Resume()
+    data = request.get_json()
+    user_id = data['user_id']
+    title = data['title']
+    desc = data['desc']
+    resume.addAward(user_id, title, desc)
+
+
+@stuAPI.route('/api/addResumeCourse', methods=['POST'])
+def addResumeCourse():
+    resume = Resume()
+    data = request.get_json()
+    user_id = data['user_id']
+    name = data['name']
+    resume.addCourse(user_id, name)
+
+
+@stuAPI.route('/api/addResumeObjective', methods=['POST'])
+def addResumeObjective():
+    resume = Resume()
+    data = request.get_json()
+    user_id = data['user_id']
+    obj_string = data['obj_string']
+    resume.addObjective(user_id, obj_string)
+
+
+@stuAPI.route('/api/addResumeVolunteerWork', methods=['POST'])
+def addResumeVolunteerWork():
+    resume = Resume()
+    data = request.get_json()
+    user_id = data['user_id']
+    company = data['company']
+    role = data['role']
+    start_date = data['start_date']
+    end_date = data['end_date']
+    resume.addVolunteerWork(user_id, company, role, start_date, end_date)
+
+@stuAPI.route('/api/generate_resume', methods = ['POST'])
+def getResume():
+    data = request.get_json()
+    user_id = data['user_id']
+    generateResume(user_id)
+    pdf_path = "resume.pdf" # might need to change this depending on tests (dk what path is here)
+    try:
+        return send_file(pdf_path, as_attachment= True)
+    except Exception as e:
+        print(e)
+        return str(e)
+
+
+
+
 if __name__ == '__main__':
     stuAPI.run(debug=True)
 

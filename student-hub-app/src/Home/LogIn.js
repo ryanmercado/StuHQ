@@ -29,9 +29,9 @@ const LogIn = () => {
                 navigate('/dashboard');
                 secureLocalStorage.setItem('usr_id', response.usr_id)
             }
-
-            //Create pop-up handling is response.result == 'login failed'
-            //username or password are incorrect
+            else if (response.result === 'login failed') {
+                setLoginFailed(true);
+            }
 
           }
         };

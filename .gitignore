@@ -1,6 +1,5 @@
 *.db
-server/usrDatabase/usrDB.db
+server/usrDatabase/*.db
 *.pyc
 resume.pdf
 backend/resume/resume.pdf
-

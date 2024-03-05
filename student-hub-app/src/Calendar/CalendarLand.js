@@ -1,5 +1,5 @@
 // Calendar.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
 import format from 'date-fns/format';
 import parse from 'date-fns/format';
@@ -8,10 +8,14 @@ import getDay from 'date-fns/getDay';
 import DatePicker from 'react-datepicker';
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "react-datepicker/dist/react-datepicker.css";
+import { useNavigate } from 'react-router-dom';
+import secureLocalStorage from 'react-secure-storage';
 
 const events = [];
 
 function CalendarLand() {
+    const usr_id = secureLocalStorage.getItem('usr_id');
+    const navigate = useNavigate();
     const [newEvent, setNewEvent] = useState({ title: "", start: "", end: "" });
     const [allEvents, setAllEvents] = useState(events);
 
@@ -40,7 +44,12 @@ function CalendarLand() {
         locales
     });
 
+    useEffect(() => {
 
+        if (usr_id === null) {
+            navigate("/");
+        }
+    }, [usr_id, navigate]);
 
     return (
         <div>
@@ -57,8 +66,8 @@ function CalendarLand() {
             <div>
                 <h2>Event List</h2>
                 <ul>
-                    {allEvents.map((event) => {
-                        return (<li>{event.title}: {event.start.toString()} - {event.end.toString()} <button onClick={() => deleteEvent(event)}>Delete Event</button></li>
+                    {allEvents.map((event, index) => {
+                        return (<li key={index}>{event.title}: {event.start.toString()} - {event.end.toString()} <button onClick={() => deleteEvent(event)}>Delete Event</button></li>
                         );
                     })}
                 </ul>

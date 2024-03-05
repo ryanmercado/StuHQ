@@ -1,10 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import GroceryList from './GroceryList';
 import RecipeList from './RecipeList';
 import StockList from './StockList';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import secureLocalStorage from 'react-secure-storage';
 
 const RecipeLanding = () => {
+    const usr_id = secureLocalStorage.getItem('usr_id');
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (usr_id === null) {
+            navigate("/");
+        }
+    }, [usr_id, navigate]);
+
     return (
         <div>
             <h1>Recipe Landing</h1>

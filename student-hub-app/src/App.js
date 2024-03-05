@@ -1,6 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import ReactDOM from 'react-dom/client';
 import './assets/styles/index.css';
 import reportWebVitals from './reportWebVitals';
@@ -15,10 +15,12 @@ import RecipeLanding from './Recipe/RecipeLanding.js';
 import RecipeList from './Recipe/RecipeList.js';
 import StockList from './Recipe/StockList.js';
 import GroceryList from './Recipe/GroceryList.js';
+import Navbar from './Navbar/Navbar.js';
 
 function App() {
     return (
-        <Router>
+        <>
+            <Navbar />
             <Routes>
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/login" element={<LogIn />} />
@@ -32,7 +34,7 @@ function App() {
                 <Route path='/stock-list' element={<StockList />} />
 
             </Routes>
-        </Router>
+        </>
     )
 }
 

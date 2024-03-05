@@ -11,20 +11,29 @@ import CalendarLand from './Calendar/CalendarLand';
 import Dashboard from './Home/Dashboard.js'
 import ResumeDoc from './Resume/resumeDoc';
 
-function App(){
-  return(
-      <Router>
-          <Routes>
-              <Route path="/signup" element={<SignUp />} />
-              <Route path="/login" element={<LogIn />} />
-              <Route path="/" element={<Landing />} />
-              <Route path="/calendar" element={<CalendarLand />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/recipeLanding" element ={<recipeLanding/>} />
-              <Route path="/resumeLanding" element ={<ResumeDoc/>} />
-          </Routes>
-      </Router>
-  )
+import RecipeLanding from './Recipe/RecipeLanding.js';
+import RecipeList from './Recipe/RecipeList.js';
+import StockList from './Recipe/StockList.js';
+import GroceryList from './Recipe/GroceryList.js';
+
+function App() {
+    return (
+        <Router>
+            <Routes>
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="/login" element={<LogIn />} />
+                <Route path="/" element={<Landing />} />
+                <Route path="/calendar" element={<CalendarLand />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/recipeLanding" element={<RecipeLanding />} />
+                <Route path="/resumeLanding" element={<ResumeDoc />} />
+                <Route path='/grocery-list' element={<GroceryList />} />
+                <Route path='/recipe-list' element={<RecipeList />} />
+                <Route path='/stock-list' element={<StockList />} />
+
+            </Routes>
+        </Router>
+    )
 }
 
 export default App;

@@ -62,8 +62,10 @@ class Stock:
                 else: 
                     new_stock.append(item)
             items_string = ', '.join(new_stock)
-            cursor.execute('UPDATE curr_stock SET stock_list = ? WHERE usr_id = ?', (items_string, id))
-            
+            if items_string:
+                cursor.execute('UPDATE curr_stock SET stock_list = ? WHERE usr_id = ?', (items_string, id))
+            else:
+                cursor.execute('DELETE FROM curr_stock WHERE usr_id = ?', (id,))
         conn.commit()
         cursor.close()
         conn.close()

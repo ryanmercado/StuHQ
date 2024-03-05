@@ -4,8 +4,8 @@ from datetime import datetime
 
 
 def create_event(usr_id, event_desc, event_type, 
-                 event_title, start_epoch, end_epoch, on_to_do_list, extra_data, 
-                 is_submitted, want_notification):
+                 event_title, start_epoch = None, end_epoch = None,  on_to_do_list = 0, extra_data = None, 
+                 is_submitted = None, want_notification = None):
     
     '''
         precondition: 
@@ -161,15 +161,12 @@ def get_event_id():
     cursor.execute('SELECT MAX(event_id) FROM calendar')
     max_id = cursor.fetchone()[0]
 
-    print(max_id)
-
     if max_id is not None:
         # Iterate over the range of usr_ids from 1 to the maximum
         for event_id in range(0, max_id + 1):
             # Check if the usr_id exists in the usr_info table
             cursor.execute('SELECT COUNT(*) FROM calendar WHERE event_id = ?', (event_id,))
             count = cursor.fetchone()[0]
-            print(count)
             if count == 0:
                 # Found the first missing usr_id
                 return event_id
@@ -224,3 +221,18 @@ def event_id_exists(event_id):
     con.close()
 
     return count > 0
+
+def toggleToDo(event_id, on_to_do_list):
+    if event_id_exists(event_id):
+        con = sqlite3.connect('server/usrDatabase/usrDB.db')
+        cursor = con.cursor()
+        cursor.execute('''
+                       UPDATE calendar 
+                       SET on_to_do_list = ?
+                       WHERE event_id = ?
+                       ''', (on_to_do_list,event_id,))
+        con.commit()
+        con.close()
+        return jsonify({'result': 'toggle successful'}) 
+    else:
+        return jsonify({'result': 'event_id not found'}) 

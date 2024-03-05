@@ -123,7 +123,19 @@ def createEvent():
     extra_data = data['extra_data']
     is_submitted = data['is_submitted']
     want_notification = data['want_notification']
-    return user_events.create_event(usr_id, event_desc, event_type, event_title, start_epoch, end_epoch, on_to_do_list, extra_data, is_submitted, want_notification)
+    return user_events.create_event(usr_id=usr_id, event_desc=event_desc, event_type=event_type, event_title=event_title, 
+                                    start_epoch=start_epoch, end_epoch=end_epoch, on_to_do_list=on_to_do_list, extra_data=extra_data, 
+                                    is_submitted=is_submitted, want_notification=want_notification)
+
+@stuAPI.route('/api/ToDoCreateEvent', methods=['POST']) 
+def ToDoCreateEvent():
+    data = request.get_json()
+    usr_id = data['usr_id']
+    event_desc = data['event_desc']
+    event_type = data['event_type']
+    event_title = data['event_title']
+    on_to_do_list = data['on_to_do_list']
+    return user_events.create_event(usr_id=usr_id, event_desc=event_desc, event_type=event_type, event_title=event_title, on_to_do_list=on_to_do_list)
 
 
 @stuAPI.route('/api/getEventInformation', methods=['GET']) 
@@ -134,8 +146,7 @@ def getEventInformation():
 
 @stuAPI.route('/api/getUserEvents', methods=['GET']) 
 def getUserEvents():
-    data = request.get_json()
-    usr_id = data['usr_id']
+    usr_id = request.args.get('usr_id')
     return user_events.get_usr_events(usr_id)
 
 @stuAPI.route('/api/updateEvent', methods=['POST']) 
@@ -153,6 +164,14 @@ def updateEvent():
     want_notification = data['want_notification']
     return user_events.update_event(event_id, event_title, event_desc, event_type, start_epoch, end_epoch, on_to_do_list, extra_data, is_submitted, want_notification) 
 
+
+@stuAPI.route('/api/toggleToDo', methods=['POST']) 
+def toggleToDo():
+    print(request.get_json)
+    data = request.get_json()
+    event_id = data['event_id']
+    on_to_do_list = data['on_to_do_list']
+    return user_events.toggleToDo(event_id, on_to_do_list)
 
 @stuAPI.route('/api/deleteEvent', methods=['POST']) 
 def deleteEvent():
@@ -290,5 +309,5 @@ def getResume():
 
 
 if __name__ == '__main__':
-    stuAPI.run(debug=True)
+    stuAPI.run()
 

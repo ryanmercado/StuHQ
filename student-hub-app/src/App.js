@@ -7,7 +7,7 @@ import reportWebVitals from './reportWebVitals';
 import LogIn from './Home/LogIn';
 import SignUp from './Home/SignUp';
 import Landing from './Home/Landing';
-import CalendarLand from './Calendar/CalendarLand';
+import ScrollPane from './Calendar/ScrollPane.js';
 import Dashboard from './Home/Dashboard.js'
 import ResumeDoc from './Resume/resumeDoc';
 
@@ -25,7 +25,7 @@ function App() {
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/login" element={<LogIn />} />
                 <Route path="/" element={<Landing />} />
-                <Route path="/calendar" element={<CalendarLand />} />
+                <Route path="/calendar" element={<ScrollPane />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/recipeLanding" element={<RecipeLanding />} />
                 <Route path="/resumeLanding" element={<ResumeDoc />} />

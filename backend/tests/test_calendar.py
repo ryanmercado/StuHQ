@@ -18,8 +18,9 @@ def app_client():
 
 @pytest.fixture
 def clear_db_fixture():
-    yield
     clearDB()
+    yield
+    
 
 # Clears usr_info and calendar tables
 def clearDB():

@@ -7,10 +7,10 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib import colors
 
-# Use for Development
+# For Dev
 # from Resume import Resume
 
-# Use for Production
+# For Prod
 from resume.Resume import Resume
 import json
 

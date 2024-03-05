@@ -60,8 +60,11 @@ class GroceryList:
                     continue
                 else:
                     shaved_grocery_list.append(existing_item)
-            final_list = items_string = ', '.join(shaved_grocery_list)
-            cursor.execute('UPDATE grocery_list SET grocery_list = ? WHERE usr_id = ?', (final_list, id))
+            final_list = ', '.join(shaved_grocery_list)
+            if final_list: 
+                cursor.execute('UPDATE grocery_list SET grocery_list = ? WHERE usr_id = ?', (final_list, id))
+            else:
+                cursor.execute('DELETE FROM grocery_list WHERE usr_id = ?', (id,))
         conn.commit()
         cursor.close()
         conn.close()

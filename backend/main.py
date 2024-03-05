@@ -1,7 +1,9 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from recipe import Recipe, GroceryList, Stock
 from calendar_module import user_events, to_do_list
+from resume import Resume
+from resume import generateResume
 import handleCreateAccount, handleSignIn
 
 
@@ -17,9 +19,9 @@ def create_recipe():
     measurements = data['measurements']
     steps = data['steps']
 
-    recipe = Recipe.Recipe(name, ingredients,measurements, steps)
+    recipe = Recipe.Recipe(name, ingredients, measurements, steps)
     recipes = [recipe]
-    Recipe.addRecipe(usr_id, recipes)
+    Recipe.Recipe.addRecipe(usr_id, recipes)
     return jsonify({'message': 'Recipe created successfully'})
 
 
@@ -29,15 +31,15 @@ def delete_recipe():
     usr_id = data['usr_id']
     name = data['name']
     
-    Recipe.removeRecipe(usr_id, name)
+    Recipe.Recipe.removeRecipe(usr_id, name)
     return jsonify({'message': 'Recipe deleted successfully'})
 
 
 @stuAPI.route('/api/getRecipes', methods=['GET'])
 def get_recipes():
     usr_id = request.args.get('usr_id')
-    return Recipe.getRecipes(usr_id)
-    
+    return Recipe.Recipe.getRecipes(usr_id)
+
 
 
 @stuAPI.route('/api/addGroceryListIngredient', methods=['POST'])
@@ -45,8 +47,8 @@ def add_ingredient():
     data = request.get_json()
     usr_id = data['usr_id']
     item = data['item']
-
-    GroceryList.add_item(usr_id, item)
+    
+    GroceryList.GroceryList.add_item(usr_id, item)
     return jsonify({'message': 'Ingredient added successfully'})
 
 
@@ -56,14 +58,14 @@ def remove_ingredient():
     usr_id = data['usr_id']
     item = data['item']
 
-    GroceryList.delete_item(usr_id,item)
+    GroceryList.GroceryList.delete_item(usr_id, item)
     return jsonify({'message': 'Ingredient deleted successfully'})
 
 
 @stuAPI.route('/api/getGroceryList', methods=['GET'])
 def getGroceryList():
     usr_id = request.args.get('usr_id')
-    return GroceryList.get_items(usr_id)
+    return GroceryList.GroceryList.get_items(usr_id)
 
 
 @stuAPI.route('/api/addStockItem', methods=['POST'])
@@ -71,7 +73,7 @@ def addStockItem():
     data = request.get_json()
     usr_id = data['usr_id']
     item = data['item']
-    Stock.add_item(usr_id, item)
+    Stock.Stock.add_item(usr_id, item)
     return jsonify({'message': 'Item added successfully'})
 
 
@@ -80,14 +82,14 @@ def removeStockItem():
     data = request.get_json()
     usr_id = data['usr_id']
     item = data['item']  
-    Stock.delete_item(usr_id, item)
+    Stock.Stock.delete_item(usr_id, item)
     return jsonify({'message': 'Item removed successfully'})
 
 
 @stuAPI.route('/api/getStock', methods=['GET'])
 def getStockItems():
     usr_id = request.args.get('usr_id')
-    return Stock.get_items(usr_id)
+    return Stock.Stock.get_items(usr_id)
 
 @stuAPI.route('/api/addTo_ToDoList', methods=['POST'])
 def addTo_ToDoList():
@@ -158,10 +160,11 @@ def deleteEvent():
     event_id = data['event_id']
     return user_events.delete_event(event_id)
  
-@stuAPI.route('/api/login', methods=['GET'])
+@stuAPI.route('/api/login', methods=['POST'])
 def login():
-    username = request.args.get('username')
-    password = request.args.get('password')
+    data = request.get_json()
+    username = data['username']
+    password = data['password']
     return handleSignIn.login(username, password)
 
 @stuAPI.route('/api/createAccount', methods=['POST'])
@@ -286,6 +289,7 @@ def getResume():
     except Exception as e:
         print(e)
         return str(e)
+
 
 
 

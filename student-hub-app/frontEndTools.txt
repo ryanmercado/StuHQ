@@ -12,3 +12,6 @@ Find Color Scheme(We need to decide on one and stick to it):
 http://Huemint.com
 Similar tool to find color palats:
 http://Coolors.co
+
+For word animations:
+https://www.typefaceanimator.com/

@@ -9,6 +9,8 @@ import SignUp from './Home/SignUp';
 import Landing from './Home/Landing';
 import CalendarLand from './Calendar/CalendarLand';
 import Dashboard from './Home/Dashboard.js'
+import ResumeDoc from './Resume/resumeDoc';
+
 import RecipeLanding from './Recipe/RecipeLanding.js';
 import RecipeList from './Recipe/RecipeList.js';
 import StockList from './Recipe/StockList.js';
@@ -24,7 +26,7 @@ function App() {
                 <Route path="/calendar" element={<CalendarLand />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/recipeLanding" element={<RecipeLanding />} />
-                <Route path="/resumeLanding" element={<resumeDoc />} />
+                <Route path="/resumeLanding" element={<ResumeDoc />} />
                 <Route path='/grocery-list' element={<GroceryList />} />
                 <Route path='/recipe-list' element={<RecipeList />} />
                 <Route path='/stock-list' element={<StockList />} />

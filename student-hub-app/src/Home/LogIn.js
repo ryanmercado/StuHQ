@@ -1,45 +1,42 @@
 // Login.js
 
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
+import secureLocalStorage from 'react-secure-storage'
+
 
 const LogIn = () => {
-    const [formData, setFormData] = useState({
-        username: '',
-        password: '',
-    });
+    const navigate = useNavigate();
+    const [username, setUsernameValue] = useState('');
+    const [password, setPasswordValue] = useState('');
     const [loginFailed, setLoginFailed] = useState(false);
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
-
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        try{
-            const response = await fetch('http://localhost:5000/api/login?username=${formData.username}&password=${formData.password}', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            
-            const data = await response.json();
-
-            if (response.data.result === 'login successful') {
-                history.push('/dashboard')
-            }else{
-                setLoginFailed(true)
-            }
-        }catch (error) {
-            console.error('Login error:', error);
-        } finally{
-            setFormData({
-                username: '',
-                password: '',
-            });
+        const formData = {
+            username: username,
+            password: password,
         }
-        
+        const jsonData = JSON.stringify(formData)
+        e.preventDefault();
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://localhost:5000/api/login");
+        xhr.setRequestHeader("Content-Type", "application/json"); 
+        xhr.onload = () => {
+          if (xhr.status === 200) { 
+            const response = JSON.parse(xhr.response)
+            console.log(response)
+            if (response.result === 'login successful') {
+                navigate('/dashboard');
+                secureLocalStorage.setItem('usr_id', response.usr_id)
+            }
+
+            //Create pop-up handling is response.result == 'login failed'
+            //username or password are incorrect
+
+          }
+        };
+        xhr.send(jsonData);
+        setPasswordValue('')
     };
 
     return (
@@ -51,8 +48,8 @@ const LogIn = () => {
                     <input
                         type="username"
                         name="username"
-                        value={formData.username}
-                        onChange={handleChange}
+                        value={username}
+                        onChange={(e) => setUsernameValue(e.target.value)}
                     />
                 </label>
                 <br />
@@ -61,8 +58,8 @@ const LogIn = () => {
                     <input
                         type="password"
                         name="password"
-                        value={formData.password}
-                        onChange={handleChange}
+                        value={password}
+                        onChange={(e) => setPasswordValue(e.target.value)}
                     />
                 </label>
                 <br />

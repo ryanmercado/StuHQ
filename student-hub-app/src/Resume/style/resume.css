@@ -1,0 +1,38 @@
+
+  .create-resume-btn {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    width: 200px; /* Adjust width as needed */
+    height: 50px; /* Adjust height as needed */
+    background-color: #007bff; /* Blue color */
+    color: white;
+    font-size: 1.5rem; /* Adjust font size as needed */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0 auto; /* Center horizontally */
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+  }
+  
+  .create-resume-btn:hover {
+    background-color: #0056b3; /* Darker blue color on hover */
+  }
+  
+  .create-resume-btn:focus {
+    box-shadow: 0 0 0 2px #0056b3; /* Add outline on focus */
+  }
+
+  .body {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  

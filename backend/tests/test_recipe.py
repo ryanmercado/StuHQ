@@ -216,13 +216,11 @@ def test_remove_stock_item4(user_exists_fixture, populate_stock_list_fixture): #
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM curr_stock WHERE usr_id = ?', (0, ))
     res = cursor.fetchone()
-    assert (res[0] == 0)
-    assert (res[1] == '')
+    assert (res == None)
     GroceryList.GroceryList.delete_item(0, 'grapes')
     cursor.execute('SELECT * FROM curr_stock WHERE usr_id = ?', (0, ))
     res = cursor.fetchone()
-    assert (res[0] == 0)
-    assert (res[1] == '')
+    assert (res == None)
 
 def test_get_stock_item(clear_db_fixture, app_client): # get items (user does not exist)
     list = Stock.Stock.get_items(0)
@@ -237,8 +235,9 @@ def test_get_stock_item2(user_exists_fixture, populate_stock_list_fixture): # ge
 def test_get_stock_item3(user_exists_fixture, populate_stock_list_fixture): # get items (user exists, empty list)
     Stock.Stock.delete_item(0, 'grapes')
     Stock.Stock.delete_item(0, 'beans')
-    list = Stock.Stock.get_items(0)
-    assert (list == '""')
+    response = Stock.Stock.get_items(0)
+    data = response.get_json()  # Convert the response to a dictionary
+    assert data['result'] == 'usr did not exist'
 
 
 
@@ -305,13 +304,11 @@ def test_remove_grocery_item4(user_exists_fixture, populate_grocery_list_fixture
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM grocery_list WHERE usr_id = ?', (0, ))
     res = cursor.fetchone()
-    assert (res[0] == 0)
-    assert (res[1] == '')
+    assert (res == None)
     GroceryList.GroceryList.delete_item(0, 'grapes')
     cursor.execute('SELECT * FROM grocery_list WHERE usr_id = ?', (0, ))
     res = cursor.fetchone()
-    assert (res[0] == 0)
-    assert (res[1] == '')
+    assert (res == None)
 
 def test_get_grocery_item(clear_db_fixture, app_client): # get items (user does not exist)
     list = GroceryList.GroceryList.get_items(0)
@@ -327,7 +324,8 @@ def test_get_grocery_item3(): # get items (user exists, empty list)
     GroceryList.GroceryList.delete_item(0, 'grapes')
     GroceryList.GroceryList.delete_item(0, 'beans')
     list = GroceryList.GroceryList.get_items(0)
-    assert (list == '""')
+    res = list.get_json()
+    assert (res['result'] == 'id did not exist')
     
 
 

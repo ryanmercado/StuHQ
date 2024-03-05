@@ -302,8 +302,13 @@ def getResume():
     data = request.get_json()
     user_id = data['user_id']
     generateResume(user_id)
-    pdf_path = "resume/resume.pdf" # might need to change this depending on tests (dk what path is here)
-    return send_file(pdf_path, as_attachment= True)
+    pdf_path = "resume.pdf" # might need to change this depending on tests (dk what path is here)
+    try:
+        return send_file(pdf_path, as_attachment= True)
+    except Exception as e:
+        print(e)
+        return str(e)
+
 
 
 

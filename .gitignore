@@ -1,9 +1,6 @@
 *.db
 server/usrDatabase/usrDB.db
 *.pyc
-
-*.DS_Store
-
-backend/recipe/__pycache__/Stock.cpython-311.pyc
-
+resume.pdf
 backend/resume/resume.pdf
+

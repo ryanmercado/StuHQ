@@ -1,0 +1,51 @@
+.gen-info-form {
+    font-family: Arial, sans-serif;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .gen-info-form h1 {
+    text-align: center;
+  }
+  
+  .gen-info-form label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .gen-info-form input {
+    width: calc(100% - 20px);
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .gen-info-form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .gen-info-form button:hover {
+    background-color: #0056b3;
+  }
+
+  .grad-date-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .grad-date-container select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  

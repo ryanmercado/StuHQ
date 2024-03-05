@@ -6,6 +6,11 @@ from reportlab.lib.units import inch
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib import colors
+
+# For Dev
+# from Resume import Resume
+
+# For Prod
 from resume.Resume import Resume
 import json
 

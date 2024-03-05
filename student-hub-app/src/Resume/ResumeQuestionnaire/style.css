@@ -48,4 +48,103 @@
     border-radius: 4px;
   }
   
+  .skills-form {
+    font-family: Arial, sans-serif;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .skills-form h1 {
+    text-align: center;
+  }
+  
+  .skill-input-container {
+    margin-bottom: 10px;
+  }
+  
+  .skill-input {
+    display: flex;
+    align-items: center;
+  }
+  
+  .skill-input input {
+    width: calc(100% - 120px);
+    padding: 8px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .add-skill-btn,
+  .remove-skill-btn {
+    padding: 8px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .add-skill-btn:hover,
+  .remove-skill-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .remove-skill-btn {
+    background-color: #dc3545;
+  }
+  
+  .remove-skill-btn:hover {
+    background-color: #c82333;
+  }
+  
+  .extracurr-form {
+    font-family: Arial, sans-serif;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .extracurr-form h1 {
+    text-align: center;
+  }
+  
+  .extracurricular-input-container {
+    margin-bottom: 10px;
+  }
+  
+  .extracurricular-input {
+    display: flex;
+    align-items: center;
+  }
+  
+  .extracurricular-input input {
+    width: calc(100% - 120px);
+    padding: 8px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .add-extracurricular-btn,
+  .remove-extracurricular-btn {
+    padding: 8px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .add-extracurricular-btn:hover,
+  .remove-extracurricular-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .remove-extracurricular-btn {
+    background-color: #dc3545;
+  }
+  
+  .remove-extracurricular-btn:hover {
+    background-color: #c82333;
+  }
   

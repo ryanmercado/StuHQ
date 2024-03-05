@@ -35,4 +35,17 @@
   .gen-info-form button:hover {
     background-color: #0056b3;
   }
+
+  .grad-date-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .grad-date-container select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
   

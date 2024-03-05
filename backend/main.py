@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from recipe import Recipe, GroceryList, Stock
 from calendar_module import user_events, to_do_list
-from resume import Resume
+from resume.Resume import Resume
 from resume import generateResume
 import handleCreateAccount, handleSignIn
 

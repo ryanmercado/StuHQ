@@ -30,7 +30,13 @@ const RecipeList = () => {
             }
 
             const data = await response.json();
-            setRecipeItems(data);
+
+            if (data.result === 'id did not exist') {
+                setRecipeItems([]);
+            } else {
+                setRecipeItems(data);
+            }
+
 
         } catch (error) {
             console.error('Error fetching recipes:', error.message);

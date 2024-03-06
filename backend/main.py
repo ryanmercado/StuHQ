@@ -41,6 +41,15 @@ def get_recipes():
     return Recipe.Recipe.getRecipes(usr_id)
 
 
+@stuAPI.route('/api/purchasedIngredient', methods=['POST'])
+def purchase_item():
+    data = request.get_json()
+    usr_id = data['usr_id']
+    item = data['item']
+
+    GroceryList.GroceryList.purchased_item(usr_id, item)
+    return jsonify({'message': 'done'})
+
 
 @stuAPI.route('/api/addGroceryListIngredient', methods=['POST'])
 def add_ingredient():

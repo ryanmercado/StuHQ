@@ -4,6 +4,7 @@ import RecipeList from './RecipeList';
 import StockList from './StockList';
 import { Link, useNavigate } from 'react-router-dom';
 import secureLocalStorage from 'react-secure-storage';
+import './styles/recipeLanding.css';
 
 const RecipeLanding = () => {
     const usr_id = secureLocalStorage.getItem('usr_id');
@@ -16,16 +17,14 @@ const RecipeLanding = () => {
     }, [usr_id, navigate]);
 
     return (
-        <div>
-            <h1>Recipe Landing</h1>
-            <div>
-                <Link to="/grocery-list">Grocery List</Link>
-            </div>
-            <div>
-                <Link to="/stock-list">Stock List</Link>
-            </div>
-            <div>
-                <Link to="/recipe-list">Recipe List</Link>
+        <div className="recipe-landing">
+            <div className="content">
+                <h1>Welcome to the Recipe Hub</h1>
+                <div className="button-container">
+                    <Link to="/grocery-list" className="button">Grocery List</Link>
+                    <Link to="/stock-list" className="button">Stock List</Link>
+                    <Link to="/recipe-list" className="button">Recipe List</Link>
+                </div>
             </div>
         </div>
     );

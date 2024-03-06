@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import secureLocalStorage from 'react-secure-storage';
 import { useNavigate } from 'react-router-dom';
+import './styles/stockList.css';
 
 const StockList = () => {
     const navigate = useNavigate();
@@ -99,21 +100,27 @@ const StockList = () => {
 
 
     return (
-        <div>
+        <div className="stock-list-container">
             <h2>Your Stock List</h2>
-            <ul>
+            <div className="add-item-container">
+                <input
+                    type="text"
+                    name= "new-item"
+                    className="add-item-input"
+                    value={newItem.name}
+                    placeholder="Add item to stock..."
+                    onChange={(e) => setNewItem({ name: e.target.value })}
+                />
+                <button className="add-item-button" onClick={addItem}>Add</button>
+            </div>
+            <ul className="grocery-items-list">
                 {stockItems.map((item, index) => (
-                    <li key={index}>
-                        {item}{' '}
-                        <button onClick={() => removeItem(item)}>Remove</button>
+                    <li key={index} className= "stock-item" >
+                        <span>{item}</span>
+                        <button className="remove-item-button" onClick={() => removeItem(item)}>X</button>
                     </li>
                 ))}
             </ul>
-            <label>
-                Add Item:
-                <input type="text" name="new-item" value={newItem.name} placeholder='Stock Item' onChange={(e) => setNewItem({ name: e.target.value })} />
-            </label>
-            <button onClick={addItem}>Add Item</button>
         </div>
     );
 };

@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import secureLocalStorage from 'react-secure-storage';
 import { useNavigate } from 'react-router-dom';
+import './styles/recipeList.css';
 
 const RecipeList = () => {
     const navigate = useNavigate();
@@ -13,6 +14,8 @@ const RecipeList = () => {
         measurements: [],
         steps: '',
     });
+    const [showPopup, setShowPopup] = useState(false);
+    const [selectedRecipe, setSelectedRecipe] = useState(null);
 
     const fetchRecipes = async () => {
         const apiUrl = new URL('http://localhost:5000/api/getRecipes');
@@ -42,7 +45,6 @@ const RecipeList = () => {
             console.error('Error fetching recipes:', error.message);
         }
     };
-
 
     const addRecipe = async () => {
         try {
@@ -113,26 +115,43 @@ const RecipeList = () => {
         }
     }, [usr_id, navigate]);
 
+
+    const RecipePopup = ({ recipe, onClose }) => {
+        return (
+            <div className="recipe-popup">
+                <h3>{recipe.name}</h3>
+                <p><strong>Ingredients:</strong> {recipe.ingredients}</p>
+                <p><strong>Measurements:</strong> {recipe.measurements}</p>
+                <p><strong>Steps:</strong> {recipe.steps}</p>
+                <button onClick={onClose}>Close</button>
+            </div>
+        );
+    };
+
     return (
-        <div>
+        
+        <div className="recipe-list-container scrollable-page">
             <h2>Your Recipe List</h2>
-            <ul>
+            <ul className="recipe-items-list">
                 {recipeItems.map((recipe) => (
-                    <li key={recipe.name}>
+                    <li key={recipe.name} className="recipe-item" onClick={() => {
+                        setSelectedRecipe(recipe);
+                        setShowPopup(true);
+                    }}>
                         {recipe.name}{' '}
-                        <button onClick={() => removeRecipe(recipe.name)}>Remove</button>
+                        <button className="remove-recipe-button" onClick={(e) => {e.stopPropagation(); removeRecipe(recipe.name);}}>Remove</button>
                     </li>
                 ))}
             </ul>
 
-            <div>
+            <div className="add-recipe-container">
                 <h2>Add a New Recipe</h2>
                 <form>
                     <label>
                         Name:
                         <input
                             type="text"
-                            placeholder='pizza'
+                            placeholder="Recipe Name"
                             value={newRecipe.name}
                             onChange={(e) => setNewRecipe({ ...newRecipe, name: e.target.value })}
                         />
@@ -140,17 +159,15 @@ const RecipeList = () => {
                     <label>
                         Ingredients:
                         <input
-                            type="text"
-                            placeholder="dough, tomato sauce, cheese"
-                            value={newRecipe.ingredients.join(', ')}
-                            onChange={(e) => setNewRecipe({ ...newRecipe, ingredients: e.target.value.split(', ') })}
+                            placeholder="Ingredients separated by commas"
+                            value={newRecipe.ingredients}
+                            onChange={(e) => setNewRecipe({ ...newRecipe, ingredients: e.target.value })}
                         />
                     </label>
                     <label>
                         Measurements:
                         <input
-                            type="text"
-                            placeholder="EX: (300 g, 200 ml, 2 tsp)"
+                            placeholder="Measurements separated by commas"
                             value={newRecipe.measurements}
                             onChange={(e) => setNewRecipe({ ...newRecipe, measurements: e.target.value })}
                         />
@@ -158,8 +175,7 @@ const RecipeList = () => {
                     <label>
                         Steps:
                         <input
-                            type="text"
-                            placeholder='Cook dough, add sauce and cheese'
+                            placeholder="Steps"
                             value={newRecipe.steps}
                             onChange={(e) => setNewRecipe({ ...newRecipe, steps: e.target.value })}
                         />
@@ -169,7 +185,14 @@ const RecipeList = () => {
                     </button>
                 </form>
             </div>
+            {showPopup && (
+            <div className="popup-container">
+                <div className="popup-overlay" onClick={() => setShowPopup(false)}></div>
+                <RecipePopup recipe={selectedRecipe} onClose={() => setShowPopup(false)} />
+            </div>
+            )}
         </div>
+
     );
 };
 

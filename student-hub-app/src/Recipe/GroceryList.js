@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import secureLocalStorage from 'react-secure-storage';
 import { useNavigate } from 'react-router-dom';
+import './styles/groceryList.css';
 
 
 const GroceryList = () => {
@@ -66,6 +67,29 @@ const GroceryList = () => {
         });
     };
 
+    const purchasedItem = async (name) => {
+        try {
+            const response = await fetch('http://localhost:5000/api/purchasedIngredient', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ usr_id: usr_id, item: name })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to purchase item');
+            }
+
+            const data = await response.json();
+            console.log(data.message);
+
+            fetchGroceryList();
+        } catch (error) {
+            console.error('Error purchasing item: ', error.message);
+        }
+    };
+
     const removeItem = async (name) => {
         try {
             const response = await fetch('http://localhost:5000/api/removeGroceryListIngredient', {
@@ -100,24 +124,30 @@ const GroceryList = () => {
 
 
     return (
-        <div>
+        <div className="grocery-list-container">
             <h2>Your Grocery List</h2>
-            <ul>
-                {
-                    groceryItems.map((item, index) => (
-                        <li key={index}>
-                            {item}{' '}
-                            <button onClick={() => removeItem(item)}>Remove</button>
-                        </li>
-                    ))
-                }
+            <div className="add-item-container">
+                <input
+                    type="text"
+                    name= "new-item"
+                    className="add-item-input"
+                    value={newItem.name}
+                    placeholder="Add new item..."
+                    onChange={(e) => setNewItem({ name: e.target.value })}
+                />
+                <button className="add-item-button" onClick={addItem}>Add</button>
+            </div>
+            <ul className="grocery-items-list">
+                {groceryItems.map((item, index) => (
+                    <li key={index} className= "grocery-item" >
+                        <span>{item}</span>
+                        <button className="remove-item-button" onClick={() => removeItem(item)}>X</button>
+                        <button className="purchased-button" onClick={() => purchasedItem(item)}>purchased!</button>
+                    </li>
+                ))}
             </ul>
-            <label>
-                Add Item:
-                <input type="text" name="new-item" value={newItem.name} placeholder='Grocery Item' onChange={(e) => setNewItem({ name: e.target.value })} />
-            </label>
-            <button onClick={addItem}>Add Item</button>
         </div>
+        
     );
 };
 

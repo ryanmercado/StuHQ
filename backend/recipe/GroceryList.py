@@ -93,4 +93,4 @@ class GroceryList:
         #precondition: id as int and item as string
         #postcondition: removes item from grocery list, adds item to stock
         GroceryList.delete_item(id, item)
-        Stock.add_item(id, item)
+        Stock.Stock.add_item(id, item)

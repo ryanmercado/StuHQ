@@ -1,0 +1,81 @@
+/* recipeList.css */
+
+.scrollable-page {
+    height: 100vh; /* Set the height of the page */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.recipe-list-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.recipe-items-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.recipe-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.remove-recipe-button {
+    padding: 2px 5px;
+    font-size: 14px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.add-recipe-container {
+    text-align: center; /* Center the heading */
+    margin-bottom: 20px; /* Add space between the heading and the button */
+  }
+
+.add-recipe-container h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.add-recipe-container form {
+    display: flex;
+    flex-direction: column;
+}
+
+.add-recipe-container label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.add-recipe-container label input {
+    flex: 2;
+    margin-left: 30px;
+    padding: 5px;
+    font-size: 14px;
+    align-self: flex-start;
+}
+
+.add-recipe-container button {
+    padding: 5px 10px;
+    margin-top: 10px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.add-recipe-container button:hover {
+    background-color: #0056b3;
+}

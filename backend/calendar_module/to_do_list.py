@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-
 from flask import jsonify
 from calendar_module import user_events
 import sqlite3

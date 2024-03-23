@@ -21,6 +21,8 @@ function CalendarLand( {onEventChange} ) {
     const [startTime, setStartTime] = useState(null);
     const [endTime, setEndTime] = useState(null);
     const [anchorEl, setAnchorEl] = useState(null);
+    const [C_popupOpen, setC_popupOpen] = useState(false);
+    const [Ctoken, setCtoken] = useState('');
     const [isPopoverOpen, setPopoverOpen] = useState(false);
     const [allEvents, setAllEvents] = useState(new Array);
     const [error, setError] = useState('');
@@ -44,7 +46,8 @@ function CalendarLand( {onEventChange} ) {
                 const response = JSON.parse(xhr.response);
                 var todo = new Array
                 if(loadFlag){
-                    const response_events = response.result;                
+                    const response_events = response.result;
+                    console.log(response_events)                
                     const builtEvents = response_events.map(buildEvent)
                     for(let i = 0; i < builtEvents.length; i++){
                         if (builtEvents[i].on_to_do_list == 1){
@@ -138,9 +141,7 @@ function CalendarLand( {onEventChange} ) {
         xhr.open("POST", "http://localhost:5000/api/createEvent");
         xhr.setRequestHeader("Content-Type", "application/json"); 
         xhr.onload = () => {
-          if (xhr.status === 200) { // Handle cases: username taken, pwds don't match, email taken
             const response = JSON.parse(xhr.response)
-          }
         };
         xhr.send(jsonData);
         loadFlag = true;
@@ -168,8 +169,39 @@ function CalendarLand( {onEventChange} ) {
         setTimeout(() => {
             fetchUserEvents();
         }, 1000);
-        //     fetchUserEvents();
 
+    };
+
+    const handleCanvasImport = () => {
+        setC_popupOpen(true);
+      };
+    
+    const handleCloseCpopup = () => {
+        setC_popupOpen(false);
+    };
+    
+    const handleTokenChange = (e) => {
+        setCtoken(e.target.value);
+      };
+
+    const handleSubmitToken = (e) => {
+        e.preventDefault()
+        const formData = {
+            usr_id: usr_id,
+            token : Ctoken
+        }
+        const jsonData = JSON.stringify(formData)
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://localhost:5000/api/importCanvas");
+        xhr.setRequestHeader("Content-Type", "application/json"); 
+        xhr.onload = () => {
+          if (xhr.status === 200) { 
+            const response = JSON.parse(xhr.response)
+          }
+        };
+        xhr.send(jsonData);
+        setC_popupOpen(false);
+        setCtoken('')
     };
 
     const locales = {
@@ -262,6 +294,36 @@ function CalendarLand( {onEventChange} ) {
           <button style={{ marginTop: "10px" }} onClick={handleAddEvent}>
             Add Event
           </button>
+          <button onClick={handleCanvasImport}>
+            Import from Canvas
+          </button>
+          <Popover
+                open={C_popupOpen}
+                onClose={handleCloseCpopup}
+                anchorReference="anchorPosition"
+                anchorPosition={{ top: 450, left: 750 }}
+                anchorOrigin={{
+                    vertical: 'center',
+                    horizontal: 'center',
+                  }}
+                transformOrigin={{
+                    vertical: 'center',
+                    horizontal: 'center',
+                }}
+            >
+                <div style={{ maxWidth: '400px', padding: '20px' }}>
+                    <div className="popup-inner">
+                        <form onSubmit={handleSubmitToken}>
+                        <label>
+                            OAuth Token:
+                            <input type="text" value={Ctoken} onChange={handleTokenChange} />
+                        </label>
+                        <button type="submit">Submit</button>
+                        </form>
+                    </div>
+                    <Button onClick={handleCloseCpopup}>Close Popup</Button>
+                </div>
+            </Popover>
           {error && <div style={{ color: 'red' }}>{error}</div>}
           </div>
       </div>

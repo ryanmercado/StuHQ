@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from recipe import Recipe, GroceryList, Stock
 from calendar_module import user_events, to_do_list
+from calendar_module.canvasAPI import parseUpcoming
 from resume.Resume import Resume
 from resume import generateResume
 import handleCreateAccount, handleSignIn
@@ -318,9 +319,12 @@ def getResume():
         print(e)
         return str(e)
 
-
-
-
+@stuAPI.route('/api/importCanvas', methods = ['POST'])
+def importCanvasAssignments():
+    data = request.get_json()
+    usr_id = data['usr_id']
+    token = data['token']
+    return parseUpcoming.parseCanvasAssignments(usr_id=usr_id, token=token)
 
 if __name__ == '__main__':
     stuAPI.run()

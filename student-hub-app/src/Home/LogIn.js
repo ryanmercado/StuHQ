@@ -1,8 +1,10 @@
-// Login.js
 
 import React, { useState } from 'react';
 import {useNavigate} from 'react-router-dom';
 import secureLocalStorage from 'react-secure-storage'
+import { Link } from 'react-router-dom';
+import '../assets/styles/Login.css'; 
+
 
 
 const LogIn = () => {
@@ -40,32 +42,39 @@ const LogIn = () => {
     };
 
     return (
-        <div>
-            <h2>Login</h2>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Username:
-                    <input
-                        type="username"
-                        name="username"
-                        value={username}
-                        onChange={(e) => setUsernameValue(e.target.value)}
-                    />
-                </label>
-                <br />
-                <label>
-                    Password:
-                    <input
-                        type="password"
-                        name="password"
-                        value={password}
-                        onChange={(e) => setPasswordValue(e.target.value)}
-                    />
-                </label>
-                <br />
-                <button type="submit">Login</button>
-            </form>
-            {loginFailed && <div style={{ color: 'red' }}>Login failed</div>}
+        <div className='login-container'>
+            <div className='login-content'>
+                <h2>Login</h2>
+                <form  onSubmit={handleSubmit}>
+                    <label>
+                        Username:
+                        <input className= 'input-field'
+                            type="username"
+                            name="username"
+                            value={username}
+                            onChange={(e) => setUsernameValue(e.target.value)}
+                        />
+                    </label>
+                    <br />
+                    <label>
+                        Password:
+                        <input className= 'input-field'
+                            type="password"
+                            name="password"
+                            value={password}
+                            onChange={(e) => setPasswordValue(e.target.value)}
+                        />
+                    </label>
+                    <br />
+                    <div className="global-button-group">
+                        <button className='button' type="submit">Login</button>
+                    <Link to="/">
+                        <button className="button">Back to Home</button>
+                    </Link>
+                </div>
+                </form>
+                {loginFailed && <div style={{ color: 'red' }}>Login failed</div>}
+            </div>
         </div>
     );
 };

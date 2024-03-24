@@ -1,0 +1,27 @@
+
+.landing-content {
+    /* Styles for your landing page content */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    font-family: 'Cormorant Garamond', serif;
+}
+.welcome-text {
+    display: flex;
+    align-items: flex-end; /* Align items vertically */
+  }
+
+.landing-content h1 {
+    color: white;
+    font-size: 5rem;
+    margin-bottom: 15px;
+}
+
+.landing-content p {
+    color: white;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+  
+  

@@ -5,6 +5,7 @@ import secureLocalStorage from 'react-secure-storage'
 import { Link } from 'react-router-dom';
 import '../assets/styles/Login.css'; 
 import '../assets/styles/Global.css'; 
+import logo from '../assets/images/StuHQlogo.png'; 
 
 
 
@@ -45,9 +46,11 @@ const LogIn = () => {
     return (
         <div className='global-container'>
             <div className='login-content'>
-                <h2>Login</h2>
+                <h2>Login to</h2>
+                <img src={logo} alt="Logo" className="logo" />
                 <form  onSubmit={handleSubmit}>
-                    <label>
+                <br></br>
+                    <label style={{display: 'block', textAlign: 'left'}}>
                         Username:
                         <input className= 'input-field'
                             type="username"
@@ -57,7 +60,7 @@ const LogIn = () => {
                         />
                     </label>
                     <br />
-                    <label>
+                    <label style={{display: 'block', textAlign: 'left'}}>
                         Password:
                         <input className= 'input-field'
                             type="password"
@@ -66,6 +69,7 @@ const LogIn = () => {
                             onChange={(e) => setPasswordValue(e.target.value)}
                         />
                     </label>
+                    <br />
                     <br />
                     <div className="global-button-group">
                         <button className='button' type="submit">Login</button>

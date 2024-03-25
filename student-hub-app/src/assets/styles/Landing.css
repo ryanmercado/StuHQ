@@ -5,16 +5,23 @@
     flex-direction: column;
     align-items: center;
     color: white;
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Avant Garde', sans-serif;
 }
 .welcome-text {
     display: flex;
     align-items: flex-end;
+    font-size: 27px;
+  }
+
+.welcome-text h3 {
+    display: flex;
+    align-items: flex-end;
+    font-size: 38px;
   }
 
 .landing-content h1 {
     color: white;
-    font-size: 5rem;
+    font-size: 20px;
     margin-bottom: 15px;
 }
 

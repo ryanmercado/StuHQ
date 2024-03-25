@@ -61,7 +61,7 @@ function SignUp() {
             <div className='login-content'>
                 <h2>Sign Up</h2>
                 <form onSubmit={handleSubmit}>
-                    <label>
+                    <label style={{display: 'block', textAlign: 'left'}}>
                         Username:
                         <input className= 'input-field'
                             type="text"
@@ -71,7 +71,7 @@ function SignUp() {
                         />
                     </label>
                     <br />
-                    <label>
+                    <label style={{display: 'block', textAlign: 'left'}}>
                         Email:
                         <input className= 'input-field'
                             type="email"
@@ -81,7 +81,7 @@ function SignUp() {
                         />
                     </label>
                     <br />
-                    <label>
+                    <label style={{display: 'block', textAlign: 'left'}}>
                         Password:
                         <input className= 'input-field'
                             type="password"
@@ -91,7 +91,7 @@ function SignUp() {
                         />
                     </label>
                     <br />
-                    <label>
+                    <label style={{display: 'block', textAlign: 'left'}}>
                         Confirm Password:
                         <input className= 'input-field'
                             type="password"

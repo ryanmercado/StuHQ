@@ -1,20 +1,4 @@
-.login-container {
-    background: linear-gradient(to bottom right, #f94a1e, #5B8FFB); 
-    width: 100%;
-    height: 100vh; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-  }
 
-.login-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: white;
-    font-family: 'Cormorant Garamond', serif;
-}
 .input-field {
     width: 100%;
     padding: 10px;
@@ -22,7 +6,7 @@
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
-  }
+}
   
 .button {
     background-color: #f94a1e; 

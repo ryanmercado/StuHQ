@@ -4,6 +4,7 @@ import {useNavigate} from 'react-router-dom';
 import secureLocalStorage from 'react-secure-storage'
 import { Link } from 'react-router-dom';
 import '../assets/styles/Login.css'; 
+import '../assets/styles/Global.css'; 
 
 
 
@@ -42,7 +43,7 @@ const LogIn = () => {
     };
 
     return (
-        <div className='login-container'>
+        <div className='global-container'>
             <div className='login-content'>
                 <h2>Login</h2>
                 <form  onSubmit={handleSubmit}>
@@ -68,10 +69,10 @@ const LogIn = () => {
                     <br />
                     <div className="global-button-group">
                         <button className='button' type="submit">Login</button>
-                    <Link to="/">
-                        <button className="button">Back to Home</button>
-                    </Link>
-                </div>
+                        <Link to="/">
+                            <button className="button">Back to Home</button>
+                        </Link>
+                    </div>
                 </form>
                 {loginFailed && <div style={{ color: 'red' }}>Login failed</div>}
             </div>

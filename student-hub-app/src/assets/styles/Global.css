@@ -10,7 +10,13 @@
 .global-button-group {
     display: flex; /* Set display to flex */
 }
-  
+.login-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    font-family: 'Cormorant Garamond', serif;
+}
 .global-button {
     background-color: #f94a1e; 
     border: none;

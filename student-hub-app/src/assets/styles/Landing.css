@@ -9,7 +9,7 @@
 }
 .welcome-text {
     display: flex;
-    align-items: flex-end; /* Align items vertically */
+    align-items: flex-end;
   }
 
 .landing-content h1 {

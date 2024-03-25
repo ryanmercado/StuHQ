@@ -2,6 +2,10 @@
 import React, { useState } from 'react';
 import {useNavigate} from 'react-router-dom';
 import secureLocalStorage from 'react-secure-storage'
+import { Link } from 'react-router-dom';
+import '../assets/styles/Global.css';
+import '../assets/styles/Login.css'; 
+
 
 function SignUp() {
     const navigate = useNavigate();
@@ -53,52 +57,59 @@ function SignUp() {
     };
 
     return (
-        <div>
-            <h2>Sign Up</h2>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Username:
-                    <input
-                        type="text"
-                        name="username"
-                        value={username}
-                        onChange={(e) => setUsernameValue(e.target.value)}
-                    />
-                </label>
-                <br />
-                <label>
-                    Email:
-                    <input
-                        type="email"
-                        name="email"
-                        value={email}
-                        onChange={(e) => setEmailValue(e.target.value)}
-                    />
-                </label>
-                <br />
-                <label>
-                    Password:
-                    <input
-                        type="password"
-                        name="password"
-                        value={password}
-                        onChange={(e) => setPasswordValue(e.target.value)}
-                    />
-                </label>
-                <br />
-                <label>
-                    Confirm Password:
-                    <input
-                        type="password"
-                        name="confirm_password"
-                        value={confirm_password}
-                        onChange={(e) => setConfirmPasswordValue(e.target.value)} 
-                    />
-                </label>
-                <br />
-                <button type="submit">Sign Up</button>
-                {createdFailed && <div style={{ color: 'red' }}>{failedMessage}</div>}
-            </form>
+        <div className='global-container'>
+            <div className='login-content'>
+                <h2>Sign Up</h2>
+                <form onSubmit={handleSubmit}>
+                    <label>
+                        Username:
+                        <input className= 'input-field'
+                            type="text"
+                            name="username"
+                            value={username}
+                            onChange={(e) => setUsernameValue(e.target.value)}
+                        />
+                    </label>
+                    <br />
+                    <label>
+                        Email:
+                        <input className= 'input-field'
+                            type="email"
+                            name="email"
+                            value={email}
+                            onChange={(e) => setEmailValue(e.target.value)}
+                        />
+                    </label>
+                    <br />
+                    <label>
+                        Password:
+                        <input className= 'input-field'
+                            type="password"
+                            name="password"
+                            value={password}
+                            onChange={(e) => setPasswordValue(e.target.value)}
+                        />
+                    </label>
+                    <br />
+                    <label>
+                        Confirm Password:
+                        <input className= 'input-field'
+                            type="password"
+                            name="confirm_password"
+                            value={confirm_password}
+                            onChange={(e) => setConfirmPasswordValue(e.target.value)} 
+                        />
+                    </label>
+                    <br />
+                    <div className="global-button-group">
+                        <button className='button' type="submit">Sign Up</button>
+                        <Link to="/">
+                            <button className="button">Back to Home</button>
+                        </Link>
+                    </div>
+                    {createdFailed && <div style={{ color: 'red' }}>{failedMessage}</div>}
+                </form>
+            </div>
         </div>
     );
 };

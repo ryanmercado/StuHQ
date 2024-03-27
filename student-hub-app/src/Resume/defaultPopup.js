@@ -48,7 +48,7 @@ const DefaultPopup = ({ handleClose }) => {
   switch (currentPage) {
     case 1:
       pageContent = (
-        <GenInfo
+        <Skills
           handleValidation={handleValidation}
         />
       );

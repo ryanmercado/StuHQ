@@ -9,7 +9,7 @@ const Jobs = ({ handleValidation }) => {
       startDate: '',
       endDate: '',
       location: '',
-      duties: ['', '']
+      duties: ''
     },
     {
       company: '',
@@ -17,7 +17,7 @@ const Jobs = ({ handleValidation }) => {
       startDate: '',
       endDate: '',
       location: '',
-      duties: ['', '']
+      duties: ''
     }
   ]);
 
@@ -33,7 +33,7 @@ const Jobs = ({ handleValidation }) => {
         job.startDate.trim() !== '' &&
         job.endDate.trim() !== '' &&
         job.location.trim() !== '' &&
-        job.duties.every(duty => duty.trim() !== '')
+        job.duties.trim() !== ''
       );
     });
     handleValidation(areAllJobsValid);
@@ -46,27 +46,23 @@ const Jobs = ({ handleValidation }) => {
     setJobHistory(updatedJobHistory);
   };
 
-  const handleDutyChange = (jobIndex, dutyIndex, value) => {
-    const updatedJobHistory = [...jobHistory];
-    updatedJobHistory[jobIndex].duties[dutyIndex] = value;
-    setJobHistory(updatedJobHistory);
-  };
-
   const handleAddJob = () => {
-    const newJob = {
-      company: '',
-      role: '',
-      startDate: '',
-      endDate: '',
-      location: '',
-      duties: ['', '']
-    };
-    setJobHistory(prevJobHistory => [...prevJobHistory, newJob]);
+    if (jobHistory.length < 4) {
+      const newJob = {
+        company: '',
+        role: '',
+        startDate: '',
+        endDate: '',
+        location: '',
+        duties: ''
+      };
+      setJobHistory(prevJobHistory => [...prevJobHistory, newJob]);
+    }
   };
 
-  const handleAddDuty = (jobIndex) => {
+  const handleDeleteJob = index => {
     const updatedJobHistory = [...jobHistory];
-    updatedJobHistory[jobIndex].duties.push('');
+    updatedJobHistory.splice(index, 1);
     setJobHistory(updatedJobHistory);
   };
 
@@ -106,19 +102,20 @@ const Jobs = ({ handleValidation }) => {
             placeholder="Location"
             onChange={(e) => handleJobChange(jobIndex, 'location', e.target.value)}
           />
-          {job.duties.map((duty, dutyIndex) => (
-            <input
-              key={dutyIndex}
-              type="text"
-              value={duty}
-              placeholder={`What you did ${dutyIndex + 1}`}
-              onChange={(e) => handleDutyChange(jobIndex, dutyIndex, e.target.value)}
-            />
-          ))}
-          <button onClick={() => handleAddDuty(jobIndex)}>Add Duty</button>
+          <textarea
+            className="description-input"
+            value={job.duties}
+            placeholder={`Give us Job Information to run through GPT`}
+            onChange={(e) => handleJobChange(jobIndex, 'duties', e.target.value)}
+          />
+          {jobIndex >= 2 && (
+            <button onClick={() => handleDeleteJob(jobIndex)}>Delete Job</button>
+          )}
         </div>
       ))}
-      <button onClick={handleAddJob}>Add Job</button>
+      {jobHistory.length < 4 && (
+        <button className="add-job-button" onClick={handleAddJob}>Add Job</button>
+      )}
     </div>
   );
 };

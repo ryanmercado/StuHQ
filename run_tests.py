@@ -10,8 +10,8 @@ sys.path.append(back_end_module)
 sys.path.append(recipe_module)
 sys.path.append(resume_module)
 
-# pytest.main()
+pytest.main()
 
 # to run specific file: 
-pytest.main(['backend/tests/test_resume.py'])
+# pytest.main(['backend/tests/test_resume.py'])
 

@@ -1,5 +1,6 @@
 import sqlite3
 import pytest
+from backend.resume import Resume
 from flask import Flask
 
 # Define a mock Flask app for testing
@@ -17,13 +18,13 @@ def app_client():
 
 @pytest.fixture
 def clear_db_fixture():
-    clearDB()
+    clear_db()
     yield
 
-@pytest.fixture
-def user_exists_fixture():
-    add_user()
-    yield
+# @pytest.fixture
+# def user_exists_fixture():
+#     add_user()
+#     yield
 
 @pytest.fixture
 def experience_entry_fixture():
@@ -64,22 +65,26 @@ def volunteer_entry_fixture():
 def clear_db():
     conn = sqlite3.connect('server/usrDatabase/usrDB.db')
     cursor = conn.cursor()
-    cursor.execute('DELETE FROM usr_info')
-    cursor.execute('DELETE FROM grocery_list')
-    cursor.execute('DELETE FROM recipes')
-    cursor.execute('DELETE FROM curr_stock')
+    cursor.execute('DELETE FROM technical_skills')
+    cursor.execute('DELETE FROM general_info')
+    cursor.execute('DELETE FROM projects')
+    cursor.execute('DELETE FROM awards')
+    cursor.execute('DELETE FROM objective')
+    cursor.execute('DELETE FROM volunteer_work')
+    cursor.execute('DELETE FROM course_work')
+    cursor.execute('DELETE FROM extracurr')
+    cursor.execute('DELETE FROM experience')
     conn.commit()
     cursor.close()
     conn.close()
 
-def add_user():
-    clear_db()
-    conn = sqlite3.connect('server/usrDatabase/usrDB.db')
-    cursor = conn.cursor()
-    cursor.execute('INSERT INTO usr_info (usr_id, username, pswd_hash, usr_email, created_epoch) VALUES (?, ?, ?, ?, ?)', (0, 'gray', 'hash', 'g@email.com', 1))
-    conn.commit()
-    cursor.close()
-    conn.close()
+# def add_user():
+#     conn = sqlite3.connect('server/usrDatabase/usrDB.db')
+#     cursor = conn.cursor()
+#     cursor.execute('INSERT INTO usr_info (usr_id, username, pswd_hash, usr_email, created_epoch) VALUES (?, ?, ?, ?, ?)', (0, 'gray', 'hash', 'g@email.com', 1))
+#     conn.commit()
+#     cursor.close()
+#     conn.close()
 
 def add_experience_entry():
     conn = sqlite3.connect('server/usrDatabase/usrDB.db')
@@ -164,8 +169,8 @@ def add_volunteer_entry():
 
 
 # START OF EXPERIENCE TESTS
-def test_add_experience(user_exists_fixture, experience_entry_fixture): #add experience (user exists, 1 experience entry exists in DB already)
-    resume = Resume()
+def test_add_experience(clear_db_fixture, experience_entry_fixture): #add experience (user exists, 1 experience entry exists in DB already)
+    resume = Resume.Resume()
     resume.addExperience(1, "Dell", "SWE", "03/22/2022", "07/24/2024", "Austin, TX", "Was a software engineer")
     conn = sqlite3.connect('server/usrDatabase/usrDB.db')
     cursor = conn.cursor()
@@ -174,9 +179,10 @@ def test_add_experience(user_exists_fixture, experience_entry_fixture): #add exp
     assert(res[0][1] != res[1][1])  # check that job_ids are unique
     assert(res[0][2] == "TI")       # check names of companies in entries
     assert(res[1][2] == "Dell")
+    conn.close()
 
-def test_add_experience2(user_exists_fixture): #add experience (user exists, 0 experience entries exists in DB already)
-    resume = Resume()
+def test_add_experience2(clear_db_fixture): #add experience (user exists, 0 experience entries exists in DB already)
+    resume = Resume.Resume()
     resume.addExperience(1, "Dell", "SWE", "03/22/2022", "07/24/2024", "Austin, TX", "Was a software engineer")
     conn = sqlite3.connect('server/usrDatabase/usrDB.db')
     cursor = conn.cursor()
@@ -185,8 +191,8 @@ def test_add_experience2(user_exists_fixture): #add experience (user exists, 0 e
     assert(res[2] == "Dell")                # check name of company in entries
 
 # START OF EXTRACURR TESTS
-def test_add_extracurr(user_exists_fixture, extracurr_entry_fixture): #add extracurr (user exists, 1 extracurr entry exists in DB already)
-    resume = Resume()
+def test_add_extracurr(clear_db_fixture, extracurr_entry_fixture): #add extracurr (user exists, 1 extracurr entry exists in DB already)
+    resume = Resume.Resume()
     resume.addExtracurr(1, "Video Games", "Played Fortnite")
     conn = sqlite3.connect('server/usrDatabase/usrDB.db')
     cursor = conn.cursor()
@@ -196,8 +202,8 @@ def test_add_extracurr(user_exists_fixture, extracurr_entry_fixture): #add extra
     assert(res[0][2] == "Basketball")       # check names of activities in entries
     assert(res[1][2] == "Video Games")
 
-def test_add_extracurr2(user_exists_fixture): #add experience (user exists, 0 extracurr entries exists in DB already)
-    resume = Resume()
+def test_add_extracurr2(clear_db_fixture): #add experience (user exists, 0 extracurr entries exists in DB already)
+    resume = Resume.Resume()
     resume.addExtracurr(1, "Video Games", "Played Fortnite")
     conn = sqlite3.connect('server/usrDatabase/usrDB.db')
     cursor = conn.cursor()
@@ -206,8 +212,8 @@ def test_add_extracurr2(user_exists_fixture): #add experience (user exists, 0 ex
     assert(res[0][2] == "Video Games")      # check name of activity in entry
 
 # START OF GENERAL INFO TESTS
-def test_add_generalInfo(user_exists_fixture, generalInfo_entry_fixture): #add generalInfo (user exists, 1 general_info entry exists in DB already)
-    resume = Resume()
+def test_add_generalInfo(clear_db_fixture, generalInfo_entry_fixture): #add generalInfo (user exists, 1 general_info entry exists in DB already)
+    resume = Resume.Resume()
     try:
         resume.addGeneralInfo(1, "Drinkard", "Grayson", 2142535672, "gdrinkard@yahoo.com", "gdrinkard", "University of Texas", "05/10/2024", "ECE", 3.90)
         error = 0
@@ -217,8 +223,8 @@ def test_add_generalInfo(user_exists_fixture, generalInfo_entry_fixture): #add g
         # Close the database connection
         assert(error == 1)                    # test that there is an error when making entry with same PK
 
-def test_add_generalInfo2(user_exists_fixture): #add generalInfo (user exists, 0 general_info entries exists in DB already)
-    resume = Resume()
+def test_add_generalInfo2(clear_db_fixture): #add generalInfo (user exists, 0 general_info entries exists in DB already)
+    resume = Resume.Resume()
     resume.addGeneralInfo(1, "Drinkard", "Grayson", 2142535672, "gdrinkard@yahoo.com", "gdrinkard", "University of Texas", "05/10/2024", "ECE", 3.90)
     conn = sqlite3.connect('server/usrDatabase/usrDB.db')
     cursor = conn.cursor()
@@ -227,8 +233,8 @@ def test_add_generalInfo2(user_exists_fixture): #add generalInfo (user exists, 0
     assert(res[1] == "Drinkard")             # check name of person in entry
 
 # START OF TECHNICAL SKILL TESTS
-def test_add_technicalSkill(user_exists_fixture, technicalSkill_entry_fixture): #add technical skill (user exists, 1 technical skill entry exists in DB already)
-    resume = Resume()
+def test_add_technicalSkill(clear_db_fixture, technicalSkill_entry_fixture): #add technical skill (user exists, 1 technical skill entry exists in DB already)
+    resume = Resume.Resume()
     resume.addTechnicalSkill(1, "Python")
     conn = sqlite3.connect('server/usrDatabase/usrDB.db')
     cursor = conn.cursor()
@@ -238,8 +244,8 @@ def test_add_technicalSkill(user_exists_fixture, technicalSkill_entry_fixture): 
     assert(res[0][2] == "Java")             # check names of skills in entries
     assert(res[1][2] == "Python")
 
-def test_add_technicalSkill2(user_exists_fixture): # add technical skill (user exists, 0 technical skill entries exist in DB already)
-    resume = Resume()
+def test_add_technicalSkill2(clear_db_fixture): # add technical skill (user exists, 0 technical skill entries exist in DB already)
+    resume = Resume.Resume()
     resume.addTechnicalSkill(1, "Python")
     conn = sqlite3.connect('server/usrDatabase/usrDB.db')
     cursor = conn.cursor()
@@ -248,8 +254,8 @@ def test_add_technicalSkill2(user_exists_fixture): # add technical skill (user e
     assert(res[2] == "Python")             # check name of skill in entry
 
 # START OF PROJECT TESTS
-def test_add_project(user_exists_fixture, project_entry_fixture): #add project (user exists, 1 project entry exists in DB already)
-    resume = Resume()
+def test_add_project(clear_db_fixture, project_entry_fixture): #add project (user exists, 1 project entry exists in DB already)
+    resume = Resume.Resume()
     resume.addProject(1, "StuHQ", "University of Texas", "04/19/2023", "Student Hub App")
     conn = sqlite3.connect('server/usrDatabase/usrDB.db')
     cursor = conn.cursor()
@@ -259,8 +265,8 @@ def test_add_project(user_exists_fixture, project_entry_fixture): #add project (
     assert(res[0][2] == "Video Game")       # check names of projects in entries
     assert(res[1][2] == "StuHQ")
 
-def test_add_project2(user_exists_fixture): #add project (user exists, 0 project entries exist in DB already)
-    resume = Resume()
+def test_add_project2(clear_db_fixture): #add project (user exists, 0 project entries exist in DB already)
+    resume = Resume.Resume()
     resume.addProject(1, "StuHQ", "University of Texas", "04/19/2023", "Student Hub App")
     conn = sqlite3.connect('server/usrDatabase/usrDB.db')
     cursor = conn.cursor()
@@ -269,8 +275,8 @@ def test_add_project2(user_exists_fixture): #add project (user exists, 0 project
     assert(res[2] == "StuHQ")               # check name of project
 
 # START OF AWARD TESTS
-def test_add_award(user_exists_fixture, award_entry_fixture): #add award (user exists, 1 award entry exists in DB already)
-    resume = Resume()
+def test_add_award(clear_db_fixture, award_entry_fixture): #add award (user exists, 1 award entry exists in DB already)
+    resume = Resume.Resume()
     resume.addAward(1, "College Scholar", "Top 20 percent of class")
     conn = sqlite3.connect('server/usrDatabase/usrDB.db')
     cursor = conn.cursor()
@@ -280,8 +286,8 @@ def test_add_award(user_exists_fixture, award_entry_fixture): #add award (user e
     assert(res[0][2] == "Best Student")     # check names of awards in entries
     assert(res[1][2] == "College Scholar")
 
-def test_add_award2(user_exists_fixture, award_entry_fixture): #add award (user exists, 0 award entries exist in DB already)
-    resume = Resume()
+def test_add_award2(clear_db_fixture): #add award (user exists, 0 award entries exist in DB already)
+    resume = Resume.Resume()
     resume.addAward(1, "College Scholar", "Top 20 percent of class")
     conn = sqlite3.connect('server/usrDatabase/usrDB.db')
     cursor = conn.cursor()
@@ -290,8 +296,8 @@ def test_add_award2(user_exists_fixture, award_entry_fixture): #add award (user 
     assert(res[2] == "College Scholar")  # check name of award in entry
 
 # START OF COURSE TESTS
-def test_add_course(user_exists_fixture, course_entry_fixture): #add course (user exists, 1 course entry exists in DB already)
-    resume = Resume()
+def test_add_course(clear_db_fixture, course_entry_fixture): #add course (user exists, 1 course entry exists in DB already)
+    resume = Resume.Resume()
     resume.addCourse(1, "SWArch")
     conn = sqlite3.connect('server/usrDatabase/usrDB.db')
     cursor = conn.cursor()
@@ -301,8 +307,8 @@ def test_add_course(user_exists_fixture, course_entry_fixture): #add course (use
     assert(res[0][2] == "Computer Vision")  # check names of courses in entries
     assert(res[1][2] == "SWArch")
 
-def test_add_course2(user_exists_fixture): #add course (user exists, 0 course entries exist in DB already)
-    resume = Resume()
+def test_add_course2(clear_db_fixture): #add course (user exists, 0 course entries exist in DB already)
+    resume = Resume.Resume()
     resume.addCourse(1, "SWArch")
     conn = sqlite3.connect('server/usrDatabase/usrDB.db')
     cursor = conn.cursor()
@@ -311,19 +317,8 @@ def test_add_course2(user_exists_fixture): #add course (user exists, 0 course en
     assert(res[2] == "SWArch")           # check name of course in entry
 
 # START OF OBJECTIVE TESTS
-def test_add_objective(user_exists_fixture, objective_entry_fixture): #add objective (user exists, 1 objective entry exists in DB already)
-    resume = Resume()
-    resume.addObjective(1, "I want to be a great student")
-    conn = sqlite3.connect('server/usrDatabase/usrDB.db')
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM objective WHERE usr_id = ?', (1, ))
-    res = cursor.fetchall()
-    assert(res[0][2] != res[1][2])                              # check that obj_ids are unique
-    assert(res[0][1] == "I want to be the best engineer ever")  # check objectives in entries
-    assert(res[1][1] == "I want to be a great student")
-
-def test_add_objective2(user_exists_fixture): #add objective (user exists, 0 objective entries exist in DB already)
-    resume = Resume()
+def test_add_objective(clear_db_fixture): #add objective (user exists, 0 objective entries exist in DB already)
+    resume = Resume.Resume()
     resume.addObjective(1, "I want to be a great student")
     conn = sqlite3.connect('server/usrDatabase/usrDB.db')
     cursor = conn.cursor()
@@ -332,8 +327,8 @@ def test_add_objective2(user_exists_fixture): #add objective (user exists, 0 obj
     assert(res[1] == "I want to be a great student")        # check objective in entry
 
 # START OF VOLUNTEER WORK TESTS
-def test_add_volunteerWork(user_exists_fixture, volunteer_entry_fixture_entry_fixture): #add volunteer work (user exists, 1 volunteer work entry exists in DB already)
-    resume = Resume()
+def test_add_volunteerWork(clear_db_fixture, volunteer_entry_fixture): #add volunteer work (user exists, 1 volunteer work entry exists in DB already)
+    resume = Resume.Resume()
     resume.addVolunteerWork(1, "Food Bank", "Food Collector", "02/23/2023", "05/14/2023")
     conn = sqlite3.connect('server/usrDatabase/usrDB.db')
     cursor = conn.cursor()
@@ -343,11 +338,27 @@ def test_add_volunteerWork(user_exists_fixture, volunteer_entry_fixture_entry_fi
     assert(res[0][2] == "YMSL")                                 # check companies in entries
     assert(res[1][2] == "Food Bank")
 
-def test_add_volunteerWork2(user_exists_fixture): #add volunteer work (user exists, 0 volunteer work entries exist in DB already)
-    resume = Resume()
+def test_add_volunteerWork2(clear_db_fixture): #add volunteer work (user exists, 0 volunteer work entries exist in DB already)
+    resume = Resume.Resume()
     resume.addVolunteerWork(1, "Food Bank", "Food Collector", "02/23/2023", "05/14/2023")
     conn = sqlite3.connect('server/usrDatabase/usrDB.db')
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM volunteer_work WHERE usr_id = ?', (1, ))
     res = cursor.fetchone()
     assert(res[2] == "Food Bank")                               # check companies in entry
+
+# START OF GET USER INFO TESTS
+def test_getUserInfo(clear_db_fixture, volunteer_entry_fixture, course_entry_fixture, award_entry_fixture,
+                     project_entry_fixture, technicalSkill_entry_fixture, generalInfo_entry_fixture, extracurr_entry_fixture,
+                     experience_entry_fixture, objective_entry_fixture):
+    resume = Resume.Resume()
+    resume.getUserInfo(1)
+    assert(resume.experience[0].company == "TI")
+    assert(resume.extracurr[0].title == "Basketball")
+    assert(resume.general_info[0].firstname == "Owen")
+    assert(resume.technical_skills[0].name == "Java")
+    assert(resume.projects[0].title == "Video Game")
+    assert(resume.course_work[0].name == "Computer Vision")
+    assert(resume.objective[0].obj_str == "I want to be the best engineer ever")
+    assert(resume.volunteer_work[0].company == "YMSL")
+    assert(resume.awards[0].title == "Best Student")

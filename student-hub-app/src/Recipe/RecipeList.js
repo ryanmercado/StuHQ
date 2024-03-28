@@ -157,22 +157,6 @@ const RecipeList = () => {
                         />
                     </label>
                     <label>
-                        Ingredients:
-                        <input
-                            placeholder="Ingredients separated by commas"
-                            value={newRecipe.ingredients}
-                            onChange={(e) => setNewRecipe({ ...newRecipe, ingredients: e.target.value })}
-                        />
-                    </label>
-                    <label>
-                        Measurements:
-                        <input
-                            placeholder="Measurements separated by commas"
-                            value={newRecipe.measurements}
-                            onChange={(e) => setNewRecipe({ ...newRecipe, measurements: e.target.value })}
-                        />
-                    </label>
-                    <label>
                         Steps:
                         <input
                             placeholder="Steps"
@@ -180,6 +164,46 @@ const RecipeList = () => {
                             onChange={(e) => setNewRecipe({ ...newRecipe, steps: e.target.value })}
                         />
                     </label>
+                    <label>
+                        Ingredients and Measurements:
+                        <div></div>
+                        {newRecipe.ingredients.map((ingredient, index) => (
+                            <div key = {index} className="ingredient-row">
+                                <input
+                                    placeholder = "Ingredient"
+                                    value = {ingredient}
+                                    onChange= {(e) => {
+                                        const updatedIngredients = [...newRecipe.ingredients];
+                                        updatedIngredients[index] = e.target.value;
+                                        setNewRecipe({...newRecipe, ingredients: updatedIngredients});
+                                    }}
+                                />
+                            
+                                <input
+                                    placeholder = "Measurement"
+                                    value = {newRecipe.measurements[index] || ''}
+                                    onChange= {(e) => {
+                                        const updatedMeasurements = [...newRecipe.measurements];
+                                        updatedMeasurements[index] = e.target.value;
+                                        setNewRecipe({...newRecipe, measurements: updatedMeasurements});
+                                    }}
+                                />
+                            </div>   
+                        ))}
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setNewRecipe({
+                                    ...newRecipe,
+                                    ingredients: [...newRecipe.ingredients, ''],
+                                    measurements: [...newRecipe.measurements, ''],
+                                });
+                            }}
+                        >
+                            Add Ingredient
+                        </button>
+                    </label>
+                    
                     <button type="button" onClick={addRecipe}>
                         Add Recipe
                     </button>

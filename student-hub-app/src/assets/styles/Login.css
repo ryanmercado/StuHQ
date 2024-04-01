@@ -1,28 +1,22 @@
+.login-content{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Copperplate Gothic', sans-serif;
+  color: white;
+}
 
 .input-field {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
 }
-  
-.button {
-    background-color: #f94a1e; 
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 0 5px;
-    cursor: pointer;
-    border-radius: 8px;
-  }
-  
-  .button:hover {
-    background-color: #5B8FFB; 
-  }
-  
+
+.logo {
+  width: 200px; /* Adjust the width of the logo as needed */
+  height: auto;
+  margin-left: 15px; /* Add some spacing between the text and the logo */
+}

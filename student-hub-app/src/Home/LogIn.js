@@ -72,9 +72,9 @@ const LogIn = () => {
                     <br />
                     <br />
                     <div className="global-button-group">
-                        <button className='button' type="submit">Login</button>
+                        <button className='global-button' type="submit">Login</button>
                         <Link to="/">
-                            <button className="button">Back to Home</button>
+                            <button className="global-button">Back Home</button>
                         </Link>
                     </div>
                 </form>

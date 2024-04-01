@@ -5,6 +5,8 @@ import secureLocalStorage from 'react-secure-storage'
 import { Link } from 'react-router-dom';
 import '../assets/styles/Global.css';
 import '../assets/styles/Login.css'; 
+import logo from '../assets/images/StuHQlogo.png'; 
+
 
 
 function SignUp() {
@@ -60,6 +62,7 @@ function SignUp() {
         <div className='global-container'>
             <div className='login-content'>
                 <h2>Sign Up</h2>
+                <img src={logo} alt="Logo" className="logo" />
                 <form onSubmit={handleSubmit}>
                     <label style={{display: 'block', textAlign: 'left'}}>
                         Username:
@@ -102,9 +105,9 @@ function SignUp() {
                     </label>
                     <br />
                     <div className="global-button-group">
-                        <button className='button' type="submit">Sign Up</button>
+                        <button className='global-button' type="submit">Sign Up</button>
                         <Link to="/">
-                            <button className="button">Back to Home</button>
+                            <button className="global-button">Back Home</button>
                         </Link>
                     </div>
                     {createdFailed && <div style={{ color: 'red' }}>{failedMessage}</div>}

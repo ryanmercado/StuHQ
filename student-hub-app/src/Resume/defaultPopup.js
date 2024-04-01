@@ -48,7 +48,7 @@ const DefaultPopup = ({ handleClose }) => {
   switch (currentPage) {
     case 1:
       pageContent = (
-        <GenInfo
+        <Projects
           handleValidation={handleValidation}
         />
       );
@@ -96,24 +96,23 @@ const DefaultPopup = ({ handleClose }) => {
             {errorMessage}
           </div>
         )}
-        {pageContent}
+        <div className="page-content">
+          {pageContent}
+          {currentPage !== 5 && (
+            <span className="arrow arrow-right" onClick={nextPage}>
+              &#10095;
+            </span>
+          )}
+        </div>
       </div>
-      {/* {currentPage !== 1 && ( // Conditionally render the previous arrow if not on page 1 //THIS IS FOR PREV PAGE LOGIC - NOT READY YET
-        <span className="arrow arrow-left" onClick={prevPage}>
-          &#10094;
-        </span>
-      )} */}
-      {currentPage !== 5 ? (
-        <span className="arrow arrow-right" onClick={nextPage}>
-          &#10095;
-        </span>
-      ) : (
+      {currentPage === 5 && (
         <button className="submit-button" onClick={handleSubmit}>
           Submit
         </button>
       )}
     </div>
   );
+  
 };
 
 export default DefaultPopup;

@@ -47,7 +47,6 @@
     border: 1px solid #ccc;
     border-radius: 4px;
   }
-  
   .skills-form {
     font-family: Arial, sans-serif;
     max-width: 400px;
@@ -146,5 +145,191 @@
   
   .remove-extracurricular-btn:hover {
     background-color: #c82333;
+  }
+
+  .jobs-form {
+    font-family: Arial, sans-serif;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .jobs-form h1 {
+    text-align: center;
+  }
+  
+  .job-container {
+    margin-bottom: 20px;
+  }
+  
+  .job-container label {
+    display: block;
+    font-weight: bold;
+  }
+  
+  .job-container input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .job-container button {
+    padding: 8px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .job-container button:hover {
+    background-color: #0056b3;
+  }
+
+  .add-job-button {
+    padding: 8px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .add-job-button:hover {
+    background-color: #0056b3;
+  }
+  
+
+  .description-input {
+    width: 100%;
+    height: 100px; /* Adjust height as needed */
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    resize: vertical; /* Allow vertical resizing */
+  }
+  
+  
+  .jobs-form {
+    font-family: Arial, sans-serif;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .jobs-form h1 {
+    text-align: center;
+  }
+  
+  .job-container {
+    margin-bottom: 20px;
+  }
+  
+  .job-container label {
+    display: block;
+    font-weight: bold;
+  }
+  
+  .job-container input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .job-container button {
+    padding: 8px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .job-container button:hover {
+    background-color: #0056b3;
+  }
+
+  .add-job-button {
+    padding: 8px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .add-job-button:hover {
+    background-color: #0056b3;
+  }
+  
+
+  .description-input {
+    width: 100%;
+    height: 100px; /* Adjust height as needed */
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    resize: vertical; /* Allow vertical resizing */
+  }
+  
+  
+  .projects-container {
+    font-family: Arial, sans-serif;
+    max-width: 600px;
+    margin: 20px auto; /* Changed margin to match the original */
+  }
+  
+  .project {
+    padding: 10px;
+    margin-bottom: 20px; /* Changed margin-bottom to match the original */
+  }
+  
+  .project label {
+    display: block;
+    font-weight: bold;
+  }
+  
+  .project input[type="text"],
+  .project textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc; /* Border removed */
+    border-radius: 4px;
+  }
+  
+  .project button,
+  .add-project-button { /* Changed to match the original class name */
+    padding: 8px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .project button:hover,
+  .add-project-button:hover { /* Changed to match the original class name */
+    background-color: #0056b3;
+  }
+  
+  .description-input {
+    width: 100%;
+    height: 100px;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    resize: vertical;
   }
   

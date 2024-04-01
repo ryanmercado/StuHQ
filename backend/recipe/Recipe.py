@@ -6,7 +6,7 @@ class Recipe:
     ingredients = []
     measurements = []
     name = ''
-    steps = ''
+    steps = []
 
     def __init__(self, name, ingredients, measurements, steps):
         self.name = name

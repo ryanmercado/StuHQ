@@ -79,3 +79,62 @@
 .add-recipe-container button:hover {
     background-color: #0056b3;
 }
+
+.ingredient-group {
+    display: flex;
+    align-items: center;
+}
+
+.ingredient-row {
+    display: flex;
+    align-items: center;
+    margin-right: 10px; /* Add some spacing between groups */
+}
+
+.ingredient-row input {
+    margin-right: 5px; /* Add some spacing between inputs */
+}
+
+.ingredient-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Adds space between each group */
+}
+
+.ingredient-row button {
+    margin-top: 0px;
+}
+
+.step-row {
+    display: flex;
+    align-items: center; /* Align items vertically in the center */
+    gap: 10px; /* Add some spacing between items */
+}
+
+.step-row label {
+    flex-shrink: 0; /* Prevent label from shrinking */
+    margin-top: 8px;
+}
+
+.step-row button {
+    margin-top: 0px;
+}
+
+.create-recipe-button {
+    background-color: #007bff; 
+    border: none; /* Remove border */
+    color: white; /* White text color */
+    text-align: center; 
+    text-decoration: none; 
+    display: inline-block; 
+    font-size: 16px; 
+    margin: 4px 2px; 
+    cursor: pointer; 
+    padding: 10px 20px; 
+    border-radius: 4px; 
+    margin-left: 200px;
+}
+
+.create-recipe-button:hover {
+    background-color: #0056b3;
+}

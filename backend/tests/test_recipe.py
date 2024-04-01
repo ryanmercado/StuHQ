@@ -134,7 +134,7 @@ def add_recipes_list():
         name='Pizza',
         ingredients=['dough', 'tomato sauce', 'cheese'],
         measurements = [(300, 'g'), (200, 'g'), (200, 'g')],
-        steps='Cook dough, add sauce and cheese'
+        steps=['Cook dough', 'add sauce and cheese']
     )
     recipes = [recipe]
     Recipe.Recipe.addRecipe(0, recipes)
@@ -338,7 +338,7 @@ def test_add_recipe(user_exists_fixture): #add recipe (user exists, empty list)
         name='Grayson',
         ingredients=['dough', 'tomato sauce', 'cheese'],
         measurements = [(300, 'g'), (200, 'g'), (200, 'g')],
-        steps='Cook dough, add sauce and cheese'
+        steps= ['Cook dough', 'Add sauce and cheese']
     )
     recipes = [recipe]
     Recipe.Recipe.addRecipe(0, recipes)
@@ -347,7 +347,7 @@ def test_add_recipe(user_exists_fixture): #add recipe (user exists, empty list)
     cursor.execute('SELECT * FROM recipes WHERE usr_id = ?', (0,))
     result = cursor.fetchone()
     assert (result[0] == 0)
-    assert (result[1] == '[{"name": "Grayson", "ingredients": ["dough", "tomato sauce", "cheese"], "measurements": [[300, "g"], [200, "g"], [200, "g"]], "steps": "Cook dough, add sauce and cheese"}]')
+    assert (result[1] == '[{"name": "Grayson", "ingredients": ["dough", "tomato sauce", "cheese"], "measurements": [[300, "g"], [200, "g"], [200, "g"]], "steps": ["Cook dough", "Add sauce and cheese"]}]')
     conn.commit()
     cursor.close()
     conn.close()
@@ -357,7 +357,7 @@ def test_add_recipe2(user_exists_fixture, populate_recipes_list_fixture): #add r
         name='Pasta',
         ingredients=['dough', 'tomato sauce', 'cheese'],
         measurements = [(300, 'g'), (200, 'g'), (200, 'g')],
-        steps='Cook dough, add sauce and cheese'
+        steps=['Cook dough', 'add sauce and cheese']
     )
     recipes = [recipe]
     Recipe.Recipe.addRecipe(0, recipes)
@@ -366,7 +366,7 @@ def test_add_recipe2(user_exists_fixture, populate_recipes_list_fixture): #add r
     cursor.execute('SELECT * FROM recipes WHERE usr_id = ?', (0,))
     result = cursor.fetchone()
     assert (result[0] == 0)
-    assert (result[1] == '[{"name": "Pizza", "ingredients": ["dough", "tomato sauce", "cheese"], "measurements": [[300, "g"], [200, "g"], [200, "g"]], "steps": "Cook dough, add sauce and cheese"}, {"name": "Pasta", "ingredients": ["dough", "tomato sauce", "cheese"], "measurements": [[300, "g"], [200, "g"], [200, "g"]], "steps": "Cook dough, add sauce and cheese"}]')
+    assert (result[1] == '[{"name": "Pizza", "ingredients": ["dough", "tomato sauce", "cheese"], "measurements": [[300, "g"], [200, "g"], [200, "g"]], "steps": ["Cook dough", "add sauce and cheese"]}, {"name": "Pasta", "ingredients": ["dough", "tomato sauce", "cheese"], "measurements": [[300, "g"], [200, "g"], [200, "g"]], "steps": ["Cook dough", "add sauce and cheese"]}]')
     conn.commit()
     cursor.close()
     conn.close()
@@ -376,7 +376,7 @@ def test_add_recipe3(clear_db_fixture):     #add recipe (user does not exist) (n
         name='Pasta',
         ingredients=['dough', 'tomato sauce', 'cheese'],
         measurements = [(300, 'g'), (200, 'g'), (200, 'g')],
-        steps='Cook dough, add sauce and cheese'
+        steps=['Cook dough', 'add sauce and cheese']
     )
     recipes = [recipe]
     Recipe.Recipe.addRecipe(0, recipes)
@@ -404,7 +404,7 @@ def test_remove_recipe2(user_exists_fixture, populate_recipes_list_fixture): #re
     cursor.execute('SELECT * FROM recipes WHERE usr_id = ?', (0,))
     res = cursor.fetchone()
     assert (res[0] == 0)
-    assert (res[1] == '[{"name": "Pizza", "ingredients": ["dough", "tomato sauce", "cheese"], "measurements": [[300, "g"], [200, "g"], [200, "g"]], "steps": "Cook dough, add sauce and cheese"}]')
+    assert (res[1] == '[{"name": "Pizza", "ingredients": ["dough", "tomato sauce", "cheese"], "measurements": [[300, "g"], [200, "g"], [200, "g"]], "steps": ["Cook dough", "add sauce and cheese"]}]')
 
 def test_remove_recipe3(clear_db_fixture): #remove recipe (user does not exist)
     name = 'Pasta'
@@ -417,20 +417,20 @@ def test_remove_recipe3(clear_db_fixture): #remove recipe (user does not exist)
 
 def test_get_recipes(user_exists_fixture, populate_recipes_list_fixture): #get recipes (user exists, one item in list)
     recipes = Recipe.Recipe.getRecipes(0)
-    assert (recipes == '[{"name": "Pizza", "ingredients": ["dough", "tomato sauce", "cheese"], "measurements": [[300, "g"], [200, "g"], [200, "g"]], "steps": "Cook dough, add sauce and cheese"}]')
+    assert (recipes == '[{"name": "Pizza", "ingredients": ["dough", "tomato sauce", "cheese"], "measurements": [[300, "g"], [200, "g"], [200, "g"]], "steps": ["Cook dough", "add sauce and cheese"]}]')
 
 def test_get_recipes2(user_exists_fixture, populate_recipes_list_fixture): #get recipes (user exists, multiple items in list)
     recipe = Recipe.Recipe(
         name='Pasta',
         ingredients=['dough', 'tomato sauce', 'cheese'],
         measurements = [(300, 'g'), (200, 'g'), (200, 'g')],
-        steps='Cook dough, add sauce and cheese'
+        steps=['Cook dough', 'add sauce and cheese']
     )
     recipes = [recipe]
     Recipe.Recipe.addRecipe(0, recipes)
 
     recipes = Recipe.Recipe.getRecipes(0)
-    assert (recipes == '[{"name": "Pizza", "ingredients": ["dough", "tomato sauce", "cheese"], "measurements": [[300, "g"], [200, "g"], [200, "g"]], "steps": "Cook dough, add sauce and cheese"}, {"name": "Pasta", "ingredients": ["dough", "tomato sauce", "cheese"], "measurements": [[300, "g"], [200, "g"], [200, "g"]], "steps": "Cook dough, add sauce and cheese"}]')
+    assert (recipes == '[{"name": "Pizza", "ingredients": ["dough", "tomato sauce", "cheese"], "measurements": [[300, "g"], [200, "g"], [200, "g"]], "steps": ["Cook dough", "add sauce and cheese"]}, {"name": "Pasta", "ingredients": ["dough", "tomato sauce", "cheese"], "measurements": [[300, "g"], [200, "g"], [200, "g"]], "steps": ["Cook dough", "add sauce and cheese"]}]')
 
 def test_get_recipes3(clear_db_fixture, app_client): #get recipes (user does not exist)
     res = Recipe.Recipe.getRecipes(0)

@@ -1,8 +1,12 @@
-// Login.js
 
 import React, { useState } from 'react';
 import {useNavigate} from 'react-router-dom';
 import secureLocalStorage from 'react-secure-storage'
+import { Link } from 'react-router-dom';
+import '../assets/styles/Login.css'; 
+import '../assets/styles/Global.css'; 
+import logo from '../assets/images/StuHQlogo.png'; 
+
 
 
 const LogIn = () => {
@@ -40,32 +44,42 @@ const LogIn = () => {
     };
 
     return (
-        <div>
-            <h2>Login</h2>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Username:
-                    <input
-                        type="username"
-                        name="username"
-                        value={username}
-                        onChange={(e) => setUsernameValue(e.target.value)}
-                    />
-                </label>
-                <br />
-                <label>
-                    Password:
-                    <input
-                        type="password"
-                        name="password"
-                        value={password}
-                        onChange={(e) => setPasswordValue(e.target.value)}
-                    />
-                </label>
-                <br />
-                <button type="submit">Login</button>
-            </form>
-            {loginFailed && <div style={{ color: 'red' }}>Login failed</div>}
+        <div className='global-container'>
+            <div className='login-content'>
+                <h2>Login to</h2>
+                <img src={logo} alt="Logo" className="logo" />
+                <form  onSubmit={handleSubmit}>
+                <br></br>
+                    <label style={{display: 'block', textAlign: 'left'}}>
+                        Username:
+                        <input className= 'input-field'
+                            type="username"
+                            name="username"
+                            value={username}
+                            onChange={(e) => setUsernameValue(e.target.value)}
+                        />
+                    </label>
+                    <br />
+                    <label style={{display: 'block', textAlign: 'left'}}>
+                        Password:
+                        <input className= 'input-field'
+                            type="password"
+                            name="password"
+                            value={password}
+                            onChange={(e) => setPasswordValue(e.target.value)}
+                        />
+                    </label>
+                    <br />
+                    <br />
+                    <div className="global-button-group">
+                        <button className='global-button' type="submit">Login</button>
+                        <Link to="/">
+                            <button className="global-button">Back Home</button>
+                        </Link>
+                    </div>
+                </form>
+                {loginFailed && <div style={{ color: 'red' }}>Login failed</div>}
+            </div>
         </div>
     );
 };

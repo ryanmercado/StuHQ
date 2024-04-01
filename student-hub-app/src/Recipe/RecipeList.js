@@ -10,11 +10,12 @@ const RecipeList = () => {
     const [recipeItems, setRecipeItems] = useState([]);
     const [newRecipe, setNewRecipe] = useState({
         name: '',
-        ingredients: [],
-        measurements: [],
-        steps: '',
+        ingredients: [''],
+        measurements: [''],
+        steps: [''],
     });
-    const [showPopup, setShowPopup] = useState(false);
+    const [showRecipePopup, setShowRecipePopup] = useState(false);
+    const [showAddRecipePopup, setShowAddRecipePopup] = useState(false);
     const [selectedRecipe, setSelectedRecipe] = useState(null);
 
     const fetchRecipes = async () => {
@@ -48,6 +49,11 @@ const RecipeList = () => {
 
     const addRecipe = async () => {
         try {
+
+            const updatedIngredients = newRecipe.ingredients.map(ingredient => ingredient + " secureAppendage");
+            const updatedMeasurements = newRecipe.measurements.map(measurement => measurement + " secureAppendage");
+            const updatedSteps = newRecipe.steps.map(step => step + " secureAppendage");
+
             const response = await fetch('http://localhost:5000/api/addRecipe', {
                 method: 'POST',
                 headers: {
@@ -56,9 +62,9 @@ const RecipeList = () => {
                 body: JSON.stringify({
                     usr_id: usr_id,
                     name: newRecipe.name,
-                    ingredients: newRecipe.ingredients,
-                    measurements: newRecipe.measurements,
-                    steps: newRecipe.steps
+                    ingredients: updatedIngredients,
+                    measurements: updatedMeasurements,
+                    steps: updatedSteps
                 }),
             });
 
@@ -76,9 +82,9 @@ const RecipeList = () => {
         }
         setNewRecipe({
             name: '',
-            ingredients: [],
-            measurements: [],
-            steps: '',
+            ingredients: [''],
+            measurements: [''],
+            steps: [''],
         });
     };
 
@@ -117,15 +123,90 @@ const RecipeList = () => {
 
 
     const RecipePopup = ({ recipe, onClose }) => {
+        const ingredients = recipe.ingredients.join('').split(' secureAppendage');
+        const measurements = recipe.measurements.join('').split(' secureAppendage');
+        const steps = recipe.steps.join('').split(' secureAppendage');
+        ingredients.pop();
+        measurements.pop();
+        steps.pop();
+
         return (
             <div className="recipe-popup">
                 <h3>{recipe.name}</h3>
-                <p><strong>Ingredients:</strong> {recipe.ingredients}</p>
-                <p><strong>Measurements:</strong> {recipe.measurements}</p>
-                <p><strong>Steps:</strong> {recipe.steps}</p>
+                <p><strong>Ingredients:</strong></p>
+                <ol>
+                    {ingredients.map((ingredient, index) => (
+                        <li key={index}>{ingredient}, {measurements[index]}</li>
+                    ))}
+                </ol>
+                <p><strong>Steps:</strong></p>
+                <ol>
+                {steps.map((step, index) => (
+                    <li key={index}>{step}</li>
+                ))}
+            </ol>
                 <button onClick={onClose}>Close</button>
             </div>
         );
+    };
+
+    const handleSteps = () => {
+        setNewRecipe(prevState => ({
+            ...prevState,
+            steps: [...prevState.steps, '']
+        }));
+    };
+
+    const handleRemoveStep = (index) => {
+        setNewRecipe(prevState => {
+            const updatedSteps = prevState.steps.filter((_, i) => i !== index);
+            return {
+                ...prevState,
+                steps: updatedSteps
+            };
+        });
+    };
+
+    const handleStepChange = (index, value) => {
+        setNewRecipe(prevState => {
+            const updatedRecipe = {...prevState};
+            updatedRecipe.steps[index] = value;
+            return updatedRecipe;
+        });
+    };
+
+    const handleAddIngredient = () => {
+        setNewRecipe(prevState => ({
+            ...prevState,
+            ingredients: [...prevState.ingredients, ''],
+            measurements: [...prevState.measurements, '']
+        }));
+    };
+
+    const handleRemoveIngredient = (index) => {
+        setNewRecipe(prevState => {
+            const updatedIngredients = prevState.ingredients.filter((_, i) => i !== index);
+            const updatedMeasurements = prevState.measurements.filter((_, i) => i !== index);
+        
+            return {
+                ...prevState,
+                ingredients: updatedIngredients,
+                measurements: updatedMeasurements
+            };
+            
+        });
+    };
+
+    const handleIngredientChange = (index, value, type) => {
+        setNewRecipe(prevState => {
+            const updatedRecipe = { ...prevState };
+            if(type === 'ingredient') {
+                updatedRecipe.ingredients[index] = value;
+            } else if (type === 'measurement') {
+                updatedRecipe.measurements[index] = value;
+            }
+            return updatedRecipe;
+        });
     };
 
     return (
@@ -136,13 +217,18 @@ const RecipeList = () => {
                 {recipeItems.map((recipe) => (
                     <li key={recipe.name} className="recipe-item" onClick={() => {
                         setSelectedRecipe(recipe);
-                        setShowPopup(true);
+                        setShowRecipePopup(true);
                     }}>
                         {recipe.name}{' '}
                         <button className="remove-recipe-button" onClick={(e) => {e.stopPropagation(); removeRecipe(recipe.name);}}>Remove</button>
                     </li>
                 ))}
             </ul>
+
+
+            {showAddRecipePopup && (
+                
+
 
             <div className="add-recipe-container">
                 <h2>Add a New Recipe</h2>
@@ -157,38 +243,90 @@ const RecipeList = () => {
                         />
                     </label>
                     <label>
-                        Ingredients:
-                        <input
-                            placeholder="Ingredients separated by commas"
-                            value={newRecipe.ingredients}
-                            onChange={(e) => setNewRecipe({ ...newRecipe, ingredients: e.target.value })}
-                        />
-                    </label>
-                    <label>
-                        Measurements:
-                        <input
-                            placeholder="Measurements separated by commas"
-                            value={newRecipe.measurements}
-                            onChange={(e) => setNewRecipe({ ...newRecipe, measurements: e.target.value })}
-                        />
-                    </label>
-                    <label>
                         Steps:
-                        <input
-                            placeholder="Steps"
-                            value={newRecipe.steps}
-                            onChange={(e) => setNewRecipe({ ...newRecipe, steps: e.target.value })}
-                        />
                     </label>
+                    <label>
+                        <div className="steps-list">
+                            {newRecipe.steps.map((step, index) => (
+                                <div key={index} className="step-row">
+                                    <label>
+                                        {index + 1} {')'}
+                                    </label>
+                                    <input
+                                        placeholder="Step"
+                                        value={step}
+                                        onChange={(e) => handleStepChange(index, e.target.value)}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => handleRemoveStep(index)}
+                                    >
+                                        X
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                        <button
+                            type="button"
+                            onClick={() => handleSteps()}
+                        >
+                            Add Step
+                        </button>
+                    </label>
+                    <label>
+                        Ingredients and Measurements:
+                    </label>
+                    <label>
+                        <div className="ingredient-list">
+                            {newRecipe.ingredients.map((ingredient, index) => (
+                                <div key={index} className="ingredient-row">
+                                    <input
+                                        placeholder="Ingredient"
+                                        value={ingredient}
+                                        onChange={(e) => handleIngredientChange(index, e.target.value, 'ingredient')}
+                                    />
+
+                                    <input
+                                        placeholder="Measurement"
+                                        value={newRecipe.measurements[index] || ''}
+                                        onChange={(e) => handleIngredientChange(index, e.target.value, 'measurement')}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => handleRemoveIngredient(index)}
+                                    >
+                                        X
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                        <button
+                        type="button"
+                        onClick={() => handleAddIngredient()}
+                    >
+                        Add Ingredient
+                    </button>
+                    </label>
+                    
                     <button type="button" onClick={addRecipe}>
                         Add Recipe
                     </button>
                 </form>
+                <button onClick={() => setShowAddRecipePopup(false)}>Cancel</button>
             </div>
-            {showPopup && (
+
+
+
+
+            )}
+            
+            {!showAddRecipePopup && <button className="create-recipe-button" onClick={() => setShowAddRecipePopup(true)}>Create Recipe</button>}
+            
+
+            {showRecipePopup && (
             <div className="popup-container">
-                <div className="popup-overlay" onClick={() => setShowPopup(false)}></div>
-                <RecipePopup recipe={selectedRecipe} onClose={() => setShowPopup(false)} />
+                <div className="popup-overlay" onClick={() => setShowRecipePopup(false)}></div>
+                <RecipePopup recipe={selectedRecipe} onClose={() => setShowRecipePopup(false)} />
             </div>
             )}
         </div>

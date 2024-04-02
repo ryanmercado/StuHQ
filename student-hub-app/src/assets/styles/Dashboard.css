@@ -1,0 +1,61 @@
+body{
+    background: linear-gradient(to bottom right, #f8a663, #4e79d5); /* Gradient colors */
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+}
+
+.dashboard-container{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+}
+
+
+.dash-title{
+    text-align: center;
+    color: white;
+    font-family: 'Copperplate Gothic', sans-serif;
+}
+
+.columns-container{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.column{
+    text-align: center;
+    font-family: 'Copperplate Gothic', sans-serif;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.column img{
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    margin-bottom: 50px;
+    align-items: center;
+}
+
+.colmun button{
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    padding: 10px 20px;
+    color: white;
+    background-color: #3498db;
+    border: none;
+    border-radius: 5px;
+}
+
+
+.column-blurb{
+    color: white;
+    font-family: 'Copperplate Gothic', sans-serif;
+}

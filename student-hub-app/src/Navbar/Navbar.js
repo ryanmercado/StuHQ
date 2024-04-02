@@ -1,6 +1,7 @@
 import React from 'react';
 import "./navbar.css";
 import { Link, useLocation } from "react-router-dom";
+import logo from '../assets/images/StuHQlogo.png'; 
 
 
 const Navbar = () => {
@@ -8,7 +9,7 @@ const Navbar = () => {
     return (
         <nav className='nav'>
             <Link to='/dashboard' className='site-title'>
-                StuHQ
+                <img src={logo} alt="Logo" className="nav-bar-logo" />
             </Link>
             <ul>
                 <CustomLink to="/calendar">Calendar</CustomLink>

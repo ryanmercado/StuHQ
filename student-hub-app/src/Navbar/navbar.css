@@ -7,7 +7,7 @@ body {
 }
 
 .nav {
-    background-color: #333;
+    background-color: #62666b;
     color: white;
     display: flex;
     justify-content: space-between;
@@ -44,3 +44,9 @@ body {
 .nav li:hover {
     background-color: #777;
 }
+
+.nav-bar-logo {
+    width: 100px; /* Adjust the width of the logo as needed */
+    height: auto;
+    margin-top: 5px;
+  }

@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import CalendarLand from './CalendarLand';
 import ToDo from './ToDo';
+import '../assets/styles/Calendar.css';
+ 
 
 
 const ScrollPane = () => {
@@ -14,9 +16,9 @@ const ScrollPane = () => {
     };
 
     return (
-        <div style={{ overflowY: 'scroll', height: '100vh', border: '1px solid #ccc', padding: '10px' }}>
-            <CalendarLand onEventChange={handleEventChange}  />
-            <ToDo events ={events}/>
+        <div className = "life-container" style={{ overflowY: 'scroll', height: '100vh', border: '1px solid #ccc', padding: '10px' }}>
+            <CalendarLand className = 'calendar' onEventChange={handleEventChange}  />
+            <ToDo className = 'todo' events ={events}/>
         </div>
     );
 };

@@ -1,0 +1,100 @@
+.life-container {
+    background: linear-gradient(to bottom right, #f8a663, #4e79d5); /* Gradient colors */
+    width: 100%;
+    height: 100vh; /* Set full height of the viewport */
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* Two columns with equal width */
+    grid-column-gap: 0px; /* Adjust the gap between columns */
+}
+
+.calendar{
+    grid-column: 1; /* Left component occupies the first column */
+}
+.todo{
+    grid-column: 2;
+}
+.calendar-header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Copperplate Gothic', sans-serif;
+    color: white;
+    margin-bottom: 15px;
+    margin-right: 180px;
+
+}
+.calendar-container {
+    width: 100%;
+    height: 100%;
+    padding: 0px; /* Adjust padding to your preference */
+  }  
+
+.calendar-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Copperplate Gothic', sans-serif;
+    color: white;
+}
+
+.add-event-popup {
+    position: fixed;
+    top: 50%;
+    left: 25%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  .add-event-popup input[type="text"],
+  .add-event-popup textarea,
+  .add-event-popup select {
+    width: calc(100% - 20px); /* Adjust width to leave space for the checkbox */
+    padding: 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+  }
+  
+  .add-event-popup input[type="checkbox"] {
+    display: inline-block; /* Display checkbox inline */
+    margin-right: 5px; /* Adjust spacing between checkbox and label */
+  }
+  .add-event-popup label.checkbox-label {
+    display: inline-block;
+    vertical-align: middle; /* Align label vertically */
+  }
+  
+  .add-event-popup .button-container {
+    text-align: right; /* Align buttons to the right */
+  }
+  
+  .add-event-popup button {
+    padding: 10px 20px;
+    background-color: #5B8FFB;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .add-event-popup button:hover {
+    background-color: #f94a1e;
+  }
+  
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999; /* Ensure it's above other content */
+  }
+
+.rbc-calendar {
+    background: #ffffff; 
+}
+  
+  

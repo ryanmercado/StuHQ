@@ -1,0 +1,93 @@
+
+.todo-header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Copperplate Gothic', sans-serif;
+    color: red;
+    margin-bottom: 10px;
+    margin-right:20px;
+}
+ .todo-fields .error{
+    color: red;
+    margin-top: 10px;
+  }
+
+.todo-fields-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+  .todo-fields {
+    display: flex;
+    height: 50px;
+  }
+  
+  .todo-fields input[type="text"] {
+    margin-right: 10px; /* Adjust margin between text fields */
+  }
+ 
+  .todo-fields button {
+    background-color: #5B8FFB; 
+    width: 100px;
+    border: none;
+    color: white;
+    padding: 7px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    margin: 0 5px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.5s ease;
+  }
+  .todo-fields button:hover {
+    background-color: #f94a1e; 
+   }
+
+  
+
+
+.task-list {
+    background-color: #f4f4f4; /* Background color of the box */
+    border: 1px solid #ddd; /* Border color */
+    border-radius: 8px; /* Border radius for rounded corners */
+    padding: 20px; /* Padding inside the box */
+    max-width: 600px; /* Maximum width of the box */
+    margin-right: 10px; /* Center the box horizontally */
+    justify-content: center;    
+    font-family: 'Copperplate Gothic', sans-serif;
+    font-size: 18px;
+
+}
+
+  .task-list li {
+    list-style: none; /* Remove default list styles */
+    margin-bottom: 10px; /* Space between list items */
+  }
+  
+  .task-list input[type="checkbox"] {
+    margin-right: 10px; /* Space between checkbox and text */
+  }
+  .task-list button {
+    background-color: #5B8FFB; 
+    width: 75px;
+    border: none;
+    color: white;
+    padding: 7px 0;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    margin: 0 5px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.5s ease;
+  }
+  .task-list button:hover {
+    background-color: #f94a1e; 
+   }
+  
+  

@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import secureLocalStorage from 'react-secure-storage';
+import '../assets/styles/ToDo.css';
+
+
 
 const ToDo = ({ events }) => {
   const [tasks, setTasks] = useState([]);
@@ -95,8 +98,9 @@ const ToDo = ({ events }) => {
 
   return (
     <div>
-      <h1>Todo List</h1>
-      <div>
+      <div className='todo-header'>
+        <h1>Todo List</h1>
+        <div className='todo-fields'>
         <input
           type="text"
           placeholder="Enter a new task"
@@ -116,10 +120,11 @@ const ToDo = ({ events }) => {
                 <option value="Task">Task</option>
                 <option value="Other">Other</option>
             </select>
-        <button onClick={handleAddTask}>Add Task</button>
-        {error && <div style={{ color: 'red' }}>{error}</div>}
+        <button className='button' onClick={handleAddTask}>Add Task</button>
+        </div>
+        {error && <div className='error'>{error}</div>}
       </div>
-      <ul>
+      <ul className='task-list'>
         {tasks.map((task) => (
           <li key={task.id}>
             <input

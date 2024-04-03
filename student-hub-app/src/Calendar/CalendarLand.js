@@ -10,6 +10,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from 'react-router-dom';
 import secureLocalStorage from 'react-secure-storage';
 import dayjs from 'dayjs';
+import '../assets/styles/Global.css';
 
 
 function CalendarLand( {onEventChange} ) {
@@ -22,6 +23,7 @@ function CalendarLand( {onEventChange} ) {
     const [endTime, setEndTime] = useState(null);
     const [anchorEl, setAnchorEl] = useState(null);
     const [isPopoverOpen, setPopoverOpen] = useState(false);
+    const [isAddOpen, setAddOpen] = useState(false);
     const [allEvents, setAllEvents] = useState(new Array);
     const [error, setError] = useState('');
     const usr_id = secureLocalStorage.getItem("usr_id");
@@ -91,7 +93,6 @@ function CalendarLand( {onEventChange} ) {
             addEvent.description === '' ||
             addEvent.eventType === ''
         ) {
-            // Set an error message
             setError('Please fill in all fields');
             return;
         }
@@ -168,12 +169,17 @@ function CalendarLand( {onEventChange} ) {
         setTimeout(() => {
             fetchUserEvents();
         }, 1000);
-        //     fetchUserEvents();
-
     };
 
     const locales = {
         "en-US": require("date-fns/locale/en-US")
+    };
+
+    const handleOpenAdd = () => {
+        setAddOpen(true)
+    };
+    const handleCloseAdd = () => {
+        setAddOpen(false)
     };
 
     const handleSelectEvent = (event) => {
@@ -183,7 +189,8 @@ function CalendarLand( {onEventChange} ) {
             start: event.start,
             end: event.end,
             desc : event.description,
-            type : event.type
+            type : event.type,
+            event: event
         })
         setAnchorEl(event.target);
         setPopoverOpen(true)
@@ -209,10 +216,28 @@ function CalendarLand( {onEventChange} ) {
 
     return (
         <div>
-            <h1>Calendar</h1>
+            <div className='calendar-header'>
+                <h1>Calendar</h1>
+                <button className='global-button' onClick={handleOpenAdd}>
+                    Add Event
+                </button>
+            </div>
             <div>
-        <h2>Add New Event</h2>
-        <div style={{ zIndex: 2 }}>
+        <Popover
+             open={isAddOpen}
+             anchorEl={anchorEl}
+             onClose={handleCloseAdd}
+             transformOrigin={{
+                 vertical: 'center',
+                 horizontal: 'center',
+                 }}
+             anchorOrigin={{
+                 vertical: 'center',
+                 horizontal: 'center',
+             }}
+        >
+        <div className = 'add-event-popup' style={{ maxWidth: '400px', padding: '20px' }}>
+            <h2>Add New Event</h2>
             <input type='text' placeholder='Add Title' value={addEvent.title} onChange={(e) => setAddEvent({ ...addEvent, title: e.target.value })} />
             <input type='text' placeholder='Add Description' value={addEvent.description} onChange={(e) => setAddEvent({ ...addEvent, description: e.target.value })} />
             <select id='type_dropdown' value={addEvent.eventType} onChange={(e) => setAddEvent({ ...addEvent, eventType: e.target.value })}>
@@ -222,91 +247,94 @@ function CalendarLand( {onEventChange} ) {
                 <option value="Task">Task</option>
                 <option value="Other">Other</option>
             </select>
-          <DatePicker
-            selected={startDate}
-            onChange={(date) => setStartDate(date)}
-            placeholderText='Start Date'
+            <DatePicker
+                selected={startDate}
+                onChange={(date) => setStartDate(date)}
+                placeholderText='Start Date'
+            />
+                <DatePicker
+                selected={endDate}
+                onChange={(date) => setEndDate(date)}
+                placeholderText='End Date'
+                />
+            <DatePicker
+                selected={startTime}
+                onChange={(time) => setStartTime(time)}
+                showTimeSelect
+                showTimeSelectOnly
+                timeIntervals={15}
+                timeCaption="Time"
+                dateFormat="h:mm aa"
+                placeholderText='Start Time'
             />
             <DatePicker
-            selected={endDate}
-            onChange={(date) => setEndDate(date)}
-            placeholderText='End Date'
+                selected={endTime}
+                onChange={(time) => setEndTime(time)}
+                showTimeSelect
+                showTimeSelectOnly
+                timeIntervals={15}
+                timeCaption="Time"
+                dateFormat="h:mm aa"
+                placeholderText='End Time'
             />
-            <DatePicker
-            selected={startTime}
-            onChange={(time) => setStartTime(time)}
-            showTimeSelect
-            showTimeSelectOnly
-            timeIntervals={15}
-            timeCaption="Time"
-            dateFormat="h:mm aa"
-            placeholderText='Start Time'
-            />
-            <DatePicker
-            selected={endTime}
-            onChange={(time) => setEndTime(time)}
-            showTimeSelect
-            showTimeSelectOnly
-            timeIntervals={15}
-            timeCaption="Time"
-            dateFormat="h:mm aa"
-            placeholderText='End Time'
-            />
+
+          <div className='button-container'>
             <input
-            type='checkbox'
-            id='showOnTodoList'
-            checked={addEvent.on_to_do_list}
-            onChange={handleCheckboxChange}
-            />
-            <label htmlFor='showOnTodoList'>Show on Todo List</label>
-          <button style={{ marginTop: "10px" }} onClick={handleAddEvent}>
-            Add Event
-          </button>
-          {error && <div style={{ color: 'red' }}>{error}</div>}
-          </div>
-      </div>
-            <div>
-                <h2>Event List</h2>
-                <ul>
-                    {allEvents.map((event) => {
-                        return (<li>{event.title}: {event.start.toString()} - {event.end.toString()} - {event.description} <button onClick={() => deleteEvent(event)}>Delete Event</button></li>);
-                    })}
-                </ul>
-            </div>
-            <div style={{zIndex: 1 }}>
+                    type='checkbox'
+                    id='showOnTodoList'
+                    checked={addEvent.on_to_do_list}
+                    onChange={handleCheckboxChange}
+                />
+            <label htmlFor='showOnTodoList' className='checkbox-label'> Show on Todo List</label>
+            <button onClick={handleAddEvent}>
+                Add Event
+            </button>
+            <button style={{ marginLeft: "10px" }} onClick={handleCloseAdd}>
+                Close
+            </button>
+            {error && <div style={{ color: 'red' }}>{error}</div>}
+           </div>
+        </div>
+            </Popover>
+        </div>
+        <div style={{zIndex: 1 }}>
+        <div className="calendar-container">
             <Calendar
                 localizer={localizer}
                 events={allEvents}
                 startAccessor="start"
                 endAccessor="end"
-                style={{ height: 500, margin: "50px" }}
+                style={{ height: 650, width: 900, margin: "10px" }}
                 showMultiDayTimes
                 onSelectEvent={(event, target) => handleSelectEvent(event, target)}
             />
-            </div>
-            <Popover
-                open={isPopoverOpen}
-                anchorEl={anchorEl}
-                onClose={handleClosePopover}
-                transformOrigin={{
-                    vertical: 'center',
-                    horizontal: 'center',
-                  }}
-                anchorOrigin={{
-                    vertical: 'center',
-                    horizontal: 'center',
-                }}
-            >
-                <div style={{ maxWidth: '400px', padding: '20px' }}>
-                    <Typography variant="h6">{popoverFields.title}</Typography>
-                    <Typography>Start: {popoverFields.start?.toString()}</Typography>
-                    <Typography>End: {popoverFields.end?.toString()}</Typography>
-                    <Typography>Description: {popoverFields.desc}</Typography>
-                    <Typography>Event Type: {popoverFields.type}</Typography>
-                    <Button onClick={handleClosePopover}>Close Popup</Button>
-                </div>
-            </Popover>
         </div>
+        </div>
+        <Popover
+            open={isPopoverOpen}
+            anchorEl={anchorEl}
+            onClose={handleClosePopover}
+            transformOrigin={{
+                vertical: 'center',
+                horizontal: 'center',
+                }}
+            anchorOrigin={{
+                vertical: 'center',
+                horizontal: 'center',
+            }}
+        >
+            <div style={{ maxWidth: '400px', padding: '20px' }}>
+                <Typography variant="h6">{popoverFields.title}</Typography>
+                <Typography>Start: {popoverFields.start?.toString()}</Typography>
+                <Typography>End: {popoverFields.end?.toString()}</Typography>
+                <Typography>Description: {popoverFields.desc}</Typography>
+                <Typography>Event Type: {popoverFields.type}</Typography>
+                <Button onClick={handleClosePopover}>Close Popup</Button>
+                <Button onClick={() => {deleteEvent(popoverFields.event); 
+                                        handleClosePopover();}}>Delete Event</Button>
+            </div>
+        </Popover>
+    </div>
     );
 }
 

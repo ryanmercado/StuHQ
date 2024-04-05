@@ -1,5 +1,5 @@
 import requests
-my_key = "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"
+my_key = "sk-"
 def generate_response(prompt):
     url = "https://api.openai.com/v1/engines/gpt-3.5-turbo/completions"
     headers = {

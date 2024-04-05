@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './style.css'; // Assuming the CSS file is named Projects.css
+import secureLocalStorage from 'react-secure-storage';
 
 const Projects = ({ handleValidation }) => {
   const [projects, setProjects] = useState([
@@ -16,10 +17,25 @@ const Projects = ({ handleValidation }) => {
       descArr: ''
     }
   ]);
+  const usr_id = secureLocalStorage.getItem("usr_id");
+  const [isSubmittable, setIsSubmittable] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
     validateFields();
+    validateSubmit();
   }, [projects]);
+
+  const validateSubmit = () => {
+    const areAllProjectsValid = projects.every(project => {
+      return (
+        project.title.trim() !== '' &&
+        project.date.trim() !== '' &&
+        project.descArr.trim() !== ''
+      );
+    });
+    setIsSubmittable(areAllProjectsValid);
+  }
 
   const validateFields = () => {
     const areAllProjectsValid = projects.every(project => {
@@ -29,9 +45,45 @@ const Projects = ({ handleValidation }) => {
         project.descArr.trim() !== ''
       );
     });
-    handleValidation(areAllProjectsValid);
+    if(!areAllProjectsValid)
+      handleValidation(areAllProjectsValid);
     // You can add submission logic here if needed
   };
+
+  const handleSubmit = async () => {
+    let submittedProjectsCount = 0;
+    for (const project of projects) {
+      const formData = {
+        user_id: usr_id,
+        title: project.title,
+        who_for: project.whoFor,
+        date: project.date,
+        desc_arr: project.descArr
+      };
+
+      // Example API call with fetch:
+      const response = await fetch('http://localhost:5000/api/addResumeProject', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      // Check if the response is successful
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Project added:', data);
+        submittedProjectsCount++;
+      } else {
+        console.error('Failed to add project:', response);
+      }
+    }
+    if (submittedProjectsCount === projects.length) {
+      setIsSubmitted(true);
+      handleValidation(true);
+    }
+  }
 
   const handleProjectChange = (index, field, value) => {
     const updatedProjects = [...projects];
@@ -97,6 +149,13 @@ const Projects = ({ handleValidation }) => {
       {projects.length < 4 && (
         <button className="add-project-button" onClick={handleAddProject}>Add Project</button>
       )}
+      <br />
+      <br />
+      {/* Submit button */}
+      {isSubmittable && !isSubmitted && (
+        <button onClick={handleSubmit}>Submit</button>
+        )}
+
     </div>
   );
   

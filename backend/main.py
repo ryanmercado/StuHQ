@@ -204,67 +204,130 @@ def createAccount():
     email = data['email']
     return handleCreateAccount.sign_up(username, email, password, confirm_password)
 
-
 @stuAPI.route('/api/addResumeExperience', methods=['POST'])
-def addResumeExperience():
-    resume = Resume()
-    data = request.get_json()
-    user_id = data['user_id']
-    company = data['company']
-    role = data['role']
-    start_date = data['start_date']
-    end_date = data['end_date']
-    location = data['location']
-    desc_arr = data['desc_arr']
-    resume.addExperience(user_id, company, role, start_date, end_date, location, desc_arr)
+def add_resume_experience():
+    try:
+        resume = Resume()  # Assuming Resume class is imported or defined
+        data = request.get_json()
+        user_id = data.get('user_id')
+        company = data.get('company')
+        role = data.get('role')
+        start_date = data.get('start_date')
+        end_date = data.get('end_date')
+        location = data.get('location')
+        desc_arr = data.get('desc_arr')
 
+        if not all([user_id, company, role, start_date, end_date, location, desc_arr]):
+            return jsonify({'error': 'Missing required fields'}), 400
+
+        resume.addExperience(user_id, company, role, start_date, end_date, location, desc_arr)
+        return jsonify({'message': 'Experience added successfully'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @stuAPI.route('/api/addResumeExtracurr', methods=['POST'])
 def addResumeExtracurr():
-    resume = Resume()
-    data = request.get_json()
-    user_id = data['user_id']
-    title = data['title']
-    desc = data['desc']
-    resume.addExtracurr(user_id, title, desc)
+    try:
+        resume = Resume()
+        data = request.get_json()
+        user_id = data.get('user_id')
+        title = data.get('title')
+        desc = data.get('desc')
+
+        # Check if all required fields are present in the request
+        if not all([user_id, title, desc]):
+            return jsonify({'error': 'Missing required fields: ()'}), 400
+
+        # Call the addExtracurr method with the provided data
+        resume.addExtracurr(user_id, title, desc)
+
+        # Return success response
+        return jsonify({'message': 'Extracurricular added successfully'}), 200
+
+    except KeyError as e:
+        # Handle case where required fields are missing from the request
+        return jsonify({'error': f'Missing required field: {e}'}), 400
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+        # Handle other exceptions
 
 
 @stuAPI.route('/api/addResumeGeneralInfo', methods=['POST'])
 def addResumeGeneralInfo():
-    resume = Resume()
-    data = request.get_json()
-    user_id = data['user_id']
-    lastname = data['lastname']
-    firstname = data['firstname']
-    phone = data['phone']
-    email = data['email']
-    linkedin = data['linkedin']
-    edu = data['edu']
-    grad_date = data['grad_date']
-    major = data['major']
-    GPA = data['GPA']
-    resume.addGeneralInfo(user_id, lastname, firstname, phone, email, linkedin, edu, grad_date, major, GPA)
-
+    try:
+        # Assuming Resume() and resume.addGeneralInfo() work as expected
+        resume = Resume()
+        
+        # Get JSON data from request
+        data = request.get_json()
+        
+        # Extract data from JSON
+        user_id = data.get('user_id')
+        lastname = data.get('lastname')
+        firstname = data.get('firstname')
+        phone = data.get('phone')
+        email = data.get('email')
+        linkedin = data.get('linkedin')
+        edu = data.get('edu')
+        grad_date = data.get('grad_date')
+        major = data.get('major')
+        GPA = data.get('GPA')
+        
+        # Check if all required fields are present
+        if None in [user_id, lastname, firstname, phone, email, linkedin, edu, grad_date, major, GPA]:
+            return jsonify({'error': 'Missing required fields'}), 400
+        
+        # Call method to add general info to resume
+        resume.addGeneralInfo(user_id, lastname, firstname, phone, email, linkedin, edu, grad_date, major, GPA)
+        
+        # Return success response
+        return jsonify({'message': 'General info added successfully'}), 200
+    except KeyError as e:
+        # Handle KeyError if any required field is missing from the JSON data
+        return jsonify({'error': f'Missing field: {e.args[0]}'}, 400)
+    except Exception as e:
+        # Handle any other exceptions
+        return jsonify({'error': str(e)}), 500
 
 @stuAPI.route('/api/addResumeTechnicalSkill', methods=['POST'])
 def addResumeTechnicalSkill():
-    resume = Resume()
-    data = request.get_json()
-    user_id = data['user_id']
-    name = data['name']
-    resume.addTechnicalSkill(user_id, name)
+    try:
+        resume = Resume()
+        data = request.get_json()
+        user_id = data['user_id']
+        name = data['name']
+        resume.addTechnicalSkill(user_id, name)
+        return jsonify({'success': True}), 200
+    except KeyError as e:
+        # Handle KeyError if 'user_id' or 'name' is missing in the request JSON
+        return jsonify({'error': f'Missing required field: {e}'}), 400
+    except Exception as e:
+        # Handle other exceptions
+        return jsonify({'error': str(e)}), 500
+
 
 
 @stuAPI.route('/api/addResumeProject', methods=['POST'])
 def addResumeProject():
-    resume = Resume()
-    data = request.get_json()
-    user_id = data['user_id']
-    title = data['title']
-    who_for = data['who_for']
-    date = data['date']
-    desc_arr = data['desc_arr']
-    resume.addProject(user_id, title, who_for, date, desc_arr)
+    try:
+        resume = Resume()  # Assuming Resume class is imported or defined
+        data = request.get_json()
+        user_id = data.get('user_id')
+        title = data.get('title')
+        who_for = data.get('who_for')
+        date = data.get('date')
+        desc_arr = data.get('desc_arr')
+
+        if not all([user_id, title, who_for, date, desc_arr]):
+            return jsonify({'error': 'Missing required fields'}), 400
+
+        resume.addProject(user_id, title, who_for, date, desc_arr)
+        return jsonify({'message': 'Project added successfully'}), 200
+    except KeyError as e:
+        return jsonify({'error': 'KeyError - Missing required fields: {}'.format(str(e))}), 400
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 @stuAPI.route('/api/addResumeAward', methods=['POST'])

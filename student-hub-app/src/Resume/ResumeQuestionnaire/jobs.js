@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './style.css';
+import secureLocalStorage from 'react-secure-storage';
 
 const Jobs = ({ handleValidation }) => {
   const [jobHistory, setJobHistory] = useState([
@@ -20,11 +21,29 @@ const Jobs = ({ handleValidation }) => {
       duties: ''
     }
   ]);
+  const usr_id = secureLocalStorage.getItem("usr_id");
+  const [isSubmittable, setIsSubmittable] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
     validateFields();
+    validateSubmit();
   }, [jobHistory]);
 
+  const validateSubmit = () => {
+    const areAllJobsValid = jobHistory.every(job => {
+      return (
+        job.company.trim() !== '' &&
+        job.role.trim() !== '' &&
+        job.startDate.trim() !== '' &&
+        job.endDate.trim() !== '' &&
+        job.location.trim() !== '' &&
+        job.duties.trim() !== ''
+      );
+    });
+    setIsSubmittable(areAllJobsValid);
+  
+  }
   const validateFields = () => {
     const areAllJobsValid = jobHistory.every(job => {
       return (
@@ -36,8 +55,45 @@ const Jobs = ({ handleValidation }) => {
         job.duties.trim() !== ''
       );
     });
-    handleValidation(areAllJobsValid);
+    if (!areAllJobsValid)
+      handleValidation(areAllJobsValid);
     // You can add submission logic here if needed
+  };
+
+  const handleSubmit = async () => {
+    let submittedCount = 0;
+    for (const job of jobHistory) {
+      const formData = {
+        user_id: usr_id,
+        company: job.company,
+        role: job.role,
+        start_date: job.startDate,
+        end_date: job.endDate,
+        location: job.location,
+        desc_arr: job.duties //This needs to be run through GPT before here
+      };
+
+      const response = await fetch('http://localhost:5000/api/addResumeExperience', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Job added:', data);
+        submittedCount++;
+      } else {
+        throw new Error('Failed to add job');
+      }
+    }
+    if (submittedCount === jobHistory.length) {
+      setIsSubmitted(true);
+      handleValidation(true);
+    }
+
   };
 
   const handleJobChange = (index, field, value) => {
@@ -116,6 +172,12 @@ const Jobs = ({ handleValidation }) => {
       {jobHistory.length < 4 && (
         <button className="add-job-button" onClick={handleAddJob}>Add Job</button>
       )}
+      <br />
+      <br />
+      {/* Submit button */}
+      {isSubmittable && !isSubmitted && (
+        <button onClick={handleSubmit}>Submit</button>
+        )}
     </div>
   );
 };

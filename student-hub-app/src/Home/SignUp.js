@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import '../assets/styles/Global.css';
 import '../assets/styles/Login.css'; 
 import logo from '../assets/images/StuHQlogo.png'; 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -40,15 +42,16 @@ function SignUp() {
               }
               else if (response.result === 'username already exists'){
                   setCreatedFailed(true);
-                  setFailedMessage(response.result)
+                  setFailedMessage('Username already exists')
               }
               else if (response.result === 'a user has already signed up with this email'){
                   setCreatedFailed(true);
-                  setFailedMessage(response.result)
+                  setFailedMessage('A user has already signed up with this email')
               }
-              else if (response.result === 'passwords do not match'){
+              else if (response.result === '*Passwords do not match'){
                   setCreatedFailed(true);
-                  setFailedMessage(response.result)
+                  setFailedMessage("Passwords do not match")
+                  
   
               }
             }
@@ -110,7 +113,11 @@ function SignUp() {
                             <button className="global-button">Back Home</button>
                         </Link>
                     </div>
-                    {createdFailed && <div style={{ color: 'red' }}>{failedMessage}</div>}
+                    {createdFailed && ( 
+                        <div className='failed-message'>
+                            <FontAwesomeIcon icon={faCircleExclamation} /> {failedMessage}
+                        </div>
+                    )}
                 </form>
             </div>
         </div>

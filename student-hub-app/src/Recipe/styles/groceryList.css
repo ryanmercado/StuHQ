@@ -32,20 +32,63 @@
     padding: 0;
 }
 
+.grocery-list-container h2{
+    color: white;
+    border-color: black;
+}
+
 .grocery-item {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
     padding: 5px 0;
+    justify-content: space-between;
     border-bottom: 1px solid #ccc;
 }
 
-.remove-item-button {
+.left-item {
+    color: black;
+}
+
+.right-item{
+    display: flex;
+}
+
+.remove-item-b {
     padding: 2px 5px;
+    margin-right: 10px;
     font-size: 14px;
-    background-color: #dc3545;
+    justify-self: right;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    align-items:last baseline;
+    background: linear-gradient(to right, red, #bd4646);
+
 }
+
+.purchased-button {
+  justify-self: right;
+  display: inline-block;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(to right, #4e54c8, #8f94fb);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+
+.purchased-button:hover {
+    background: linear-gradient(to right, #8f94fb, #4e54c8);
+  }
+
+  .big-box {
+    border: 1px solid #ccc;
+    padding: 10px;
+    padding-top: 0px;
+    border-radius: 5px;
+    background-color: white;
+    padding-bottom: 0px;
+  }

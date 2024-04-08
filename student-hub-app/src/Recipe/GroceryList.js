@@ -137,15 +137,23 @@ const GroceryList = () => {
                 />
                 <button className="add-item-button" onClick={addItem}>Add</button>
             </div>
-            <ul className="grocery-items-list">
-                {groceryItems.map((item, index) => (
-                    <li key={index} className= "grocery-item" >
-                        <span>{item}</span>
-                        <button className="remove-item-button" onClick={() => removeItem(item)}>X</button>
-                        <button className="purchased-button" onClick={() => purchasedItem(item)}>purchased!</button>
-                    </li>
-                ))}
-            </ul>
+            <div className='big-box'>
+                <ul className="grocery-items-list">
+                    {groceryItems.map((item, index) => (
+                        <li key={index} className= "grocery-item" >
+                            <div className='left-item'>
+                                <span>{item}</span>
+                            </div>
+                            <div className='right-item'>
+                                <button className="remove-item-b" onClick={() => removeItem(item)}>X</button>
+                                <button className="purchased-button" onClick={() => purchasedItem(item)}>Purchased!</button>
+                            </div>
+                            
+                        </li>
+                    ))}
+                </ul>
+            </div>
+            
         </div>
         
     );

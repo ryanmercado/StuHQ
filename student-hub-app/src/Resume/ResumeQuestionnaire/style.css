@@ -31,7 +31,7 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
   }
-  button {
+  .resume-button {
     width: 100%;
     padding: 10px;
     background-color: #007bff;
@@ -109,7 +109,7 @@
   
   .extracurr-form {
     font-family: Arial, sans-serif;
-    max-width: 400px;
+    max-width: 80%;
     margin: 0 auto;
   }
   
@@ -342,4 +342,43 @@
     box-sizing: border-box;
     resize: vertical;
   }
+
+  .extracurricular-input-container {
+    margin-bottom: 20px; /* Adjust margin as needed */
+  }
+  
+  .extracurricular-input-container label {
+    margin-right: 10px; /* Adjust margin as needed */
+  }
+  
+  .extracurricular-input-container .extracurricular-input {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Adjust gap as needed */
+  }
+  
+  .extracurricular-input-container .extracurricular-input input,
+  .extracurricular-input-container .extracurricular-input select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .extracurricular-input-container .extracurricular-input select {
+    width: 120px; /* Adjust width as needed */
+  }
+  
+  .extracurricular-input-container .remove-extracurricular-btn {
+    background-color: red; /* Adjust background color as needed */
+    color: white; /* Adjust text color as needed */
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+  
+  .extracurricular-input-container .remove-extracurricular-btn:hover {
+    background-color: darkred; /* Adjust hover background color as needed */
+  }
+  
   

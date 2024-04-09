@@ -1,4 +1,30 @@
 
+.delete-resume-btn {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  width: 200px; /* Adjust width as needed */
+  height: 50px; /* Adjust height as needed */
+  background-color: #dc3545; /* Red color */
+  color: white;
+  font-size: 1.5rem; /* Adjust font size as needed */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 10px auto; /* Adjust margin as needed */
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+}
+.delete-resume-btn:hover {
+  background-color: #c82333; /* Darker red color on hover */
+}
+
+.delete-resume-btn:focus {
+  box-shadow: 0 0 0 2px #c82333; /* Add outline on focus */
+}
+
+  
   .create-resume-btn {
     display: flex;
     justify-content: center; /* Center horizontally */

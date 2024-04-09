@@ -73,6 +73,7 @@ const DefaultPopup = ({ handleClose }) => {
       pageContent = (
         <Extracurr
           handleValidation={handleValidation}
+          handleClose = {handleClose}
         />
       );
       break;

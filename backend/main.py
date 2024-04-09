@@ -3,8 +3,10 @@ from flask_cors import CORS
 from recipe import Recipe, GroceryList, Stock
 from calendar_module import user_events, to_do_list
 from resume.Resume import Resume
-from resume import generateResume
+from resume.generateResume import generateResume, deleteResumeFile
 import handleCreateAccount, handleSignIn
+import os
+import time
 
 
 stuAPI = Flask(__name__)
@@ -368,14 +370,39 @@ def addResumeVolunteerWork():
     end_date = data['end_date']
     resume.addVolunteerWork(user_id, company, role, start_date, end_date)
 
+@stuAPI.route('/api/deleteResume', methods=['POST'])
+def deleteResume():
+    resume = Resume()
+    data = request.get_json()
+    user_id = data['user_id']
+    try:
+        resume.deleteUserInfo(user_id)
+        return jsonify({'message': 'Resume deleted successfully'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 @stuAPI.route('/api/generate_resume', methods = ['POST'])
 def getResume():
     data = request.get_json()
     user_id = data['user_id']
-    generateResume(user_id)
-    pdf_path = "resume.pdf" # might need to change this depending on tests (dk what path is here)
     try:
-        return send_file(pdf_path, as_attachment= True)
+        generateResume(user_id)
+        pdf_path = f"resumes/resume-{user_id}.pdf" 
+        current_directory = os.getcwd()
+        new_pdf_path = f"backend/resumes/resume-{user_id}.pdf" 
+
+        os_path =os.path.join(current_directory, new_pdf_path)
+        
+        while not os.path.exists(os_path):
+            time.sleep(1)
+
+        # Check if the file exists before sending it
+        if os.path.exists(os_path):
+            returner = send_file(pdf_path, as_attachment=True)
+            deleteResumeFile(os_path)
+            return returner
+        else:
+            return "Resume not found. at path: " + os_path
     except Exception as e:
         print(e)
         return str(e)

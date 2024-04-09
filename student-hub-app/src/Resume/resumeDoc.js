@@ -6,7 +6,7 @@ import secureLocalStorage from 'react-secure-storage';
 
 const ResumeDoc = () => {
   const navigate = useNavigate();
-  const usr_id = secureLocalStorage.getItem('usr_id');
+  const usr_id = secureLocalStorage.getItem("usr_id");
   const [isResumeReady, setIsResumeReady] = useState(false);
   const [showPopup, setShowPopup] = useState(true);
 
@@ -18,7 +18,7 @@ const ResumeDoc = () => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ user_id: 1 })
+        body: JSON.stringify({ user_id: usr_id })
       });
   
       if (!response.ok) {
@@ -34,12 +34,31 @@ const ResumeDoc = () => {
     }
   };
 
+  const handleDeleteResume = async () => {
+    try {
+      const response = await fetch('/api/deleteResume', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ user_id: usr_id })
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to delete resume');
+      }
+  
+      console.log('Resume deleted successfully');
+    } catch (error) {
+      console.error('Error deleting resume:', error);
+    }
+  };
+
   const handlePopupClose = () => {
     setShowPopup(false);
   };
 
   useEffect(() => {
-
     if (usr_id === null) {
       navigate("/");
     }
@@ -47,14 +66,15 @@ const ResumeDoc = () => {
 
   return (
     <div className="body">
-      {(
-        <div>
-          <button className="create-resume-btn" onClick={handleCreateResume}>
-            Create Resume
-          </button>
-          {!isResumeReady && showPopup && <DefaultPopup handleClose={handlePopupClose} />}
-        </div>
-      )}
+      <div>
+        <button className="create-resume-btn" onClick={handleCreateResume}>
+          Create Resume
+        </button>
+        <button className="delete-resume-btn" onClick={handleDeleteResume}>
+          Delete User Info
+        </button>
+      </div>
+      {!isResumeReady && showPopup && <DefaultPopup handleClose={handlePopupClose} />}
     </div>
   );
 };

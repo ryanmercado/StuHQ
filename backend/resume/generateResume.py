@@ -10,9 +10,10 @@ from reportlab.lib import colors
 # For Dev
 # from Resume import Resume
 
-# For Prod
+# # For Prod
 from resume.Resume import Resume
 import json
+import os
 
 #from Resume import Resume
 
@@ -30,11 +31,19 @@ titleFontSize = 14
 tinyFontSize = 9.5
 
 #WHERE RESUME IS STORED
-
+def deleteResumeFile(filepath):
+    os.remove(filepath)
 
 def generateResume(usr_id):
+    # Define the filename based on usr_id
+    filename = f"backend/resumes/resume-{usr_id}.pdf"
+    
+    # Create the "resumes" folder if it doesn't exist
+    os.makedirs("backend/resumes", exist_ok=True)
+
+
     # Create a PDF document
-    document = SimpleDocTemplate("resume.pdf", pagesize=letter, leftMargin=0.5*inch, rightMargin=0.5*inch, topMargin=0.5*inch, bottomMargin=0.5*inch)
+    document = SimpleDocTemplate(filename, pagesize=letter, leftMargin=0.5*inch, rightMargin=0.5*inch, topMargin=0.5*inch, bottomMargin=0.5*inch)
     doc = []
 
 
@@ -65,7 +74,7 @@ def generateResume(usr_id):
         smallTxt = Paragraph(f"{general_infos[0].email} • {general_infos[0].linkedin}", style)
         doc.append(smallTxt)
     else:
-        smallTxt = Paragraph(f"{general_infos[0].email} • {phoneNumber(phoneNum)} • {general_infos[0].linkedin}", style)
+        smallTxt = Paragraph(f"{general_infos[0].email} • {phoneNum} • {general_infos[0].linkedin}", style)
         doc.append(smallTxt)
 
 
@@ -129,7 +138,7 @@ def generateResume(usr_id):
         
         
 
-        if i > 3:
+        if i > 4:
             break
     #exp
     #code
@@ -161,7 +170,7 @@ def generateResume(usr_id):
         
         
 
-        if i > 3:
+        if i > 4:
             break
 
 
@@ -179,7 +188,8 @@ def generateResume(usr_id):
         t1 = Paragraph(text=f"<font face = 'Cambria-Bold' size={regFontSize}>{extracurriculars[i].title}</font>")
         #t1 = Paragraph(text=f"<font face = 'Cambria-Bold' size={regFontSize}>{extracurriculars[i].title}</font> - <font face=Cambria-Italic size={regFontSize}>{extracurriculars[i].desc_arr}</font>")
         #t2 = Paragraph(f"{extracurriculars[i].date}", regularRightStyle())
-        t2 = Paragraph(f"{dates[i]}", regularRightStyle())
+        date = extracurriculars[i].desc
+        t2 = Paragraph(f"{date}", regularRightStyle())
 
         data = [
             [t1,t2]
@@ -199,6 +209,7 @@ def generateResume(usr_id):
 
     # Save the PDF
     document.build(doc)
+
 
     # SEND THROUGH 
 
@@ -256,6 +267,6 @@ def regularRightStyle():
 
 if __name__ == "__main__":
     
-    generateResume(1)
+    generateResume(5)
 
 

@@ -2,13 +2,29 @@
 
 .scrollable-page {
     height: 100vh; /* Set the height of the page */
-    overflow-y: auto; /* Enable vertical scrolling */
+    overflow-y: scroll; /* Enable vertical scrolling */
+}
+
+.white-text {
+    color: white;
 }
 
 .recipe-list-container {
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
+}
+
+.recipe-items-list li {
+    color: white;
+}
+
+.recipe-list-container h2 {
+    color: white;
+}
+
+.add-recipe-container label {
+    color: white;
 }
 
 .recipe-items-list {
@@ -63,6 +79,17 @@
     padding: 5px;
     font-size: 14px;
     align-self: flex-start;
+}
+
+.button-close {
+    padding: 5px 10px;
+    margin-top: 10px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 .add-recipe-container button {

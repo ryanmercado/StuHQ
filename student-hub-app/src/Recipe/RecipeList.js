@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import secureLocalStorage from 'react-secure-storage';
 import { useNavigate } from 'react-router-dom';
 import './styles/recipeList.css';
+import '../assets/styles/Calendar.css';
+
 
 const RecipeList = () => {
     const navigate = useNavigate();
@@ -132,20 +134,20 @@ const RecipeList = () => {
 
         return (
             <div className="recipe-popup">
-                <h3>{recipe.name}</h3>
-                <p><strong>Ingredients:</strong></p>
+                <h3 className='white-text'>{recipe.name}</h3>
+                <p className='white-text'><strong>Ingredients:</strong></p>
                 <ol>
                     {ingredients.map((ingredient, index) => (
-                        <li key={index}>{ingredient}, {measurements[index]}</li>
+                        <li className='white-text' key={index}>{ingredient}, {measurements[index]}</li>
                     ))}
                 </ol>
-                <p><strong>Steps:</strong></p>
+                <p className='white-text'> <strong>Steps:</strong></p>
                 <ol>
                 {steps.map((step, index) => (
-                    <li key={index}>{step}</li>
+                    <li className='white-text' key={index}>{step}</li>
                 ))}
             </ol>
-                <button onClick={onClose}>Close</button>
+                <button className="button-close" onClick={onClose}>Close</button>
             </div>
         );
     };

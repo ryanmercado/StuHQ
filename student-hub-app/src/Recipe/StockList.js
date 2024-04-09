@@ -113,14 +113,17 @@ const StockList = () => {
                 />
                 <button className="add-item-button" onClick={addItem}>Add</button>
             </div>
-            <ul className="grocery-items-list">
-                {stockItems.map((item, index) => (
-                    <li key={index} className= "stock-item" >
-                        <span>{item}</span>
-                        <button className="remove-item-button" onClick={() => removeItem(item)}>X</button>
-                    </li>
-                ))}
-            </ul>
+            <div className='big-box'>
+                <ul className="grocery-items-list">
+                    {stockItems.map((item, index) => (
+                        <li key={index} className= "stock-item" >
+                            <span>{item}</span>
+                            <button className="remove-item-button" onClick={() => removeItem(item)}>X</button>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+            
         </div>
     );
 };

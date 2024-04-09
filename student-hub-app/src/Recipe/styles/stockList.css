@@ -40,6 +40,10 @@
     border-bottom: 1px solid #ccc;
 }
 
+.stock-list-container h2 {
+    color: white;
+}
+
 .remove-item-button {
     padding: 2px 5px;
     font-size: 14px;
@@ -49,3 +53,12 @@
     border-radius: 5px;
     cursor: pointer;
 }
+
+.big-box {
+    border: 1px solid #ccc;
+    padding: 10px;
+    padding-top: 0px;
+    border-radius: 5px;
+    background-color: white;
+    padding-bottom: 0px;
+  }

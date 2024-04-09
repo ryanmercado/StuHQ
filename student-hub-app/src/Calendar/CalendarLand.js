@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Calendar, Navigate, dayjsLocalizer } from 'react-big-calendar';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -12,6 +12,13 @@ import secureLocalStorage from 'react-secure-storage';
 import dayjs from 'dayjs';
 import '../assets/styles/Global.css';
 
+function truncate(str){
+    if (str.length <= 14) {
+      return str;
+    } else {
+      return str.slice(0, 14) + '...'; 
+    }
+}
 
 function CalendarLand( {onEventChange} ) {
     const [eventIds, setEventIds] = useState(new Set());
@@ -26,6 +33,7 @@ function CalendarLand( {onEventChange} ) {
     const [isAddOpen, setAddOpen] = useState(false);
     const [allEvents, setAllEvents] = useState(new Array);
     const [error, setError] = useState('');
+    const calendarRef = useRef(null);
     const usr_id = secureLocalStorage.getItem("usr_id");
     var loadFlag = true;
     const [popoverFields, setPopoverFields] = useState({
@@ -118,10 +126,6 @@ function CalendarLand( {onEventChange} ) {
           type: addEvent.eventType,
           on_to_do_list: addEvent.on_to_do_list
         };
-
-        if (newEvent.title.trim() !== '') {
-          setAddEvent({ title: "", start: null, end: null, description: "", eventType: addEvent.eventType}); // Clear fields after adding the event
-        }
         const formData = {
             usr_id : secureLocalStorage.getItem('usr_id'),
             event_desc : newEvent.description,
@@ -139,13 +143,19 @@ function CalendarLand( {onEventChange} ) {
         xhr.open("POST", "http://localhost:5000/api/createEvent");
         xhr.setRequestHeader("Content-Type", "application/json"); 
         xhr.onload = () => {
-          if (xhr.status === 200) { // Handle cases: username taken, pwds don't match, email taken
+          if (xhr.status === 200) { 
             const response = JSON.parse(xhr.response)
           }
         };
         xhr.send(jsonData);
-        loadFlag = true;
-        fetchUserEvents();
+        setAddEvent({ title: "", start: null, end: null, description: "", eventType: "", on_to_do_list: false,});
+        setStartDate(null);
+        setEndDate(null);
+        setStartTime(null);
+        setEndTime(null);
+        setTimeout(() => {
+            fetchUserEvents();
+        }, 1000);    
       };
 
     const deleteEvent = (event1) => {
@@ -157,7 +167,7 @@ function CalendarLand( {onEventChange} ) {
         xhr.open("POST", "http://localhost:5000/api/deleteEvent");
         xhr.setRequestHeader("Content-Type", "application/json"); 
         xhr.onload = () => {
-          if (xhr.status === 200) { // Handle cases: username taken, pwds don't match, email taken
+          if (xhr.status === 200) { 
             const response = JSON.parse(xhr.response)
           }
         };
@@ -165,11 +175,9 @@ function CalendarLand( {onEventChange} ) {
         eventIds.delete(event1.event_id)
         const updatedEvents = allEvents.filter((event) => event1.event_id !== event.event_id);
         setAllEvents(updatedEvents);
-        loadFlag = true;
         setTimeout(() => {
             fetchUserEvents();
-        }, 1000);
-    };
+        }, 1000);    };
 
     const locales = {
         "en-US": require("date-fns/locale/en-US")
@@ -179,11 +187,15 @@ function CalendarLand( {onEventChange} ) {
         setAddOpen(true)
     };
     const handleCloseAdd = () => {
+        setAddEvent({ title: "", start: null, end: null, description: "", eventType: "", on_to_do_list: false,});
+        setStartDate(null);
+        setEndDate(null);
+        setStartTime(null);
+        setEndTime(null);
         setAddOpen(false)
     };
 
     const handleSelectEvent = (event) => {
-        console.log(event.type)
         setPopoverFields({
             title: event.title,
             start: event.start,
@@ -225,7 +237,7 @@ function CalendarLand( {onEventChange} ) {
             <div>
         <Popover
              open={isAddOpen}
-             anchorEl={anchorEl}
+             anchorEl={calendarRef.current}
              onClose={handleCloseAdd}
              transformOrigin={{
                  vertical: 'center',
@@ -285,8 +297,8 @@ function CalendarLand( {onEventChange} ) {
                     checked={addEvent.on_to_do_list}
                     onChange={handleCheckboxChange}
                 />
-            <label htmlFor='showOnTodoList' className='checkbox-label'> Show on Todo List</label>
-            <button onClick={handleAddEvent}>
+            <p htmlFor='showOnTodoList' className='checkbox-label'> Show on Todo List</p>
+            <button onClick={() => {handleAddEvent(); handleCloseAdd();}}>
                 Add Event
             </button>
             <button style={{ marginLeft: "10px" }} onClick={handleCloseAdd}>
@@ -307,6 +319,7 @@ function CalendarLand( {onEventChange} ) {
                 style={{ height: 650, width: 900, margin: "10px" }}
                 showMultiDayTimes
                 onSelectEvent={(event, target) => handleSelectEvent(event, target)}
+                ref = {calendarRef}
             />
         </div>
         </div>
@@ -323,15 +336,21 @@ function CalendarLand( {onEventChange} ) {
                 horizontal: 'center',
             }}
         >
-            <div style={{ maxWidth: '400px', padding: '20px' }}>
-                <Typography variant="h6">{popoverFields.title}</Typography>
-                <Typography>Start: {popoverFields.start?.toString()}</Typography>
-                <Typography>End: {popoverFields.end?.toString()}</Typography>
-                <Typography>Description: {popoverFields.desc}</Typography>
+            <div className='event-popup'>
+                <h className='title'>{truncate(popoverFields.title)}</h>
+                <Typography>
+                Start: {popoverFields.start &&
+                    `${popoverFields.start.toLocaleDateString()} ${popoverFields.start.toLocaleTimeString([], {hour: 'numeric', minute: '2-digit'})}`}
+                </Typography>
+                <Typography>
+                End: {popoverFields.end &&
+                    `${popoverFields.end.toLocaleDateString()} ${popoverFields.end.toLocaleTimeString([], {hour: 'numeric', minute: '2-digit'})}`}
+                </Typography>
+                <Typography style={{ wordWrap: 'break-word' }}>Description: {popoverFields.desc}</Typography>
                 <Typography>Event Type: {popoverFields.type}</Typography>
-                <Button onClick={handleClosePopover}>Close Popup</Button>
-                <Button onClick={() => {deleteEvent(popoverFields.event); 
-                                        handleClosePopover();}}>Delete Event</Button>
+                <button onClick={handleClosePopover}>Close Popup</button>
+                <button onClick={() => {deleteEvent(popoverFields.event); 
+                                        handleClosePopover();}}>Delete Event</button>
             </div>
         </Popover>
     </div>

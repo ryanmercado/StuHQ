@@ -3,11 +3,20 @@ import secureLocalStorage from 'react-secure-storage';
 import '../assets/styles/ToDo.css';
 
 
+function truncate(str){
+  if (str.length <= 25) {
+    return str;
+  } else {
+    return str.slice(0, 25) + '...'; 
+  }
+}
 
 const ToDo = ({ events }) => {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState({id : '', title: '', description: '', eventType: '', completed: false});
   const [error, setError] = useState('');
+  const [removedTasks, setRemovedTasks] = useState(new Set());
+
   const usr_id = secureLocalStorage.getItem("usr_id");
 
   // Update tasks when events prop changes
@@ -18,58 +27,76 @@ const ToDo = ({ events }) => {
   }, [events]);
 
   const loadEvents = (events) => {
+    console.log(removedTasks)
     if(events && events.length != 0){
         const sortedEvents = [...events].sort((a, b) => {
             if (a.end === null) return -1; // Place events with null end time at the beginning
             if (b.end === null) return 1;
             return a.end.getTime() - b.end.getTime();
           });
-        const newTasks = sortedEvents.map((event) => ({
-          id: event.event_id,
-          title: event.title,
-          description: event.description,
-          completed: false,
-        }));
+        const newTasks = sortedEvents.map((event) => {
+          if (removedTasks.has(event.event_id)) {
+            return null; 
+          }
+          return {
+            id: event.event_id,
+            title: event.title,
+            description: event.description,
+            completed: false,
+          }
+        });
         setTasks(newTasks);
+        setRemovedTasks(new Set());
+    }else{
+        setTasks([])
+        setRemovedTasks(new Set());
     }
   }
 
   const handleAddTask = () => {
-
-    console.log(newTask)
 
     if (
         newTask.title.trim() === '' ||
         newTask.description.trim() === '' ||
         newTask.eventType === ''
     ) {
-        // Set an error message
         setError('Please fill in all fields');
         return;
     }
     setError('')
 
-    const jsonData = JSON.stringify({ 'usr_id': usr_id, 'event_title': newTask.title, 'event_desc': newTask.description,'on_to_do_list': 1, 'event_type': newTask.eventType});
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", `http://localhost:5000//api/ToDoCreateEvent`, true);
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.onload = () => {
+    const jsonData = JSON.stringify({ 'usr_id': usr_id, 'event_title': newTask.title, 'event_desc': newTask.description,'on_to_do_list': 1, 'event_type': newTask.eventType });
+
+    const xhrPromise = new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", `http://localhost:5000/api/ToDoCreateEvent`, true);
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.onload = () => {
         if (xhr.status === 200) {
-            const response = JSON.parse(xhr.response);
-            console.log(response)
+          const response = JSON.parse(xhr.response);
+          resolve(response.event_id);
+        } else {
+          reject(new Error('XHR request failed')); 
         }
-    }        
-    xhr.send(jsonData);
-    const newTaskObject = {
-        id: Date.now(), // Generate a unique ID (you can use a library like uuid for more robust IDs)
+      };
+      xhr.onerror = () => reject(new Error('Network Error')); 
+      xhr.send(jsonData);
+    });
+
+    xhrPromise.then((id) => {
+      const newTaskObject = {
+        id: id, 
         title: newTask.title,
         description: newTask.description,
         eventType: newTask.eventType,
         completed: false,
       };
-  
-    setTasks((prevTasks) => [...prevTasks, newTaskObject]);
-    setNewTask({ id: '', title: '', description: '', eventType: newTask.eventType, completed: false });
+
+      setTasks((prevTasks) => [...prevTasks, newTaskObject]);
+      setNewTask({ id: '', title: '', description: '', eventType: '', completed: false });
+    }).catch((error) => {
+      console.error(error);
+    });
 
     };
 
@@ -82,19 +109,52 @@ const ToDo = ({ events }) => {
   };
 
   const handleRemoveTask = (taskId) => {
-    const jsonData = JSON.stringify({ 'usr_id': usr_id, 'event_id': taskId, 'on_to_do_list': 0});
-    console.log(jsonData)
+    const newSet = new Set(removedTasks);
+    newSet.add(taskId);
+    setRemovedTasks(newSet);
+    console.log(removedTasks)
+    console.log(newSet)    
+
+
+    const jsonData = JSON.stringify({'event_id': taskId});
     const xhr = new XMLHttpRequest();
-    xhr.open("POST", `http://localhost:5000//api/toggleToDo`, true);
+    xhr.open("GET", `http://localhost:5000/api/getEventInformation?event_id=${taskId}`, true);
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.onload = () => {
         if (xhr.status === 200) {
             const response = JSON.parse(xhr.response);
-            setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
+            console.log(response.result)
+            var time = response.result[6]    
+
+            if(time != null){
+              const jsonData1 = JSON.stringify({ 'usr_id': usr_id, 'event_id': taskId, 'on_to_do_list': 0});
+              const xhr1 = new XMLHttpRequest();
+              xhr1.open("POST", `http://localhost:5000//api/toggleToDo`, true);
+              xhr1.setRequestHeader("Content-Type", "application/json");
+              xhr1.onload = () => {
+                  if (xhr1.status === 200) {
+                      const response = JSON.parse(xhr.response);
+                  }
+              }        
+              xhr1.send(jsonData1);
+            }else{
+              const jsonData2 = JSON.stringify({'event_id': taskId});
+              const xhr2 = new XMLHttpRequest();
+              xhr2.open("POST", "http://localhost:5000/api/deleteEvent");
+              xhr2.setRequestHeader("Content-Type", "application/json"); 
+              xhr2.onload = () => {
+                if (xhr2.status === 200) { 
+                  const response = JSON.parse(xhr.response)
+                }
+              };
+              xhr2.send(jsonData2);
+            }
         }
-    }        
+        setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
+    }
     xhr.send(jsonData);
   };
+
 
   return (
     <div>
@@ -132,8 +192,8 @@ const ToDo = ({ events }) => {
               checked={task.completed}
               onChange={() => handleToggleTask(task.id)}
             />
-            <span style={{ textDecoration: task.completed ? 'line-through' : 'none' }}>
-              {task.title}
+            <span style={{textDecoration: task.completed ? 'line-through' : 'none' }}>
+              {truncate(task.title)}
             </span>
             <button onClick={() => handleRemoveTask(task.id)}>Remove</button>
           </li>

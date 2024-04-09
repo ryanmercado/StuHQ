@@ -43,7 +43,7 @@ def create_event(usr_id, event_desc, event_type,
         
         con.commit()
         con.close()
-        return jsonify({'result': 'event created'})
+        return jsonify({'result': 'event created', 'event_id': next_id})
     else:
         return jsonify({'result': 'id not found'}) 
 
@@ -224,6 +224,7 @@ def event_id_exists(event_id):
 
 def toggleToDo(event_id, on_to_do_list):
     if event_id_exists(event_id):
+        
         con = sqlite3.connect('server/usrDatabase/usrDB.db')
         cursor = con.cursor()
         cursor.execute('''

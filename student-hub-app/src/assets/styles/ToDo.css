@@ -60,9 +60,9 @@
     justify-content: center;    
     font-family: 'Copperplate Gothic', sans-serif;
     font-size: 18px;
-
+    overflow: hidden; 
+    text-overflow: ellipsis; 
 }
-
   .task-list li {
     list-style: none; /* Remove default list styles */
     margin-bottom: 10px; /* Space between list items */

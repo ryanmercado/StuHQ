@@ -16,10 +16,10 @@ const Landing = () => {
                 <h1>Please choose an option:</h1>
                 <div className="global-button-group">
                     <Link to="/login">
-                        <button className="global-button">Login</button>
+                        <button className="login-button">Login</button>
                     </Link>
                     <Link to="/signup">
-                        <button className="global-button">Sign Up</button>
+                        <button className="signup-button">Sign Up</button>
                     </Link>
                 </div>
             </div>

@@ -108,9 +108,9 @@ function SignUp() {
                     </label>
                     <br />
                     <div className="global-button-group">
-                        <button className='global-button' type="submit">Sign Up</button>
+                        <button className='login-button' type="submit">Sign Up</button>
                         <Link to="/">
-                            <button className="global-button">Back Home</button>
+                            <button className="home-button">Home</button>
                         </Link>
                     </div>
                     {createdFailed && ( 

@@ -11,8 +11,9 @@
 .global-button-group {
     align-items: center;
     justify-content: center;
-    display: flex; 
+    display: flex;
 }
+
 
 .global-button {
     background-color: #5B8FFB; 
@@ -27,10 +28,82 @@
     cursor: pointer;
     border-radius: 8px;
     transition: background-color 0.5s ease;
-
+    margin-left: 30px;
 }
   
 .global-button:hover {
     background-color: #f94a1e; 
 }
+
+.signup-button{
+    background-color: #5B8FFB; 
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    margin: 0 5px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.5s ease;
+    margin-left: 15px;
+}
+
+/* .login-button{
+    background-color: #5B8FFB; 
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    margin: 0 5px 0 0;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.5s ease;
+}
+
+.home-button{
+    background-color: #5B8FFB; 
+    border: none;
+    color: white;
+    padding: 15px 32px; 
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px; 
+    margin: 0;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.5s ease;
+} */
+
+.login-button,
+.home-button {
+    background-color: #5B8FFB; 
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 18px; /* Same font size for both buttons */
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.5s ease;
+    display: inline-block;
+    height: 50px; /* Set the same height for both buttons */
+}
+
+.login-button {
+    padding: 15px 32px; /* Adjust padding to change the width of the button */
+    margin-right: 10px; /* Add some space between buttons */
+}
+
+.home-button {
+    padding: 15px 42px; /* Adjust padding to change the width of the button */
+}
+
+
   

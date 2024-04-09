@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import '../assets/styles/Login.css'; 
 import '../assets/styles/Global.css'; 
 import logo from '../assets/images/StuHQlogo.png'; 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -78,7 +80,11 @@ const LogIn = () => {
                         </Link>
                     </div>
                 </form>
-                {loginFailed && <div style={{ color: 'red' }}>Login failed</div>}
+                {loginFailed && ( 
+                        <div className='failed-message'>
+                            <FontAwesomeIcon icon={faCircleExclamation} /> Login Failed
+                        </div>
+                    )}
             </div>
         </div>
     );

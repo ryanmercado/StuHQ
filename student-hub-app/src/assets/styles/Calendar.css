@@ -40,12 +40,13 @@
 .add-event-popup {
     position: fixed;
     top: 50%;
-    left: 25%;
+    left: 50%;
     transform: translate(-50%, -50%);
     background-color: white;
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    font-family: 'Copperplate Gothic', sans-serif;
   }
   
   .add-event-popup input[type="text"],
@@ -61,9 +62,10 @@
     display: inline-block; /* Display checkbox inline */
     margin-right: 5px; /* Adjust spacing between checkbox and label */
   }
-  .add-event-popup label.checkbox-label {
-    display: inline-block;
-    vertical-align: middle; /* Align label vertically */
+  .add-event-popup p {
+    vertical-align: middle;
+    font-size: 12px;
+    color: black;
   }
   
   .add-event-popup .button-container {
@@ -77,6 +79,7 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    margin-left: 10px;
   }
   
   .add-event-popup button:hover {
@@ -92,6 +95,45 @@
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 999; /* Ensure it's above other content */
   }
+
+  .event-popup{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(255, 255, 255);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    font-family: 'Copperplate Gothic', sans-serif;
+    max-width: 400px;
+    padding: 20px
+  }
+  .event-popup button {
+    padding: 10px 20px;
+    background-color: #5B8FFB;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    margin-top: 5px;
+  }
+  .event-popup button:hover {
+    background-color: #f94a1e;
+  }
+  .event-popup h{
+    font-family: 'Copperplate Gothic', sans-serif; /* Change the font family as needed */
+    font-size: 25px; /* Adjust the font size as needed */
+    font-weight: bold; /* Adjust the font weight as needed */
+  }
+  
+  .event-popup p {
+    font-family: 'Copperplate Gothic', sans-serif; /* Change the font family as needed */
+    font-size: 16px; /* Adjust the font size as needed */
+  }
+  
+  
 
 .rbc-calendar {
     background: #ffffff; 

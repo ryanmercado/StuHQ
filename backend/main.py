@@ -149,8 +149,7 @@ def ToDoCreateEvent():
 
 @stuAPI.route('/api/getEventInformation', methods=['GET']) 
 def getEventInformation():
-    data = request.get_json()
-    event_id = data['event_id']
+    event_id = request.args.get('event_id')
     return user_events.get_event(event_id)
 
 @stuAPI.route('/api/getUserEvents', methods=['GET']) 

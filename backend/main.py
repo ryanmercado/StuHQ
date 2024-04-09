@@ -3,7 +3,7 @@ from flask_cors import CORS
 from recipe import Recipe, GroceryList, Stock
 from calendar_module import user_events, to_do_list
 from resume.Resume import Resume
-from resume.generateResume import generateResume, deleteResumeFile
+from resume.generateResume import generateResume, deleteResumeFile, fill_example_data
 import handleCreateAccount, handleSignIn
 import os
 import time
@@ -406,6 +406,17 @@ def getResume():
     except Exception as e:
         print(e)
         return str(e)
+    
+@stuAPI.route('/api/fill_example_data', methods = ['POST'])
+def fillExampleData():
+    data = request.get_json()
+    user_id = data['user_id']
+    try:
+        fill_example_data(user_id)
+        return jsonify({'message': 'Example data filled successfully'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
 
 
 

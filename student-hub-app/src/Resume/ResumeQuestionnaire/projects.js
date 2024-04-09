@@ -123,7 +123,7 @@ const Projects = ({ handleValidation }) => {
             value={project.title}
             onChange={(e) => handleProjectChange(projectIndex, 'title', e.target.value)}
           />
-          <label>Who For:</label>
+          <label>Completed For:</label>
           <input
             type="text"
             value={project.whoFor}
@@ -135,7 +135,7 @@ const Projects = ({ handleValidation }) => {
             value={project.date}
             onChange={(e) => handleProjectChange(projectIndex, 'date', e.target.value)}
           />
-          <label>Description Array:</label>
+          <label>Description:</label>
           <textarea
             className="description-input" // Added class name to match the CSS
             value={project.descArr}

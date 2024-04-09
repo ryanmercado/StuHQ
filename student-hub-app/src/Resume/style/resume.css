@@ -1,20 +1,100 @@
-
-.delete-resume-btn {
+.resume-dashboard-container{
+  height: 100%;
   display: flex;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
-  width: 200px; /* Adjust width as needed */
-  height: 50px; /* Adjust height as needed */
-  background-color: #dc3545; /* Red color */
+  flex-direction: column;
+  align-items: center;
+  justify-content: top;
+  padding: 0 20px;
+}
+
+.dash-title{
+  text-align: center;
   color: white;
-  font-size: 1.5rem; /* Adjust font size as needed */
+}
+
+.features-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 40px;
+}
+
+.feature-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px;
+  background-color: #f9f9f9;
+  border-radius: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.feature-box:hover {
+  transform: translateY(-5px);
+}
+
+.feature-image {
+  width: 200px;
+  height: 200px;
+  object-fit: scale-down;
+  border-radius: 100%;
+  margin-bottom: 20px;
+}
+
+.feature-image-2 {
+  width: 150x;
+  height: 150px;
+  object-fit: scale-down;
+  border-radius: 100%;
+  margin-top: 20px;
+  margin-bottom: 50px;
+}
+
+.feature-content {
+  flex: 1;
+}
+
+.feature-title {
+  margin-bottom: 10px;
+  font-size: 24px;
+}
+
+.feature-description {
+  padding: 0px 20px;
+  margin-bottom: 20px;
+  color: #666;
+  text-align: justify;
+}
+
+.feature-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
   border: none;
   border-radius: 5px;
-  cursor: pointer;
-  margin: 10px auto; /* Adjust margin as needed */
-  text-align: center;
+  transition: background-color 0.3s ease;
+  cursor: pointer; /* Add cursor property */
+}
+
+.feature-button:hover {
+  background-color: #0056b3;
+}
+
+
+
+.delete-resume-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #dc3545; /* Red color */
+  color: #fff;
   text-decoration: none;
-  outline: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  cursor: pointer; /* Add cursor property */
+  
+  
 }
 .delete-resume-btn:hover {
   background-color: #c82333; /* Darker red color on hover */
@@ -25,40 +105,41 @@
 }
 
   
-  .create-resume-btn {
-    display: flex;
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
-    width: 200px; /* Adjust width as needed */
-    height: 50px; /* Adjust height as needed */
-    background-color: #007bff; /* Blue color */
-    color: white;
-    font-size: 1.5rem; /* Adjust font size as needed */
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin: 0 auto; /* Center horizontally */
-    text-align: center;
-    text-decoration: none;
-    outline: none;
-  }
-  
-  .create-resume-btn:hover {
-    background-color: #0056b3; /* Darker blue color on hover */
-  }
-  
-  .create-resume-btn:focus {
-    box-shadow: 0 0 0 2px #0056b3; /* Add outline on focus */
-  }
+.example-btn {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  width: 200px; /* Adjust width as needed */
+  height: 50px; /* Adjust height as needed */
+  background-color: #007bff; /* Blue color */
+  color: white;
+  font-size: 1.5rem; /* Adjust font size as needed */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 0 auto; /* Center horizontally */
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+}
 
-  .body {
-    width: 100vw;
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+.example-btn:hover {
+  background-color: #0056b3; /* Darker blue color on hover */
+}
+
+.example-btn:focus {
+  box-shadow: 0 0 0 2px #0056b3; /* Add outline on focus */
+}
+
+.body {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+}
   
   

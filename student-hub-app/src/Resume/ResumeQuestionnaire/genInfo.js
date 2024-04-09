@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './style.css';
+import secureLocalStorage from 'react-secure-storage';
 
 const GenInfo = ({ handleValidation }) => {
   const [firstName, setFirstName] = useState('');
@@ -10,18 +11,18 @@ const GenInfo = ({ handleValidation }) => {
   const [edu, setEdu] = useState('');
   const [major, setMajor] = useState('');
   const [GPA, setGPA] = useState('');
-  const [gradMonth, setGradMonth] = useState(''); 
+  const [gradMonth, setGradMonth] = useState('');
   const [gradYear, setGradYear] = useState('');
-
-  const usr_id = localStorage.getItem("usr_id");
+  const [isSubmittable, setIsSubmittable] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const usr_id = secureLocalStorage.getItem("usr_id");
 
   useEffect(() => {
     validateFields();
-  }, [firstName, lastName, phone, email, linkedin, edu, major, GPA]);
+    validateSubmit();
+  }, [firstName, lastName, phone, email, linkedin, edu, major, GPA, gradMonth, gradYear]);
 
-// handling Required fields
-
-  const validateFields = () => {
+  const validateSubmit = () => {
     if (
       firstName.trim() !== '' &&
       lastName.trim() !== '' &&
@@ -33,19 +34,25 @@ const GenInfo = ({ handleValidation }) => {
       gradMonth !== '' &&
       gradYear !== ''
     ) {
+      setIsSubmittable(true);
       handleValidation(true);
-      handleSubmit();
+    } else {
+      setIsSubmittable(false);
+    }
+  };
+
+  const validateFields = () => {
+    if (isSubmitted) {
+      // do nothing
     } else {
       // Could figure out which fields are invalid and display a message for each
-
       handleValidation(false);
     }
   };
 
   const handleSubmit = () => {
-    // Probably needs to handle con
     const formData = {
-      usr_id: usr_id,
+      user_id: usr_id,
       lastname: lastName,
       firstname: firstName,
       phone: phone,
@@ -60,19 +67,23 @@ const GenInfo = ({ handleValidation }) => {
     // Call your API here to write to the database using formData
     console.log("Form data:", formData);
     // Example API call with fetch:
-    // fetch('your_api_endpoint', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify(formData),
-    // })
-    // .then(response => response.json())
-    // .then(data => console.log(data))
-    // .catch(error => console.error('Error:', error));
+    fetch('http://localhost:5000/api/addResumeGeneralInfo', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Success:', data);
+      setIsSubmitted(true);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      // Handle error here
+    });
   };
-
-  //Make tiny error message for each field?
 
   const handleFirstNameChange = (e) => {
     setFirstName(e.target.value);
@@ -86,8 +97,7 @@ const GenInfo = ({ handleValidation }) => {
   const handlePhoneChange = (e) => {
     const inputValue = e.target.value.replace(/\D/g, ''); // Remove non-digit characters
     let formattedPhone = '';
-    //Adding delete handling logic to delete () and - would make this more seemless
-    
+
     switch (inputValue.length) {
       case 3:
         formattedPhone = inputValue.replace(/^(\d{3})$/, '($1)');
@@ -115,8 +125,7 @@ const GenInfo = ({ handleValidation }) => {
         break;
       default:
         if (inputValue.length < 10)
-          formattedPhone = inputValue
-        
+          formattedPhone = inputValue;
     }
     if (inputValue.length <= 10)
       setPhone(formattedPhone);
@@ -249,6 +258,10 @@ const GenInfo = ({ handleValidation }) => {
         onChange={handleGPAChange}
       />
       <br />
+      {/* Submit button */}
+      {isSubmittable && !isSubmitted && (
+        <button onClick={handleSubmit}>Submit</button>
+      )}
     </div>
   );
 };

@@ -27,12 +27,7 @@ const DefaultPopup = ({ handleClose }) => {
   };
 
   const handleSubmit = () => {
-    // Handle submit logic
-    if (requiredFlags) {
-      handleClose();  
-    } else {
-      setErrorMessage('*Please fill out all required fields before submitting.');
-    }
+    
   };
 
   const handleValidation = (isValid) => {
@@ -48,7 +43,7 @@ const DefaultPopup = ({ handleClose }) => {
   switch (currentPage) {
     case 1:
       pageContent = (
-        <Projects
+        <GenInfo
           handleValidation={handleValidation}
         />
       );
@@ -105,11 +100,7 @@ const DefaultPopup = ({ handleClose }) => {
           )}
         </div>
       </div>
-      {currentPage === 5 && (
-        <button className="submit-button" onClick={handleSubmit}>
-          Submit
-        </button>
-      )}
+      
     </div>
   );
   

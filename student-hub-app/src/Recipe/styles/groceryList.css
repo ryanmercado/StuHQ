@@ -10,6 +10,15 @@
     margin-bottom: 10px;
 }
 
+.link-buttons {
+    justify-content: space-between;
+    display: flex;
+}
+
+.link-button-stock {
+    margin-right: 10px;
+}
+
 .add-item-input {
     flex: 1;
     padding: 5px;

@@ -1,7 +1,7 @@
 // StockList.js
 import React, { useState, useEffect } from 'react';
 import secureLocalStorage from 'react-secure-storage';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import './styles/stockList.css';
 
 const StockList = () => {
@@ -100,7 +100,12 @@ const StockList = () => {
 
 
     return (
+        
         <div className="stock-list-container">
+            <div className='link-buttons'>
+                <Link to="/grocery-list" className="link-button link-button-grocery">GroceryList</Link>
+                <Link to="/recipe-list" className="link-button link-button-recipe">RecipeList</Link>
+            </div>
             <h2>Your Stock List</h2>
             <div className="add-item-container">
                 <input

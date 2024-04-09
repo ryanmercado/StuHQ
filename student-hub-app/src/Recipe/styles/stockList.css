@@ -38,6 +38,15 @@
     color: white;
 }
 
+.link-buttons {
+    justify-content: space-between;
+    display: flex;
+}
+
+.link-button-grocery {
+    margin-right: 10px;
+}
+
 .remove-item-button {
     padding: 2px 5px;
     font-size: 14px;

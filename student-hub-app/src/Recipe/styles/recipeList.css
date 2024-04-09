@@ -9,6 +9,15 @@
     color: white;
 }
 
+.link-buttons {
+    justify-content: space-between;
+    padding-left: 350px;
+}
+
+.link-button-grocery {
+    margin-right: 10px;
+}
+
 .recipe-list-container {
     max-width: 600px;
     margin: 0 auto;
@@ -21,6 +30,10 @@
 
 .recipe-list-container h2 {
     color: white;
+}
+
+.add-step-button {
+    width: 100px;
 }
 
 .add-recipe-container label {
@@ -44,6 +57,7 @@
 .remove-recipe-button {
     padding: 2px 5px;
     font-size: 14px;
+    width: 100px;
     background-color: #dc3545;
     color: white;
     border: none;
@@ -160,6 +174,7 @@
     padding: 10px 20px; 
     border-radius: 4px; 
     margin-left: 200px;
+    width: 200px;
 }
 
 .create-recipe-button:hover {

@@ -5,6 +5,7 @@ import StockList from './StockList';
 import { Link, useNavigate } from 'react-router-dom';
 import secureLocalStorage from 'react-secure-storage';
 import './styles/recipeLanding.css';
+import '../assets/styles/Global.css'; 
 
 const RecipeLanding = () => {
     const usr_id = secureLocalStorage.getItem('usr_id');
@@ -17,7 +18,7 @@ const RecipeLanding = () => {
     }, [usr_id, navigate]);
 
     return (
-        <div className="recipe-landing">
+        <div className="recipe-landing global-container">
             <div className="content">
                 <h1>Welcome to the Recipe Hub</h1>
                 <div className="button-container">

@@ -1,9 +1,10 @@
 // RecipeList.js
 import React, { useEffect, useState } from 'react';
 import secureLocalStorage from 'react-secure-storage';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './styles/recipeList.css';
 import '../assets/styles/Calendar.css';
+
 
 
 const RecipeList = () => {
@@ -213,7 +214,11 @@ const RecipeList = () => {
 
     return (
         
-        <div className="recipe-list-container scrollable-page">
+        <div className="recipe-list-container scrollable-page ">
+            <div className='link-buttons'>
+                <Link to="/grocery-list" className="link-button-grocery">Grocery List</Link>
+                <Link to="/stock-list" className="link-button-stock">Stock List</Link>
+            </div>
             <h2>Your Recipe List</h2>
             <ul className="recipe-items-list">
                 {recipeItems.map((recipe) => (
@@ -270,6 +275,7 @@ const RecipeList = () => {
                         </div>
                         <button
                             type="button"
+                            className='add-step-button'
                             onClick={() => handleSteps()}
                         >
                             Add Step

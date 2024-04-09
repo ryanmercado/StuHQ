@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import secureLocalStorage from 'react-secure-storage';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import './styles/groceryList.css';
 
 
@@ -125,6 +125,10 @@ const GroceryList = () => {
 
     return (
         <div className="grocery-list-container">
+            <div className='link-buttons'>
+                <Link to="/stock-list" className="link-button link-button-stock">StockList</Link>
+                <Link to="/recipe-list" className="link-button link-button-recipe">RecipeList</Link>
+            </div>
             <h2>Your Grocery List</h2>
             <div className="add-item-container">
                 <input

@@ -89,8 +89,10 @@ const ResumeDoc = () => {
   }, [usr_id, navigate]);
 
   return (
-    <div className="body">
+ 
+      
       <div className = 'resume-dashboard-container'>
+      {!isResumeReady && showPopup && <DefaultPopup handleClose={handlePopupClose} />}
         <h2 className='dash-title'>Welcome to your StuHQ Resume Builder!</h2>
         <div className='features-container'>
           <div className = 'feature-box'>
@@ -121,9 +123,7 @@ const ResumeDoc = () => {
         <br></br>
         <button className = 'feature-button' onClick={handleExampleData}> Fill with Example Data</button>
       </div>
-      
-      {!isResumeReady && showPopup && <DefaultPopup handleClose={handlePopupClose} />}
-    </div>
+
   );
 };
 

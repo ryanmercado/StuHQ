@@ -3,3 +3,4 @@ server/usrDatabase/*.db
 *.pyc
 resume.pdf
 backend/resume/resume.pdf
+server/usrDatabase/usrDB.db

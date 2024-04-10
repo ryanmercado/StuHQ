@@ -1,6 +1,6 @@
 /* groceryList.css */
 .grocery-list-container {
-    max-width: 400px;
+    max-width: 900px;
     margin: 0 auto;
     padding: 20px;
 }
@@ -20,7 +20,6 @@
 }
 
 .add-item-input {
-    flex: 1;
     padding: 5px;
     font-size: 16px;
 }

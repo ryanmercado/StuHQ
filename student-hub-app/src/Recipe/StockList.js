@@ -4,6 +4,15 @@ import secureLocalStorage from 'react-secure-storage';
 import { useNavigate, Link } from 'react-router-dom';
 import './styles/stockList.css';
 
+
+function truncate(str){
+    if (str.length <= 60) {
+      return str;
+    } else {
+      return str.slice(0, 60) + '...'; 
+    }
+  }
+
 const StockList = () => {
     const navigate = useNavigate();
     const usr_id = secureLocalStorage.getItem('usr_id');
@@ -103,8 +112,12 @@ const StockList = () => {
         
         <div className="stock-list-container">
             <div className='link-buttons'>
-                <Link to="/grocery-list" className="link-button link-button-grocery">GroceryList</Link>
-                <Link to="/recipe-list" className="link-button link-button-recipe">RecipeList</Link>
+            <Link to="/recipe-list" className="link-button-grocery">
+                    <button>Recipe List</button>
+            </Link>
+            <Link to="/grocery-list" className="link-button-grocery">
+                    <button>Grocery List</button>
+            </Link>
             </div>
             <h2>Your Stock List</h2>
             <div className="add-item-container">
@@ -122,7 +135,7 @@ const StockList = () => {
                 <ul className="grocery-items-list">
                     {stockItems.map((item, index) => (
                         <li key={index} className= "stock-item" >
-                            <span>{item}</span>
+                            <span>{truncate(item)}</span>
                             <button className="remove-item-button" onClick={() => removeItem(item)}>X</button>
                         </li>
                     ))}

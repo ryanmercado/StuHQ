@@ -5,7 +5,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import './styles/recipeList.css';
 import '../assets/styles/Calendar.css';
 
-
+function truncate(str){
+    if (str.length <= 65) {
+      return str;
+    } else {
+      return str.slice(0, 65) + '...'; 
+    }
+  }
 
 const RecipeList = () => {
     const navigate = useNavigate();
@@ -145,7 +151,7 @@ const RecipeList = () => {
                 <p className='white-text'> <strong>Steps:</strong></p>
                 <ol>
                 {steps.map((step, index) => (
-                    <li className='white-text' key={index}>{step}</li>
+                    <li className='white-text' wordWrap= 'break-word' key={index}>{step}</li>
                 ))}
             </ol>
                 <button className="button-close" onClick={onClose}>Close</button>
@@ -216,8 +222,12 @@ const RecipeList = () => {
         
         <div className="recipe-list-container scrollable-page ">
             <div className='link-buttons'>
-                <Link to="/grocery-list" className="link-button-grocery">Grocery List</Link>
-                <Link to="/stock-list" className="link-button-stock">Stock List</Link>
+                <Link to="/grocery-list" className="link-button-grocery">
+                    <button>Grocery List</button>
+                </Link>
+                <Link to="/stock-list" className="link-button-stock">
+                    <button>Stock List</button>
+                </Link>
             </div>
             <h2>Your Recipe List</h2>
             <ul className="recipe-items-list">
@@ -226,7 +236,7 @@ const RecipeList = () => {
                         setSelectedRecipe(recipe);
                         setShowRecipePopup(true);
                     }}>
-                        {recipe.name}{' '}
+                        {truncate(recipe.name)}{' '}
                         <button className="remove-recipe-button" onClick={(e) => {e.stopPropagation(); removeRecipe(recipe.name);}}>Remove</button>
                     </li>
                 ))}

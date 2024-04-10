@@ -21,7 +21,23 @@
     color: white;
     margin-bottom: 15px;
     margin-right: 180px;
-
+}
+.calendar-header h1{
+  color: white
+}
+.calendar-button{
+  background-color: #5B8FFB; 
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 18px;
+  margin: 0 5px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.5s ease;
 }
 .calendar-container {
     width: 100%;

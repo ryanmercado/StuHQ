@@ -133,11 +133,11 @@ const GroceryList = () => {
     return (
         <div className="grocery-list-container">
             <div className='link-buttons'>
-            <Link to="/stock-list" className="link-button-grocery">
-                    <button>Stock List</button>
+            <Link to="/stock-list" >
+                    <button className="link-button-grocery">Stock List</button>
             </Link>
-            <Link to="/recipe-list" className="link-button-grocery">
-                    <button>Recipe List</button>
+            <Link to="/recipe-list">
+                    <button  className="link-button-grocery">Recipe List</button>
             </Link>
             </div>
             <h2>Your Grocery List</h2>

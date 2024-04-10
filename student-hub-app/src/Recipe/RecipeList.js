@@ -222,11 +222,11 @@ const RecipeList = () => {
         
         <div className="recipe-list-container scrollable-page ">
             <div className='link-buttons'>
-                <Link to="/grocery-list" className="link-button-grocery">
-                    <button>Grocery List</button>
+                <Link to="/grocery-list" >
+                    <button className="link-button-grocery">Grocery List</button>
                 </Link>
-                <Link to="/stock-list" className="link-button-stock">
-                    <button>Stock List</button>
+                <Link to="/stock-list">
+                    <button className="link-button-grocery">Stock List</button>
                 </Link>
             </div>
             <h2>Your Recipe List</h2>

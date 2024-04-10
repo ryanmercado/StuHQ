@@ -230,7 +230,7 @@ function CalendarLand( {onEventChange} ) {
         <div>
             <div className='calendar-header'>
                 <h1>Calendar</h1>
-                <button className='global-button' onClick={handleOpenAdd}>
+                <button className=' calendar-button' onClick={handleOpenAdd}>
                     Add Event
                 </button>
             </div>

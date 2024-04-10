@@ -12,6 +12,8 @@ const ResumeDoc = () => {
   const usr_id = secureLocalStorage.getItem("usr_id");
   const [isResumeReady, setIsResumeReady] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState('');
 
   const handleCreateResume = async () => {
     //For trying to pull file from backend, does not work yet
@@ -50,8 +52,7 @@ const ResumeDoc = () => {
       if (!response.ok) {
         throw new Error('Failed to fill with example data');
       }
-  
-      console.log('Example data filled successfully');
+      showNotificationWithMessage('Example data filled successfully.');      console.log('Example data filled successfully');
     }
     catch (error) {
       console.error('Error filling with example data:', error);
@@ -73,6 +74,7 @@ const ResumeDoc = () => {
       }
   
       console.log('Resume deleted successfully');
+      showNotificationWithMessage('Resume deleted successfully.');
     } catch (error) {
       console.error('Error deleting resume:', error);
     }
@@ -80,6 +82,15 @@ const ResumeDoc = () => {
 
   const handlePopupClose = () => {
     setShowPopup(false);
+  };
+
+  const showNotificationWithMessage = (message) => {
+    setNotificationMessage(message);
+    setShowNotification(true);
+    // Auto-hide the notification after 5 seconds
+    setTimeout(() => {
+      setShowNotification(false);
+    }, 5000);
   };
 
   useEffect(() => {
@@ -92,6 +103,25 @@ const ResumeDoc = () => {
  
       
       <div className = 'resume-dashboard-container'>
+        {showNotification && (
+        <div className="notifications-container">
+          <div className="success">
+            <div className="flex">
+              <div className="flex-shrink-0">
+                <svg className="succes-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+              </div>
+              <div className="success-prompt-wrap">
+                <p className="success-prompt-heading">Success</p>
+                <div className="success-prompt-prompt">
+                  <p>{notificationMessage}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       {!isResumeReady && showPopup && <DefaultPopup handleClose={handlePopupClose} />}
         <h2 className='dash-title'>Welcome to your StuHQ Resume Builder!</h2>
         <div className='features-container'>

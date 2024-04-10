@@ -20,6 +20,12 @@
 
 .link-button-grocery {
     margin-right: 10px;
+    padding: 10px 20px;
+    background-color: #5B8FFB;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 .recipe-list-container {

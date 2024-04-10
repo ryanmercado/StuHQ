@@ -112,11 +112,11 @@ const StockList = () => {
         
         <div className="stock-list-container">
             <div className='link-buttons'>
-            <Link to="/recipe-list" className="link-button-grocery">
-                    <button>Recipe List</button>
+            <Link to="/recipe-list" >
+                    <button className="link-button-grocery" >Recipe List</button>
             </Link>
-            <Link to="/grocery-list" className="link-button-grocery">
-                    <button>Grocery List</button>
+            <Link to="/grocery-list">
+                    <button  className="link-button-grocery" >Grocery List</button>
             </Link>
             </div>
             <h2>Your Stock List</h2>

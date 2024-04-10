@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import secureLocalStorage from 'react-secure-storage';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import './styles/groceryList.css';
 
+function truncate(str){
+    if (str.length <= 60) {
+      return str;
+    } else {
+      return str.slice(0, 60) + '...'; 
+    }
+  }
 
 const GroceryList = () => {
     const navigate = useNavigate();
@@ -125,6 +132,14 @@ const GroceryList = () => {
 
     return (
         <div className="grocery-list-container">
+            <div className='link-buttons'>
+            <Link to="/stock-list" className="link-button-grocery">
+                    <button>Stock List</button>
+            </Link>
+            <Link to="/recipe-list" className="link-button-grocery">
+                    <button>Recipe List</button>
+            </Link>
+            </div>
             <h2>Your Grocery List</h2>
             <div className="add-item-container">
                 <input
@@ -142,7 +157,7 @@ const GroceryList = () => {
                     {groceryItems.map((item, index) => (
                         <li key={index} className= "grocery-item" >
                             <div className='left-item'>
-                                <span>{item}</span>
+                                <span>{truncate(item)}</span>
                             </div>
                             <div className='right-item'>
                                 <button className="remove-item-b" onClick={() => removeItem(item)}>X</button>

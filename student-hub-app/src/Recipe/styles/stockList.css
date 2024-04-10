@@ -1,6 +1,6 @@
 /* stockList.css */
 .stock-list-container {
-    max-width: 400px;
+    max-width: 900px;
     margin: 0 auto;
     padding: 20px;
 }
@@ -11,20 +11,21 @@
 }
 
 .add-item-input {
-    flex: 1;
     padding: 5px;
     font-size: 16px;
+    width: 600px;
 }
 
 .add-item-button {
     padding: 5px 10px;
-    margin-left: 10px;
+    margin-left: 50px;
     font-size: 16px;
     background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    width: 300px
 }
 
 .stock-items-list {
@@ -36,6 +37,15 @@
 
 .stock-list-container h2 {
     color: white;
+}
+
+.link-buttons {
+    justify-content: space-between;
+    display: flex;
+}
+
+.link-button-grocery {
+    margin-right: 10px;
 }
 
 .remove-item-button {

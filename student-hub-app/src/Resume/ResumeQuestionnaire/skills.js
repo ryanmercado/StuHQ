@@ -130,7 +130,7 @@ const Skills = ({ handleValidation }) => {
       <br />
       {/* Submit button */}
       {isSubmittable && !isSubmitted && (
-        <button className="submitButton" onClick={handleSubmit}>Submit</button>
+        <button className="resume-button" onClick={handleSubmit}>Submit</button>
       )}
     </div>
   );

@@ -70,7 +70,7 @@ const Jobs = ({ handleValidation }) => {
         start_date: job.startDate,
         end_date: job.endDate,
         location: job.location,
-        desc_arr: job.duties //This needs to be run through GPT before here
+        desc_arr: JSON.stringify([job.duties]) //This needs to be run through GPT before here
       };
 
       const response = await fetch('http://localhost:5000/api/addResumeExperience', {
@@ -176,7 +176,7 @@ const Jobs = ({ handleValidation }) => {
       <br />
       {/* Submit button */}
       {isSubmittable && !isSubmitted && (
-        <button onClick={handleSubmit}>Submit</button>
+        <button className="resume-button" onClick={handleSubmit}>Submit</button>
         )}
     </div>
   );

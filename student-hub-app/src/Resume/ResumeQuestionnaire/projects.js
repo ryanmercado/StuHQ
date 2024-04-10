@@ -58,7 +58,7 @@ const Projects = ({ handleValidation }) => {
         title: project.title,
         who_for: project.whoFor,
         date: project.date,
-        desc_arr: project.descArr
+        desc_arr: JSON.stringify([project.descArr])
       };
 
       // Example API call with fetch:
@@ -123,7 +123,7 @@ const Projects = ({ handleValidation }) => {
             value={project.title}
             onChange={(e) => handleProjectChange(projectIndex, 'title', e.target.value)}
           />
-          <label>Who For:</label>
+          <label>Completed For:</label>
           <input
             type="text"
             value={project.whoFor}
@@ -135,7 +135,7 @@ const Projects = ({ handleValidation }) => {
             value={project.date}
             onChange={(e) => handleProjectChange(projectIndex, 'date', e.target.value)}
           />
-          <label>Description Array:</label>
+          <label>Description:</label>
           <textarea
             className="description-input" // Added class name to match the CSS
             value={project.descArr}
@@ -153,7 +153,7 @@ const Projects = ({ handleValidation }) => {
       <br />
       {/* Submit button */}
       {isSubmittable && !isSubmitted && (
-        <button onClick={handleSubmit}>Submit</button>
+        <button className='resume-button' onClick={handleSubmit}>Submit</button>
         )}
 
     </div>

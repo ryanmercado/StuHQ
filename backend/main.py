@@ -218,8 +218,8 @@ def add_resume_experience():
         location = data.get('location')
         desc_arr = data.get('desc_arr')
 
-        if not all([user_id, company, role, start_date, end_date, location, desc_arr]):
-            return jsonify({'error': 'Missing required fields'}), 400
+        # if not all([user_id, company, role, start_date, end_date, location, desc_arr]):
+        #     return jsonify({'error': 'Missing required fields'}), 400
 
         resume.addExperience(user_id, company, role, start_date, end_date, location, desc_arr)
         return jsonify({'message': 'Experience added successfully'}), 200
@@ -236,8 +236,8 @@ def addResumeExtracurr():
         desc = data.get('desc')
 
         # Check if all required fields are present in the request
-        if not all([user_id, title, desc]):
-            return jsonify({'error': 'Missing required fields: ()'}), 400
+        # if not all([user_id, title, desc]):
+        #     return jsonify({'error': 'Missing required fields: ()'}), 400
 
         # Call the addExtracurr method with the provided data
         resume.addExtracurr(user_id, title, desc)
@@ -320,8 +320,8 @@ def addResumeProject():
         date = data.get('date')
         desc_arr = data.get('desc_arr')
 
-        if not all([user_id, title, who_for, date, desc_arr]):
-            return jsonify({'error': 'Missing required fields'}), 400
+        # if not all([user_id, title, who_for, date, desc_arr]):
+        #     return jsonify({'error': 'Missing required fields'}), 400
 
         resume.addProject(user_id, title, who_for, date, desc_arr)
         return jsonify({'message': 'Project added successfully'}), 200

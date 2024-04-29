@@ -1,7 +1,35 @@
 import sqlite3
 from flask import jsonify
 from datetime import datetime
+from calendar_module.canvasAPI.getData import getUpcomingAssignments
+import re
 
+
+def parse_upcoming_assignments(usr_id, token):
+    # Assuming getUpcomingAssignments(token) function retrieves the assignments
+    assignments = getUpcomingAssignments(token)
+
+    parsed_assignments = []
+    for assignment in assignments:
+        # Remove HTML tags from description using regular expressions
+        description = re.sub(r'<[^<]+?>', '', assignment['description'])  # Remove HTML tags
+        description = re.sub(r'\n', ' ', description)  # Replace newline characters with spaces
+
+        # Convert due_at timestamp to Unix epoch time
+        due_at_iso8601 = assignment['due_at']
+        due_at_epoch = datetime.fromisoformat(due_at_iso8601.replace('Z', '+00:00')).timestamp()*1000
+
+        assignment_data = {
+            'course_id': assignment['course_id'],
+            'name': assignment['name'],
+            'description': description.strip(),  # Remove leading/trailing whitespace
+            'due_at': int(due_at_epoch),  # Convert to integer for Unix epoch time
+        }
+        parsed_assignments.append(assignment_data)
+        res = create_event(usr_id=usr_id, event_desc=assignment_data['description'], event_type='Assignment', 
+                     event_title=assignment_data['name'], start_epoch=assignment_data['due_at'] - (30 * 60), end_epoch=assignment_data['due_at'], on_to_do_list=1)
+
+    return jsonify({'assignments': parsed_assignments})
 
 def create_event(usr_id, event_desc, event_type, 
                  event_title, start_epoch = None, end_epoch = None,  on_to_do_list = 0, extra_data = None, 

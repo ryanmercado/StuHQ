@@ -13,10 +13,10 @@ import dayjs from 'dayjs';
 import '../assets/styles/Global.css';
 
 function truncate(str){
-    if (str.length <= 14) {
+    if (str.length <= 27) {
       return str;
     } else {
-      return str.slice(0, 14) + '...'; 
+      return str.slice(0, 27) + '...'; 
     }
 }
 
@@ -31,6 +31,8 @@ function CalendarLand( {onEventChange} ) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [isPopoverOpen, setPopoverOpen] = useState(false);
     const [isAddOpen, setAddOpen] = useState(false);
+    const [isCanvasOpen, setCanvasOpen] = useState(false);
+    const [canvas_token, setCanvasToken] = useState('')
     const [allEvents, setAllEvents] = useState(new Array);
     const [error, setError] = useState('');
     const calendarRef = useRef(null);
@@ -74,9 +76,10 @@ function CalendarLand( {onEventChange} ) {
     };
 
     const buildEvent = (event) => {
+        console.log(event[6])
+
         const startDate = event[6] ? new Date(event[6]) : null;
         const endDate = event[7] ? new Date(event[7]) : null;
-
         const newEvent = {
             event_id: event[1],
             title: event[5],  
@@ -177,7 +180,8 @@ function CalendarLand( {onEventChange} ) {
         setAllEvents(updatedEvents);
         setTimeout(() => {
             fetchUserEvents();
-        }, 1000);    };
+        }, 1000);   
+     };
 
     const locales = {
         "en-US": require("date-fns/locale/en-US")
@@ -186,6 +190,7 @@ function CalendarLand( {onEventChange} ) {
     const handleOpenAdd = () => {
         setAddOpen(true)
     };
+
     const handleCloseAdd = () => {
         setAddEvent({ title: "", start: null, end: null, description: "", eventType: "", on_to_do_list: false,});
         setStartDate(null);
@@ -193,6 +198,30 @@ function CalendarLand( {onEventChange} ) {
         setStartTime(null);
         setEndTime(null);
         setAddOpen(false)
+    };
+    
+    const handleOpenCanvas = () => {
+        setCanvasOpen(true)
+    };
+    
+    const handleCloseCanvas = () => {
+        setCanvasOpen(false)
+    };
+    const handleCanvasImport = () =>{
+        const jsonData = JSON.stringify({ 'usr_id': usr_id , 'token': canvas_token});
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", `http://localhost:5000/api/canvasImport`, true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.onload = () => {
+            if (xhr.status === 200) {
+                const response = JSON.parse(xhr.response);
+            }        
+          }
+        xhr.send(jsonData);
+        setCanvasToken('')
+        setTimeout(() => {
+            fetchUserEvents();
+        }, 1000);   
     };
 
     const handleSelectEvent = (event) => {
@@ -230,11 +259,39 @@ function CalendarLand( {onEventChange} ) {
         <div>
             <div className='calendar-header'>
                 <h1>Calendar</h1>
-                <button className=' calendar-button' onClick={handleOpenAdd}>
-                    Add Event
-                </button>
+                <div className='button-container'>
+                    <button className=' calendar-button' onClick={handleOpenAdd}>
+                        Add Event
+                    </button>
+                    <button className=' calendar-button' onClick={handleOpenCanvas}>
+                        Import Canvas Events
+                    </button>
+                </div>
             </div>
             <div>
+        <Popover
+             open={isCanvasOpen}
+             anchorEl={calendarRef.current}
+             onClose={handleCloseCanvas}
+             transformOrigin={{
+                 vertical: 'center',
+                 horizontal: 'center',
+                 }}
+             anchorOrigin={{
+                 vertical: 'center',
+                 horizontal: 'center',
+             }}>
+             <div className='add-event-popup'>
+                <h2>Import Canvas Events (FOR DEMO PURPOSES ONLY)</h2>
+                <input type='text' placeholder='Canvas OAuth Token' value={canvas_token} onChange={(e) => setCanvasToken(e.target.value)} />
+                <button onClick={() => {handleCanvasImport(); handleCloseCanvas();}}>
+                    Import Events
+                </button>
+                <button style={{ marginLeft: "10px" }} onClick={handleCloseCanvas}>
+                    Close
+                </button>
+             </div>
+        </Popover>
         <Popover
              open={isAddOpen}
              anchorEl={calendarRef.current}

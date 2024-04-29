@@ -17,13 +17,18 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-family: 'Copperplate Gothic', sans-serif;
+    font-family: 'Trebuchet MS', sans-serif; 
     color: white;
     margin-bottom: 15px;
     margin-right: 180px;
 }
 .calendar-header h1{
   color: white
+}
+  
+.calendar-header .button-container {
+  flex-direction:row;
+  text-align: right; /* Align buttons to the right */
 }
 .calendar-button{
   background-color: #5B8FFB; 
@@ -49,7 +54,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-family: 'Copperplate Gothic', sans-serif;
+    font-family: 'Trebuchet MS', sans-serif; 
     color: white;
 }
 
@@ -62,7 +67,7 @@
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    font-family: 'Copperplate Gothic', sans-serif;
+    font-family: 'Trebuchet MS', sans-serif; 
   }
   
   .add-event-popup input[type="text"],
@@ -121,8 +126,8 @@
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    font-family: 'Copperplate Gothic', sans-serif;
-    max-width: 400px;
+    font-family: 'Trebuchet MS', sans-serif; 
+    max-width: 600px;
     padding: 20px
   }
   .event-popup button {
@@ -139,13 +144,13 @@
     background-color: #f94a1e;
   }
   .event-popup h{
-    font-family: 'Copperplate Gothic', sans-serif; /* Change the font family as needed */
+    font-family: 'Trebuchet MS', sans-serif; 
     font-size: 25px; /* Adjust the font size as needed */
     font-weight: bold; /* Adjust the font weight as needed */
   }
   
   .event-popup p {
-    font-family: 'Copperplate Gothic', sans-serif; /* Change the font family as needed */
+    font-family: 'Trebuchet MS', sans-serif; 
     font-size: 16px; /* Adjust the font size as needed */
   }
   

@@ -148,6 +148,13 @@ def ToDoCreateEvent():
     on_to_do_list = data['on_to_do_list']
     return user_events.create_event(usr_id=usr_id, event_desc=event_desc, event_type=event_type, event_title=event_title, on_to_do_list=on_to_do_list)
 
+@stuAPI.route('/api/canvasImport', methods=['POST']) 
+def canvasImport():
+    data = request.get_json()
+    usr_id = data['usr_id']
+    token = data['token']
+    return user_events.parse_upcoming_assignments(usr_id=usr_id, token=token)
+
 
 @stuAPI.route('/api/getEventInformation', methods=['GET']) 
 def getEventInformation():
@@ -177,7 +184,6 @@ def updateEvent():
 
 @stuAPI.route('/api/toggleToDo', methods=['POST']) 
 def toggleToDo():
-    print(request.get_json)
     data = request.get_json()
     event_id = data['event_id']
     on_to_do_list = data['on_to_do_list']
@@ -218,8 +224,8 @@ def add_resume_experience():
         location = data.get('location')
         desc_arr = data.get('desc_arr')
 
-        if not all([user_id, company, role, start_date, end_date, location, desc_arr]):
-            return jsonify({'error': 'Missing required fields'}), 400
+        # if not all([user_id, company, role, start_date, end_date, location, desc_arr]):
+        #     return jsonify({'error': 'Missing required fields'}), 400
 
         resume.addExperience(user_id, company, role, start_date, end_date, location, desc_arr)
         return jsonify({'message': 'Experience added successfully'}), 200
@@ -236,8 +242,8 @@ def addResumeExtracurr():
         desc = data.get('desc')
 
         # Check if all required fields are present in the request
-        if not all([user_id, title, desc]):
-            return jsonify({'error': 'Missing required fields: ()'}), 400
+        # if not all([user_id, title, desc]):
+        #     return jsonify({'error': 'Missing required fields: ()'}), 400
 
         # Call the addExtracurr method with the provided data
         resume.addExtracurr(user_id, title, desc)
@@ -320,8 +326,8 @@ def addResumeProject():
         date = data.get('date')
         desc_arr = data.get('desc_arr')
 
-        if not all([user_id, title, who_for, date, desc_arr]):
-            return jsonify({'error': 'Missing required fields'}), 400
+        # if not all([user_id, title, who_for, date, desc_arr]):
+        #     return jsonify({'error': 'Missing required fields'}), 400
 
         resume.addProject(user_id, title, who_for, date, desc_arr)
         return jsonify({'message': 'Project added successfully'}), 200

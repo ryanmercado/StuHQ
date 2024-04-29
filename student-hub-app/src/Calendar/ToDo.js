@@ -4,10 +4,10 @@ import '../assets/styles/ToDo.css';
 
 
 function truncate(str){
-  if (str.length <= 25) {
+  if (str.length <= 30) {
     return str;
   } else {
-    return str.slice(0, 25) + '...'; 
+    return str.slice(0, 30) + '...'; 
   }
 }
 
